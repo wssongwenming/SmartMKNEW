@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.choices.divider:RecyclerView_Divider-1.0.0">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RecyclerView_Divider-1.0.0.aar/6351f2810b0a3298f29a47a299f942e8/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/RecyclerView_Divider-1.0.0.aar/6351f2810b0a3298f29a47a299f942e8/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.choices.divider/RecyclerView_Divider/1.0.0/e75a1321deb9b35d0a95c55b19242addb2e3ec1d/RecyclerView_Divider-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
