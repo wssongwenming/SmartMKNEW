@@ -13,7 +13,7 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 /**
  * author:songwenming
  * Date:2018/9/21
- * Description:以fragment作为整个程序页面的容器,所有fragment 都统一起名Delgate
+ * Description:以fragment作为整个程序页面的容器,所有fragment 都统一起名Delegate
  */
 public abstract class BaseDelegate extends SwipeBackFragment{
 
@@ -21,7 +21,6 @@ public abstract class BaseDelegate extends SwipeBackFragment{
     public abstract Object setLayout();
 
     public abstract void onBindView(@Nullable Bundle savedInstanceState,View rootView);
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
