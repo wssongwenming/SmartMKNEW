@@ -5,12 +5,13 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.IFailure;
 import com.dtmining.latte.net.callback.ISuccess;
-
 /**
  * author:songwenming
  * Date:2018/9/22
@@ -29,12 +30,13 @@ public class ExampleDelegate extends LatteDelegate {
     }
     private void testRestClient(){
         RestClient.builder()
-                .url("http://news.baidu.com/")
+                .url("http://index/")
                 .loader(getContext())
                 .params("","")
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
+
                         Toast.makeText(getContext(),response,Toast.LENGTH_LONG).show();
 
                     }
