@@ -8,6 +8,7 @@ import com.dtmining.latte.net.callback.IRequest;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.LoaderStyle;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -30,6 +31,11 @@ public class RestClientBuilder {
     private  RequestBody mBody;
     private LoaderStyle mLoaderStyle;
     private Context mContext;
+    private File mFile;
+
+    private String mDownloadDir=null;
+    private String mExtension=null;
+    private String mName=null;
 
     RestClientBuilder(){}
 
@@ -45,6 +51,30 @@ public class RestClientBuilder {
     public final RestClientBuilder params(String key,Object value){
 
         this.PARAMS.put(key,value);
+        return this;
+    }
+
+    public final RestClientBuilder file(File file)
+    {
+        this.mFile=file;
+        return this;
+    }
+
+    public final RestClientBuilder file(String file)
+    {
+        this.mFile=new File(file);
+        return this;
+    }
+    public final RestClientBuilder dir(String dir){
+        this.mDownloadDir=dir;
+        return this;
+    }
+    public final RestClientBuilder extension(String extension){
+        this.mExtension=extension;
+        return this;
+    }
+    public final RestClientBuilder name(String name){
+        this.mName=name;
         return this;
     }
     public final RestClientBuilder raw(String raw){
@@ -82,7 +112,7 @@ public class RestClientBuilder {
         return this;
     }
     public final RestClient build(){
-        return new RestClient(mUrl,PARAMS,mIRequest,mISuccess,mIFailure,mIError,mBody,mLoaderStyle,mContext);
+        return new RestClient(mUrl,PARAMS,mDownloadDir,mExtension,mName,mIRequest,mISuccess,mIFailure,mIError,mBody,mLoaderStyle,mContext,mFile);
     }
 
 }

@@ -65,8 +65,20 @@ public class Configurator {
         return this;
     }
     //由于配置文件存储的是Object，所以用泛型返回，免去了Object类型转换
-    final <T> T getConfiguration(Enum<ConfigKeys> key){
+ /*   final <T> T getConfiguration(Enum<ConfigKeys> key){
         checkConfiguration();
         return (T)LATTE_CONFIGS.get(key);
     }
+*/
+
+    final <T> T getConfiguration(Object key) {
+        checkConfiguration();
+        final Object value = LATTE_CONFIGS.get(key);
+        if (value == null) {
+            //不能随便抛出异常，这样会导致APP
+            // throw new NullPointerException(key.toString() + " IS NULL");
+        }
+        return (T) LATTE_CONFIGS.get(key);
+    }
+
 }
