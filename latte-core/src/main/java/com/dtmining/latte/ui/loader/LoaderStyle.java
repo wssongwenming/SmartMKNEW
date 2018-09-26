@@ -1,4 +1,4 @@
-package com.dtmining.latte.ui;
+package com.dtmining.latte.ui.loader;
 
 import com.wang.avi.indicators.BallGridPulseIndicator;
 import com.wang.avi.indicators.BallPulseIndicator;

@@ -1,10 +1,14 @@
 package com.dtmining.latte.app;
 
+import android.os.Handler;
+
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import okhttp3.Interceptor;
 
 /**
  * author:songwenming
@@ -15,6 +19,8 @@ import java.util.HashMap;
 public class Configurator {
     private static final HashMap<Object,Object> LATTE_CONFIGS=new HashMap<>();
     private static final ArrayList<IconFontDescriptor> ICONS= new ArrayList<>();
+    private static final ArrayList<Interceptor> INTERCEPTORS=new ArrayList<>();
+    private static final Handler HANDLER=new Handler();
 
     private Configurator() {
         LATTE_CONFIGS.put(ConfigKeys.CONFIG_READY,false);
@@ -70,6 +76,18 @@ public class Configurator {
         return (T)LATTE_CONFIGS.get(key);
     }
 */
+    public final Configurator withInterceptor(Interceptor interceptor){
+        INTERCEPTORS.add(interceptor);
+        LATTE_CONFIGS.put(ConfigKeys.INTERCEPTOR,INTERCEPTORS);
+        return this;
+    }
+
+    private final Configurator withInterceptors(ArrayList<Interceptor> interceptors){
+        INTERCEPTORS.addAll(interceptors);
+        LATTE_CONFIGS.put(ConfigKeys.INTERCEPTOR,INTERCEPTORS);
+        return this;
+
+    }
 
     final <T> T getConfiguration(Object key) {
         checkConfiguration();

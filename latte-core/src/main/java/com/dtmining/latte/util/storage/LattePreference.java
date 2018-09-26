@@ -1,5 +1,6 @@
 package com.dtmining.latte.util.storage;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -14,9 +15,9 @@ public final class LattePreference {
      * PreferenceManager.getDefaultSharedPreferences(Context)生成 包名_preferences.xml
      * Context.getSharedPreferences(String name,int mode)生成name.xml
      */
-
     private static final SharedPreferences PREFERENCES=
             PreferenceManager.getDefaultSharedPreferences(Latte.getApplicationContext());
+
      private static final  String APP_PREFERENCES_KEY="profile";
 
      private static  SharedPreferences getAppPreference(){

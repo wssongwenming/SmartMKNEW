@@ -3,7 +3,8 @@ package com.dtmining.latte.util.dimen;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-import com.dianbin.latte.app.Latte;
+import com.dtmining.latte.app.Latte;
+
 
 public class DimenUtil {
     public static int getScreenWidth(){

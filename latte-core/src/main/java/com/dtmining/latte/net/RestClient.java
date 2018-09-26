@@ -1,7 +1,6 @@
 package com.dtmining.latte.net;
 
 import android.content.Context;
-import android.support.v7.view.ContextThemeWrapper;
 
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.IFailure;
@@ -9,8 +8,8 @@ import com.dtmining.latte.net.callback.IRequest;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.net.callback.RequestCallbacks;
 import com.dtmining.latte.net.download.DownloadHandler;
-import com.dtmining.latte.ui.LatteLoader;
-import com.dtmining.latte.ui.LoaderStyle;
+import com.dtmining.latte.ui.loader.LatteLoader;
+import com.dtmining.latte.ui.loader.LoaderStyle;
 
 import java.io.File;
 import java.util.Map;

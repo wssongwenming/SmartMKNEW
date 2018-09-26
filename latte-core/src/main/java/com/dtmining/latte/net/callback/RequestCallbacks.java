@@ -2,11 +2,8 @@ package com.dtmining.latte.net.callback;
 
 import android.os.Handler;
 
-import com.dtmining.latte.ui.LatteLoader;
-import com.dtmining.latte.ui.LoaderStyle;
-
-import java.util.PropertyResourceBundle;
-import java.util.logging.LogRecord;
+import com.dtmining.latte.ui.loader.LatteLoader;
+import com.dtmining.latte.ui.loader.LoaderStyle;
 
 import retrofit2.Call;
 import retrofit2.Callback;

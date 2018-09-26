@@ -1,14 +1,14 @@
-package com.dtmining.latte.ui;
+package com.dtmining.latte.ui.loader;
 
 import android.content.Context;
-import android.print.PrinterId;
 import android.support.v7.app.AppCompatDialog;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.dtmining.latte.R;
-import com.dtmining.latte.ui.util.dimen.DimenUtil;
+
+import com.dtmining.latte.util.dimen.DimenUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class LatteLoader {
 
     private static final ArrayList<AppCompatDialog>LOADERS=new ArrayList<>();
 
-    private static final String DEFAULT_LOADER=LoaderStyle.BallClipRotatePulseIndicator.name();
+    private static final String DEFAULT_LOADER= LoaderStyle.BallClipRotatePulseIndicator.name();
 
     public static void showLoading(Context context,Enum<LoaderStyle> type){
         showLoading(context,type.name());
@@ -35,7 +35,7 @@ public class LatteLoader {
     public static void showLoading(Context context, String type){
         final AppCompatDialog dialog=new AppCompatDialog(context, R.style.dialog);
 
-        final AVLoadingIndicatorView avLoadingIndicatorView=LoaderCreator.create(type,context);
+        final AVLoadingIndicatorView avLoadingIndicatorView= LoaderCreator.create(type,context);
         dialog.setContentView(avLoadingIndicatorView);
 
         int deviceWidth= DimenUtil.getScreenWidth();

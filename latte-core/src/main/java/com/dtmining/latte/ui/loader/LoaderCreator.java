@@ -1,4 +1,4 @@
-package com.dtmining.latte.ui;
+package com.dtmining.latte.ui.loader;
 
 import android.content.Context;
 import android.util.Log;
