@@ -36,4 +36,7 @@ public class DatabaseManager {
         //返回UserProfile的Dao
         mDao=mDaoSession.getUserProfileDao();
     }
+    public final UserProfileDao getDao(){
+        return mDao;
+    }
 }

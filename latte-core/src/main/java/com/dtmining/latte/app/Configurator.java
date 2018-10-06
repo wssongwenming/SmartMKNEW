@@ -1,5 +1,6 @@
 package com.dtmining.latte.app;
 
+import android.app.Activity;
 import android.os.Handler;
 
 import com.joanzapata.iconify.IconFontDescriptor;
@@ -97,6 +98,24 @@ public class Configurator {
             // throw new NullPointerException(key.toString() + " IS NULL");
         }
         return (T) LATTE_CONFIGS.get(key);
+    }
+
+
+    public final Configurator withWeChatAppId(String appId)
+    {
+        LATTE_CONFIGS.put(ConfigKeys.WE_CHAT_APP_ID,appId);
+        return this;
+    }
+    public final Configurator withWeChatAppSecret(String appSecret)
+    {
+        LATTE_CONFIGS.put(ConfigKeys.WE_CHAT_APP_SECRET,appSecret);
+        return this;
+    }
+    //微信拉取他的回调Activity时会需要一个Activity的上下文,这时用全局的congtext是不合适的
+    public final Configurator withActivity(Activity activity)
+    {
+        LATTE_CONFIGS.put(ConfigKeys.ACTIVITY,activity);
+        return this;
     }
 
 }

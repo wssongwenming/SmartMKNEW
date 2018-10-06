@@ -1,13 +1,19 @@
 package com.dtmining.latte.mk.launcher;
 
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
+import com.dtmining.latte.app.AccountManager;
+import com.dtmining.latte.app.IUserChecker;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.ui.launcher.ILauncherListener;
+import com.dtmining.latte.ui.launcher.OnLauncherFinishTag;
 import com.dtmining.latte.ui.launcher.ScrollLauncherTag;
 import com.dtmining.latte.util.storage.LattePreference;
 import com.dtmining.latte.util.timer.BaseTimerTask;
@@ -30,6 +36,7 @@ public class LauncherDelegate extends LatteDelegate implements ITimerListener{
     AppCompatTextView mTvTimer=null;
     private int mCount=5;
     private Timer mTimer=null;
+    private ILauncherListener mILauncherListener=null;
     @OnClick(R2.id.tv_launcher_timer)
     void onClickTimerView(){
         if(mTimer!=null){
@@ -39,6 +46,16 @@ public class LauncherDelegate extends LatteDelegate implements ITimerListener{
         }
 
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if(activity instanceof ILauncherListener){
+            mILauncherListener=(ILauncherListener) activity;
+
+        }
+    }
+
     @Override
     public Object setLayout() {
         return R.layout.delegate_launcher;
@@ -55,11 +72,26 @@ public class LauncherDelegate extends LatteDelegate implements ITimerListener{
     }
     //判断是否显示滑动气动页
     private void checkIsShowScroll(){
-        //如果没有登陆，则启动滑动页
+        //如果是第一次启动，则启动滑动页
         if(!LattePreference.getAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name())){
             start(new LauncherScrollDelegate(),SINGLETASK);
         }else{
-            //检查用户是否登陆了APP
+            //检查用户是否登陆了
+            AccountManager.checkAccount(new IUserChecker() {
+                @Override
+                public void onSignIn() {
+                    if(mILauncherListener!=null){
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
+                    }
+                }
+                @Override
+                public void onNotSignIn() {
+                    if(mILauncherListener!=null){
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
+                    }
+
+                }
+            });
         }
     }
 
