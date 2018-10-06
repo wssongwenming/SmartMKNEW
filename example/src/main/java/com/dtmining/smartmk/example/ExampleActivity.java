@@ -12,6 +12,7 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.launcher.LauncherDelegate;
 import com.dtmining.latte.mk.launcher.LauncherScrollDelegate;
+import com.dtmining.latte.mk.sign.SignUpDelegate;
 
 public class ExampleActivity extends ProxyActivity {
     @Override
@@ -26,7 +27,8 @@ public class ExampleActivity extends ProxyActivity {
     @Override
     public LatteDelegate setRootDelegate() {
         //return new ExampleDelegate();
-        return new LauncherDelegate();
+        //return new LauncherDelegate();
         //return new LauncherScrollDelegate();
+        return new SignUpDelegate();
     }
 }

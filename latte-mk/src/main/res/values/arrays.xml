@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="roles">
+        <item>请选择用户类型</item>
+        <item>病人</item>
+        <item>医生</item>
+        <item>家属</item>
+    </string-array>
+
+</resources>

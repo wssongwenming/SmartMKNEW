@@ -31,9 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by 傅令杰
- */
 public final class FileUtil {
 
     //格式化的模板

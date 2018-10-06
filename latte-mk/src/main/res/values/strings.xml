@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">LatteMK</string>
-    <string name="sign_up"></string>
+    <string name="app_name">智能药箱</string>
+    <string name="sign_up">注册</string>
+    <string name="sign_in"></string>
+    <string name="verificationcode">验证码</string>
+    <string name="phone">手机号</string>
+    <string name="password">密码</string>登陆
+    <string name="repassword">密码确认</string>
 </resources>

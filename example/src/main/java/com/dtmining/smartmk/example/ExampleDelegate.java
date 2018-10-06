@@ -30,7 +30,7 @@ public class ExampleDelegate extends LatteDelegate {
     }
     private void testRestClient(){
         RestClient.builder()
-                .url("http://index/")
+                .url("index")
                 .loader(getContext())
                 .params("","")
                 .success(new ISuccess() {

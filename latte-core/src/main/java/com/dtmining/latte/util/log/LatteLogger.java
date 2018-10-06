@@ -2,9 +2,6 @@ package com.dtmining.latte.util.log;
 
 import com.orhanobut.logger.Logger;
 
-/**
- * Created by 傅令杰 on 2017/4/22
- */
 
 public final class LatteLogger {
 
