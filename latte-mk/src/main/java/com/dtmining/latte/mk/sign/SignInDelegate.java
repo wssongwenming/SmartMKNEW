@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.sign.model.SignModel;
+import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.log.LatteLogger;
 import com.dtmining.latte.wechat.LatteWeChat;
@@ -46,15 +50,26 @@ public class SignInDelegate extends LatteDelegate {
     @OnClick(R2.id.btn_sign_in)
     void onClickSignIn(){
         if(checkForm()){
+            User user=new User();
+            SignModel signModel =new SignModel();
+            user.setTel(mPhone.getText().toString());
+            user.setPwd(mPassword.getText().toString());
+            user.setEntry_way(EntryType.NORMAL.getEntryType());
+            signModel.setDetail(user);
+            String singInJson = JSON.toJSON(signModel).toString();
             RestClient.builder()
-                    .url("http://39.105.97.128:8000/api/UserLogin")
-                    .params("email","")
-                    .params("password",mPassword.getText().toString())
+                    .url("http://10.0.2.2:8081/Web01_exec/UserLogin")
+                    .raw(singInJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            LatteLogger.json("USER_PROFILE",response);
-                            SignHandler.onSignIn(response,mISignListener);
+                           SignHandler.onSignIn(response,mISignListener);
+                        }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            mISignListener.onSignInError(msg);
                         }
                     })
                     .build()
@@ -63,7 +78,7 @@ public class SignInDelegate extends LatteDelegate {
         }
     }
     //微信登陆
-    @OnClick(R2.id.btn_wechat_sign_in)
+    @OnClick(R2.id.icon_sign_in_wechat)
     void onClickWeChat(){
         LatteWeChat.getInstancee().onSignSuccess(new IWeChatSignInCallback() {
             @Override

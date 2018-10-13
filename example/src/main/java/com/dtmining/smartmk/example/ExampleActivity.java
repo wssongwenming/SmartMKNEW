@@ -12,6 +12,7 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.launcher.LauncherDelegate;
 import com.dtmining.latte.mk.launcher.LauncherScrollDelegate;
+import com.dtmining.latte.mk.main.MkBottomDelegate;
 import com.dtmining.latte.mk.sign.ISignListener;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.sign.SignUpDelegate;
@@ -41,11 +42,34 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
     @Override
     public void onSignInSuccess() {
         Toast.makeText(this,"登陆成功",Toast.LENGTH_LONG).show();
+        startWithPop(new MkBottomDelegate());
     }
 
     @Override
     public void onSignUpSuccess() {
         Toast.makeText(this,"注册成功",Toast.LENGTH_LONG).show();
+        //
+        startWithPop(new MkBottomDelegate());
+    }
+
+    @Override
+    public void onSignInError(String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSignUpError(String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSignInFailure(String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSignUpFailure(String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -53,7 +77,7 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
         switch (tag){
             case SIGNED:
                 Toast.makeText(this, "启动结束用户已登陆", Toast.LENGTH_SHORT).show();
-                startWithPop(new ExampleDelegate());
+                startWithPop(new MkBottomDelegate());
 
                 break;
             case NOT_SIGNED:

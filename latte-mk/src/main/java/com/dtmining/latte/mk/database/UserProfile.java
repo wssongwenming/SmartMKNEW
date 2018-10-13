@@ -4,6 +4,8 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
+
 /**
  * author:songwenming
  * Date:2018/10/6
@@ -23,50 +25,54 @@ import org.greenrobot.greendao.annotation.Generated;
 public class UserProfile {
     //@Id表明userId为唯一Id，不能为int只能为long
     @Id
-    private long userId=0;
-    private String name=null;
-    private String avatar=null;
-    private String gender=null;
-    private String address=null;
-    @Generated(hash = 1202698052)
-    public UserProfile(long userId, String name, String avatar, String gender,String address) {
-        this.userId = userId;
-        this.name = name;
-        this.avatar = avatar;
-        this.gender = gender;
-        this.address = address;
+    private long  tel=0;
+    private String username=null;
+    private String pwd=null;
+    private String role=null;
+    private String entry_way=null;
+    @Generated(hash = 362390032)
+    public UserProfile(long tel, String username, String pwd, String role,
+            String entry_way) {
+        this.tel = tel;
+        this.username = username;
+        this.pwd = pwd;
+        this.role = role;
+        this.entry_way = entry_way;
     }
     @Generated(hash = 968487393)
     public UserProfile() {
     }
-    public long getUserId() {
-        return this.userId;
+    public long getTel() {
+        return this.tel;
     }
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setTel(long tel) {
+        this.tel = tel;
     }
-    public String getName() {
-        return this.name;
+    public String getUsername() {
+        return this.username;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
-    public String getAvatar() {
-        return this.avatar;
+    public String getPwd() {
+        return this.pwd;
     }
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
-    public String getGender() {
-        return this.gender;
+    public String getRole() {
+        return this.role;
     }
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setRole(String role) {
+        this.role = role;
     }
-    public String getAddress() {
-        return this.address;
+    public String getEntry_way() {
+        return this.entry_way;
     }
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEntry_way(String entry_way) {
+        this.entry_way = entry_way;
     }
-}
+ }
+
+
+

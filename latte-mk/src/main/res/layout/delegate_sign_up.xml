@@ -31,42 +31,15 @@
             android:orientation="vertical"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
-            android:paddingTop="30dp">
+            android:paddingTop="20dp">
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:src="@mipmap/logo" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="50dp">
-                <TextView
-                    android:layout_width="80dp"
-                    android:text="用户名"
-                    android:gravity="center_vertical"
-                    android:textSize="15sp"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="40dp" />
 
-                <EditText
-                    android:id="@+id/edit_sign_up_name"
-                    android:hint="请输入用户名"
-                    android:inputType="phone"
-                    android:background="@null"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/Gray"
-                    android:layout_width="match_parent"
-                    android:textSize="15sp"
-                    android:layout_height="40dp" />
-            </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:background="@color/Gray"
-                android:layout_height="1px" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
@@ -202,7 +175,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
+
                 android:background="@drawable/area_bg"
                 android:layout_height="50dp">
                 <TextView

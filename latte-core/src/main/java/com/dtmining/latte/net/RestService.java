@@ -50,7 +50,7 @@ public interface RestService {
     @Streaming
     @GET
     Call<ResponseBody> download(@Url String url,@QueryMap Map<String,Object>params);
-    //post
+
     @Multipart
     @POST
     Call<String>upload(@Url String url, @Part MultipartBody.Part body);

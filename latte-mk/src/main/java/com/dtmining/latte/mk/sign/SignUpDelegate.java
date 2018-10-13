@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.sign;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,13 +12,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dtmining.latte.app.Latte;
+import com.alibaba.fastjson.JSON;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.sign.model.SignModel;
+import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.IError;
+import com.dtmining.latte.net.callback.IFailure;
 import com.dtmining.latte.net.callback.ISuccess;
-import com.dtmining.latte.util.log.LatteLogger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,36 +55,50 @@ public class SignUpDelegate extends LatteDelegate {
 
     private String role=null;
 
-    int mEntryType=EntryType.NORMAL.getEntryType();
+
 
     //选择用户类型
     @OnItemSelected(R2.id.edit_sign_up_user_role)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-        Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
         role=parent.getItemAtPosition(position).toString();
 
     }
     //单击注册按钮
     @OnClick(R2.id.btn_sign_up)
     void onClickSignUp(){
-        if(checkForm()){
-   /*         SignUpModel signUpModel=new SignUpModel();
-            signUpModel.setEntry_way("1");
-            signUpModel.setIdentify_code(mIdentifyingCode.getText().toString());
-            signUpModel.setPwd(mPassword.getText().toString());*/
-           // signUpModel.setRole(mUserRole.);
 
-            RestClient.builder()
-                    .url("http://39.105.97.128:8000/api/UserRegister")
-                    .params("phone",mPhone.getText().toString())
-                    .params("username","")
+        if(checkForm()){
+            User user=new User();
+            SignModel signModel =new SignModel();
+            user.setTel(mPhone.getText().toString());
+            user.setIdentify_code(mIdentifyingCode.getText().toString());
+            user.setPwd(mPassword.getText().toString());
+            user.setEntry_way(EntryType.NORMAL.getEntryType());
+            user.setRole(role);
+            signModel.setDetail(user);
+            String singUpJson = JSON.toJSON(signModel).toString();
+            Log.d("singup", singUpJson);
+            Toast.makeText(this.getContext(),singUpJson,Toast.LENGTH_SHORT).show();
+            RestClient.builder().url("http://10.0.2.2:8081/Web01_exec/UserRegister")
+                    .raw(singUpJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            LatteLogger.json("USER_PROFILE",response);
+                            Log.d("response", response);
                             SignHandler.onSignUp(response,mISignListener);
 
+                        }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            mISignListener.onSignUpError(msg);
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
                         }
                     })
                     .build()
@@ -99,7 +117,6 @@ public class SignUpDelegate extends LatteDelegate {
         final String identifyCode=mIdentifyingCode.getText().toString();
         final String password=mPassword.getText().toString();
         final String rePassword=mRepassword.getText().toString();
-        //final String userRole=mUserRole.getPrompt().toString();
 
         boolean isPass=true;
         if(phone.isEmpty()|| !Patterns.PHONE.matcher(phone).matches()){
@@ -107,14 +124,12 @@ public class SignUpDelegate extends LatteDelegate {
             isPass=false;
         }else {
             mPhone.setError(null);
-            isPass=false;
         }
         if(identifyCode.isEmpty()){
             mIdentifyingCode.setError("请输入验证码");
             isPass=false;
         }else {
             mIdentifyingCode.setError(null);
-            isPass=false;
         }
         if(password.isEmpty()||password.length()<6){
             mPassword.setError("请填写至少6位数密码");

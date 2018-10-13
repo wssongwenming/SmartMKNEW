@@ -97,6 +97,22 @@ public class LauncherScrollDelegate extends LatteDelegate implements ViewPager.O
         if(position==INTEGERS.size()-1){
             Log.d("scroll", "onPageScrolled: ");
             LattePreference.setAppFlag(ScrollLauncherTag.HAS_FIRST_LAUNCHER_APP.name(),true);
+            //检查用户是否已经登录
+            AccountManager.checkAccount(new IUserChecker(){
+                @Override
+                public void onSignIn() {
+                    if(mILauncherListener!=null){
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
+                    }
+                }
+                @Override
+                public void onNotSignIn() {
+                    if(mILauncherListener!=null){
+                        mILauncherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
+                    }
+
+                }
+            });
 
         }
     }

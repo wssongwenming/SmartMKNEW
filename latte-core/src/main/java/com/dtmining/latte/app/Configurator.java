@@ -23,6 +23,7 @@ public class Configurator {
     private static final ArrayList<Interceptor> INTERCEPTORS=new ArrayList<>();
     private static final Handler HANDLER=new Handler();
 
+
     private Configurator() {
         LATTE_CONFIGS.put(ConfigKeys.CONFIG_READY,false);
     }
@@ -115,6 +116,10 @@ public class Configurator {
     public final Configurator withActivity(Activity activity)
     {
         LATTE_CONFIGS.put(ConfigKeys.ACTIVITY,activity);
+        return this;
+    }
+    public final <T> Configurator withLocalUser(T userProfile ){
+        LATTE_CONFIGS.put(ConfigKeys.LOCAL_USER,userProfile);
         return this;
     }
 
