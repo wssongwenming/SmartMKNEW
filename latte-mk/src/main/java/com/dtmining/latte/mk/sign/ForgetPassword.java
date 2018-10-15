@@ -81,10 +81,12 @@ public class ForgetPassword extends LatteDelegate{
             signModel.setDetail(user);
             String forgetPwdJson = JSON.toJSON(signModel).toString();
             RestClient.builder()
+                    .url("")
                     .raw(forgetPwdJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
+                            //携带tel跳到ResetPassword
 
                         }
                     })

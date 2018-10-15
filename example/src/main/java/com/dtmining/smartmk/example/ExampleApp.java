@@ -24,7 +24,7 @@ public class ExampleApp  extends Application{
         Log.d("appthread", Thread.currentThread().getId()+"");
         Latte.init(this)
                 .withIcon(new FontAwesomeModule())
-                .withInterceptor(new DebugInterceptor("index",R.raw.sort_list))
+                .withInterceptor(new DebugInterceptor("index",R.raw.profile))
                 .withWeChatAppId("wxe89a2c2ec439b1ac")//微信登陆初始化AppId
                 .withWeChatAppSecret("b16238a4df5dd49f1b524c56537762cb")//微信登陆人传入Secret
                 .withIcon(new FontMkModule())
