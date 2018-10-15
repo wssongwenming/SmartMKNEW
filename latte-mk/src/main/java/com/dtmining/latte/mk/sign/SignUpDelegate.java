@@ -1,18 +1,22 @@
 package com.dtmining.latte.mk.sign;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
@@ -22,10 +26,15 @@ import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.IFailure;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.handler.MyHandler;
+import com.dtmining.latte.util.regex.RegexTool;
+import com.dtmining.latte.util.sms.SMSObserver;
+import com.dtmining.latte.util.timer.CountTimer;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * author:songwenming
@@ -43,6 +52,10 @@ public class SignUpDelegate extends LatteDelegate {
     EditText mRepassword=null;
     @BindView(R2.id.edit_sign_up_user_role)
     Spinner mUserRole=null;
+    @BindView(R2.id.btn_sign_up_send_identifying_code)
+    Button mBtnSendIdentifyingCode;
+
+
 
     private ISignListener mISignListener=null;
     @Override
@@ -56,6 +69,37 @@ public class SignUpDelegate extends LatteDelegate {
     private String role=null;
 
 
+    //发送验证码
+    @OnClick(R2.id.btn_sign_up_send_identifying_code)
+    void onClickSendIdentifyingCode()
+    {
+        if(!RegexTool.isMobileNO(mPhone.getText().toString())){
+                new SweetAlertDialog(getContext(), SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("警告")
+                    .setContentText("您输入的手机号码不正确")
+                    .show();
+
+        }else {
+            CountTimer countTimer = new CountTimer(60000, 1000, mBtnSendIdentifyingCode);
+            countTimer.start();
+            User user=new User();
+            SignModel signModel =new SignModel();
+            user.setTel(mPhone.getText().toString());
+            signModel.setDetail(user);
+            //获取验证码
+            String sMSJson = JSON.toJSON(signModel).toString();
+            RestClient.builder().url("http://10.0.2.2:8081/Web01_exec/SMSCode")
+                    .raw(sMSJson)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+
+                        }
+                    })
+                    .build()
+                    .post();
+        }
+    }
 
     //选择用户类型
     @OnItemSelected(R2.id.edit_sign_up_user_role)
@@ -78,7 +122,6 @@ public class SignUpDelegate extends LatteDelegate {
             user.setRole(role);
             signModel.setDetail(user);
             String singUpJson = JSON.toJSON(signModel).toString();
-            Log.d("singup", singUpJson);
             Toast.makeText(this.getContext(),singUpJson,Toast.LENGTH_SHORT).show();
             RestClient.builder().url("http://10.0.2.2:8081/Web01_exec/UserRegister")
                     .raw(singUpJson)
@@ -119,7 +162,7 @@ public class SignUpDelegate extends LatteDelegate {
         final String rePassword=mRepassword.getText().toString();
 
         boolean isPass=true;
-        if(phone.isEmpty()|| !Patterns.PHONE.matcher(phone).matches()){
+        if(phone.isEmpty()|| !RegexTool.isMobileNO(phone)){
             mPhone.setError("请输入电话号码");
             isPass=false;
         }else {
@@ -162,6 +205,19 @@ public class SignUpDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-
+        //接受短信验证码
+        MyHandler myHandler=Latte.getMyHandler();
+        myHandler.setOnHandlerListener(new MyHandler.HandlerListener() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        System.out.println("MainActivity_msg==== " + msg.what);
+                        mIdentifyingCode.setText("123456");
+                    }
+                }
+ );
+        SMSObserver smsObserver = new SMSObserver(getContext(), myHandler.mHandler);
+        Uri uri = Uri.parse("content://sms");
+        //第二个参数： 是否监听对应服务所有URI监听  例如sms 所有uri
+        getActivity().getContentResolver().registerContentObserver(uri, true, smsObserver);
     }
 }

@@ -19,6 +19,7 @@ public enum ConfigKeys {
     WE_CHAT_APP_SECRET,
     ACTIVITY,
     HANDLER,
+    MYHANDLER,
     JAVASCRIPT_INTERFACE,
     WEB_HOST,
     LOCAL_USER

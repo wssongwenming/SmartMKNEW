@@ -2,7 +2,10 @@ package com.dtmining.latte.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.ContentFrameLayout;
+
+import com.dtmining.latte.util.handler.MyHandler;
 
 import java.util.HashMap;
 
@@ -37,5 +40,11 @@ public final class Latte {
 
     public static Context getApplication(){
         return (Context) getConfigurations().get(ConfigKeys.APPLICATION_CONTEXT);
+    }
+    public static Handler getHandler() {
+        return getConfiguration(ConfigKeys.HANDLER);
+    }
+    public static MyHandler getMyHandler() {
+        return getConfiguration(ConfigKeys.MYHANDLER);
     }
 }

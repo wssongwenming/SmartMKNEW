@@ -24,13 +24,13 @@ public class SignHandler {
         final String role=profileJson.getString("role");
         final String pwd=profileJson.getString("pwd");
         final String entry_way=profileJson.getString("entry_way");
-        final UserProfile profile=new UserProfile( tel, username, pwd, role,entry_way);
+        final UserProfile localUser=new UserProfile( tel, username, pwd, role,entry_way);
 
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);
-        Latte.getConfigurations().put(ConfigKeys.LOCAL_USER,profile);
+        Latte.getConfigurations().put(ConfigKeys.LOCAL_USER,localUser);
         //数据库在APP开始时已经初始化，这时可以调用
-        DatabaseManager.getInstance().getDao().insert(profile);
+        DatabaseManager.getInstance().getDao().insert(localUser);
         //已经注册并登陆成功了
         AccountManager.setSignState(true);
         signListener.onSignInSuccess();
@@ -43,13 +43,12 @@ public class SignHandler {
         final String role=profileJson.getString("role");
         final String pwd=profileJson.getString("pwd");
         final String entry_way=profileJson.getString("entry_way");
-        final UserProfile profile=new UserProfile( tel, username, pwd, role,entry_way);
-        Log.d("local_user", profile.toString());
+        final UserProfile localUser=new UserProfile( tel, username, pwd, role,entry_way);
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);
-        Latte.getConfigurations().put(ConfigKeys.LOCAL_USER,profile);
+        Latte.getConfigurations().put(ConfigKeys.LOCAL_USER,localUser);
         //数据库在APP开始时已经初始化，这时可以调用
-        DatabaseManager.getInstance().getDao().insert(profile);
+        DatabaseManager.getInstance().getDao().insert(localUser);
         //已经注册并登陆成功了
         AccountManager.setSignState(true);
         signListener.onSignInSuccess();

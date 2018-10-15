@@ -3,7 +3,6 @@ package com.dtmining.latte.mk.sign;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,7 +16,7 @@ import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
-import com.dtmining.latte.util.log.LatteLogger;
+import com.dtmining.latte.util.regex.RegexTool;
 import com.dtmining.latte.wechat.LatteWeChat;
 import com.dtmining.latte.wechat.callbacks.IWeChatSignInCallback;
 
@@ -45,6 +44,11 @@ public class SignInDelegate extends LatteDelegate {
         {
             mISignListener=(ISignListener) activity;
         }
+    }
+    //忘记密码
+    @OnClick(R2.id.tv_link_forget_password)
+    void onClickForgetPWD(){
+        start(new ForgetPassword());
     }
     //登陆
     @OnClick(R2.id.btn_sign_in)
@@ -98,7 +102,7 @@ public class SignInDelegate extends LatteDelegate {
         final String phone=mPhone.getText().toString();
         final String password=mPassword.getText().toString();
         boolean isPass=true;
-        if(phone.isEmpty()||!Patterns.PHONE.matcher(phone).matches()){
+        if(phone.isEmpty()||!RegexTool.isMobileNO(phone)){
             mPhone.setError("请填写正确的电话号码！");
             isPass=false;
         }else{

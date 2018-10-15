@@ -3,6 +3,7 @@ package com.dtmining.latte.app;
 import android.app.Activity;
 import android.os.Handler;
 
+import com.dtmining.latte.util.handler.MyHandler;
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;
 
@@ -22,10 +23,13 @@ public class Configurator {
     private static final ArrayList<IconFontDescriptor> ICONS= new ArrayList<>();
     private static final ArrayList<Interceptor> INTERCEPTORS=new ArrayList<>();
     private static final Handler HANDLER=new Handler();
+    private static final MyHandler MYHANDLER=new MyHandler();
 
 
     private Configurator() {
         LATTE_CONFIGS.put(ConfigKeys.CONFIG_READY,false);
+        LATTE_CONFIGS.put(ConfigKeys.HANDLER, HANDLER);
+        LATTE_CONFIGS.put(ConfigKeys.MYHANDLER,MYHANDLER);
     }
 
     //静态内部类实现单例模式

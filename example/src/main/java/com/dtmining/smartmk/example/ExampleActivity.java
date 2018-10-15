@@ -1,10 +1,12 @@
 package com.dtmining.smartmk.example;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.dtmining.latte.activities.ProxyActivity;
@@ -18,8 +20,11 @@ import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.sign.SignUpDelegate;
 import com.dtmining.latte.ui.launcher.ILauncherListener;
 import com.dtmining.latte.ui.launcher.OnLauncherFinishTag;
+import com.dtmining.latte.util.sms.SMSObserver;
 
 public class ExampleActivity extends ProxyActivity implements ISignListener,ILauncherListener {
+
+    private SMSObserver mObserver;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,12 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
         }
         //为微信回调保存Activity上下文
         Latte.getConfigurator().withActivity(this);
+        //接受短信验证码
+        mObserver = new SMSObserver(this,Latte.getHandler());
+        Uri uri = Uri.parse("content://sms");
+        //第二个参数： 是否监听对应服务所有URI监听  例如sms 所有uri
+        getContentResolver().registerContentObserver(uri, true, mObserver);
+
     }
 
     @Override
