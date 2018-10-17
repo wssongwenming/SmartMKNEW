@@ -14,22 +14,23 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.R;
 import com.dtmining.latte.ui.banner.BannerCreator;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleItemEntity,MultipleViewHolder>
-implements
+        implements
         BaseQuickAdapter.SpanSizeLookup,
-        OnItemClickListener {
+        OnItemClickListener{
     //recyclerview 的机制是滑动下来再滑动上去，就重新加载一次数据，这里确保只初始化一次Banner，防止重复Item加载
 
     private boolean mIsInitBanner=false;
     //设置图片加载策略
     private static final RequestOptions REQUEST_OPTIONS=
             new RequestOptions()
-            .centerCrop()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .dontAnimate();
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate();
 
     protected MultipleRecyclerAdapter(List<MultipleItemEntity> data) {
         super(data);
@@ -44,7 +45,7 @@ implements
     }
 
     private void init(){
-     //设置不同的item布局
+        //设置不同的item布局
         addItemType(ItemType.TEXT, R.layout.item_mutiple_text);
         addItemType(ItemType.IMAGE,R.layout.item_multiple_image);
         addItemType(ItemType.TEXT_IMAGE,R.layout.item_multiple_image_text);
