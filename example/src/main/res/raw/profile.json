@@ -17,24 +17,24 @@
       "goodsId":1,
       "text":"测试描述1",
       "imageUrl":"http://pic.58pic.com/58pic/12/20/75/63S58PICvgT.jpg",
-      "spanSize":4
+      "spanSize":1
     },
     {
       "goodsId":2,
       "text":"测试描述2",
       "imageUrl":"http://ec4.images-amazon.com/images/I/61Y4mk8UpYL._SL1500_.jpg",
-      "spanSize":2
+      "spanSize":1
     },
     {
       "goodsId":3,
       "text":"测试描述3",
       "imageUrl":"http://ec4.images-amazon.com/images/I/61Y4mk8UpYL._SL1500_.jpg",
-      "spanSize":2
+      "spanSize":1
     },
     {
       "goodsId":4,
       "imageUrl":"http://img.yougou.com/pics/adidas/2012/21006606/21006606_03_mb.jpg",
-      "spanSize":2
+      "spanSize":1
     },
     {
       "goodsId":5,
