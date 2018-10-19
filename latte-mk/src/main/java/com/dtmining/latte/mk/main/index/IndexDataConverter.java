@@ -81,15 +81,45 @@ public class IndexDataConverter extends DataConverter {
                 .build();
         ENTITIES.add(entity5);
     }
+    private void convert(){
+        ArrayList<String> medicinenames=new ArrayList<>();
+        String atime=null;
+        JSONObject jsonobject=JSON.parseObject(getJsonData());
+        JSONObject jsonobject1=jsonobject.getJSONObject("detail");
+        JSONArray jsonarray=jsonobject1.getJSONArray("histories");
+        int size=jsonarray.size();
+        for(int i=0;i<size;i++){
+            JSONObject jsonobject3=jsonarray.getJSONObject(i);
+            String tel=jsonobject3.getString("tel");
+            atime=jsonobject3.getString("atime");
+            JSONArray jsonarray6=jsonobject3.getJSONArray("medicine_names");
+            int size5=jsonarray6.size();
 
 
+            for(int j=0;j<size5;j++)
+            {
+                medicinenames.add(jsonarray6.getString(j));
+            }
+            final MultipleItemEntity entity=MultipleItemEntity.builder()
+                    .setFiled(MultipleFields.ITEM_TYPE,ItemType.TEXT_TEXT)
+                    .setFiled(MultipleFields.SPAN_SIZE,3)
+                    .setFiled(MultipleFields.MEDICINE_NAME,medicinenames.get(0))
+                    .setFiled(MultipleFields.ATIME,atime)
+                    .build();
+            ENTITIES.add(entity);
+        }
+
+
+    }
    //获取网络数据
     @Override
-    public ArrayList<MultipleItemEntity> convert() {
+    public ArrayList<MultipleItemEntity> getEntities() {
         getBanner();
         getSeperator();
         getImage_TextButton();
-        final JSONArray dataArray= JSON.parseObject(getJsonData()).getJSONArray("data");
+        getSeperator();
+        convert();
+/*        final JSONArray dataArray= JSON.parseObject(getJsonData()).getJSONArray("data");
         final int size= dataArray.size();
         for (int i = 0; i < size; i++) {
             final JSONObject data=dataArray.getJSONObject(i);
@@ -125,7 +155,7 @@ public class IndexDataConverter extends DataConverter {
                     .setFiled(MultipleFields.BANNERS,bannerImages)
                     .build();
             ENTITIES.add(entity);
-        }
+        }*/
         return ENTITIES;
     }
 /*  @Override

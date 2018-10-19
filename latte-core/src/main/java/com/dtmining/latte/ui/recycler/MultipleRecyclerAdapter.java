@@ -55,7 +55,7 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
     }
 
     public static MultipleRecyclerAdapter create(DataConverter converter,LatteDelegate delegate){
-        return new MultipleRecyclerAdapter(converter.convert(),delegate);
+        return new MultipleRecyclerAdapter(converter.getEntities(),delegate);
     }
 
     private void init(){
