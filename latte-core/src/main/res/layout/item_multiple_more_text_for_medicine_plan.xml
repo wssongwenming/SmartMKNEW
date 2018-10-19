@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <TextView
+            android:layout_width="100dp"
+            android:text="用药计划"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_more_plan"
+            android:layout_width="50dp"
+            android:text="更多"
+            android:gravity="center"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_width="10dp"
+            android:background="@mipmap/single_forword"
+            android:layout_gravity="center"
+            android:layout_height="10dp" />
+    </LinearLayout>
+</LinearLayout>

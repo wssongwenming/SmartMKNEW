@@ -2,7 +2,11 @@ package com.dtmining.latte.ui.recycler;
 
 
 import java.util.ArrayList;
-
+/**
+ * author:songwenming
+ * Date:2018/9/21
+ * Description:
+ */
 public abstract class DataConverter {
     protected final ArrayList<MultipleItemEntity> ENTITIES=new ArrayList<>();
     private String mJsonData=null;

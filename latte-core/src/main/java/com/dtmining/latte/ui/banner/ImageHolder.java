@@ -30,4 +30,7 @@ public class ImageHolder implements Holder<String> {
                 .into(mImageView);
 
     }
+/*    public void UpdateUI(Context context, int position, Integer data) {
+        mImageView.setBackgroundResource(data);
+    }*/
 }

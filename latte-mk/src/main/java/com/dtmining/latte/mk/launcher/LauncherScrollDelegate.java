@@ -32,9 +32,9 @@ public class LauncherScrollDelegate extends LatteDelegate implements ViewPager.O
     private static final ArrayList<Integer> INTEGERS=new ArrayList<>();
     private ILauncherListener mILauncherListener=null;
     private void initBanner(){
-        INTEGERS.add(R.mipmap.launcher_01);
-        INTEGERS.add(R.mipmap.launcher_02);
-        INTEGERS.add(R.mipmap.launcher_03);
+        INTEGERS.add(R.mipmap.banner_01);
+        INTEGERS.add(R.mipmap.banner_02);
+        INTEGERS.add(R.mipmap.banner_03);
 
         mConvenientBanner
                 .setPages(new LauncherHolderCreator(),INTEGERS)

@@ -20,23 +20,20 @@ public class IndexItemClickListener extends SimpleClickListener {
 
     @Override
     public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+
         final GoodsDetailDelegate delegate= GoodsDetailDelegate.create();
         DELEGATE.start(delegate);
-
     }
 
     @Override
     public void onItemLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
     }
 
     @Override
     public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
     }
 
     @Override
     public void onItemChildLongClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-
     }
 }

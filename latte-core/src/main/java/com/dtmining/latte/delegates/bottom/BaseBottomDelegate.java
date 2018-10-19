@@ -77,7 +77,6 @@ public abstract class BaseBottomDelegate extends LatteDelegate implements View.O
         for(int i=0;i<size;i++){
             //加载布局管理器,将xml布局转换为view对象,一个一个塞到mBottomBar内
             LayoutInflater.from(getContext()).inflate(R.layout.bottom_item_icon_text_layout,mBottomBar);
-
             final RelativeLayout item=(RelativeLayout)mBottomBar.getChildAt(i);
             //设置每个item的点击事件
             item.setTag(i);
@@ -93,7 +92,6 @@ public abstract class BaseBottomDelegate extends LatteDelegate implements View.O
                 itemIcon.setTextColor(mClickedColor);
                 itemTitle.setTextColor(mClickedColor);
             }
-
         }
         //@param a the array into which the elements of the list are to
         // be stored, if it is big enough; otherwise, a new array of the

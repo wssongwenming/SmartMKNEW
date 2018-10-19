@@ -6,7 +6,7 @@
   "data":[
     {
       "goodsId":0,
-      "spanSize":4,
+      "spanSize":3,
       "banners":[
         "http://imgsrc.baidu.com/baike/pic/item/342ac65c10385343e23cf54c9113b07ecb8088ef.jpg",
         "http://imgsrc.baidu.com/baike/pic/item/342ac65c10385343e23cf54c9113b07ecb8088ef.jpg",
@@ -39,7 +39,7 @@
     {
       "goodsId":5,
       "text":"我是广告",
-       "spanSize":4
+       "spanSize":3
     },
     {
       "goodsId":6,

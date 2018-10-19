@@ -10,9 +10,10 @@ import java.util.ArrayList;
 
 public class BannerCreator {
     public static void setDefault(ConvenientBanner<String> convenientBanner,
-                                  ArrayList<String>banners,
-                                  OnItemClickListener clickListener
-                                  ){
+                                       ArrayList<String>banners,
+                                       OnItemClickListener clickListener
+    )
+    {
         convenientBanner.setPages(new HolderCreator(),banners)
                 .setPageIndicator(new int[]{R.drawable.dot_normal,R.drawable.dot_focus})
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
@@ -21,4 +22,19 @@ public class BannerCreator {
                 .startTurning(3000)
                 .setCanLoop(true);
     }
+    public static void setInteger(ConvenientBanner<Integer> convenientBanner,
+                                  ArrayList<Integer>banners
+
+                                 /*, OnItemClickListener clickListener*/
+    )
+    {
+        convenientBanner.setPages(new HolderCreatorForInteger(),banners)
+                .setPageIndicator(new int[]{R.drawable.dot_normal,R.drawable.dot_focus})
+                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
+                /*//.setOnItemClickListener(clickListener)*/
+                .setPageTransformer(new DefaultTransformer())
+                .startTurning(3000)
+                .setCanLoop(true);
+    }
+
 }

@@ -2,7 +2,11 @@ package com.dtmining.latte.ui.recycler;
 
 import java.util.LinkedHashMap;
 import java.util.WeakHashMap;
-
+/**
+ * author:songwenming
+ * Date:2018/9/28
+ * Description:
+ */
 public class MultipleEntityBuilder {
     private static final LinkedHashMap<Object,Object> FIELDS=new LinkedHashMap<>();
     public MultipleEntityBuilder(){

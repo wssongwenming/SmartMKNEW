@@ -5,7 +5,11 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
-
+/**
+ * author:songwenming
+ * Date:2018/9/29
+ * Description:
+ */
 public class MultipleItemEntity implements MultiItemEntity {
     private final ReferenceQueue<LinkedHashMap<Object,Object>> ITEM_QUEUE=new ReferenceQueue<>();
     private final LinkedHashMap<Object,Object> MULTIPLE_FIELDS=new LinkedHashMap<>();
