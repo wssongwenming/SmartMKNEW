@@ -5,9 +5,11 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.ui.recycler.DataConverter;
 import com.dtmining.latte.ui.recycler.ItemType;
+import com.dtmining.latte.ui.recycler.MultipleEntityBuilder;
 import com.dtmining.latte.ui.recycler.MultipleFields;
 import com.dtmining.latte.ui.recycler.MultipleItemEntity;
 
@@ -34,6 +36,14 @@ public class IndexDataConverter extends DataConverter {
     private void getSeperator(){
         final MultipleItemEntity entity=MultipleItemEntity.builder()
                 .setFiled(MultipleFields.ITEM_TYPE,ItemType.SEPERATOR)
+                .setFiled(MultipleFields.SPAN_SIZE,3)
+                .build();
+        ENTITIES.add(entity);
+    }
+    //获取“用药记录  更多> ”
+    private void getMedicineHistoryMore(){
+        final MultipleItemEntity entity= MultipleItemEntity.builder()
+                .setFiled(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_HISTORY)
                 .setFiled(MultipleFields.SPAN_SIZE,3)
                 .build();
         ENTITIES.add(entity);
@@ -118,6 +128,7 @@ public class IndexDataConverter extends DataConverter {
         getSeperator();
         getImage_TextButton();
         getSeperator();
+        getMedicineHistoryMore();
         convert();
 /*        final JSONArray dataArray= JSON.parseObject(getJsonData()).getJSONArray("data");
         final int size= dataArray.size();

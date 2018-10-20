@@ -177,6 +177,16 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
 
             case ItemType.SEPERATOR:
                 break;
+            case ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_HISTORY:
+                View view_more =holder.getView(R.id.tv_item_medicine_history_more);
+                view_more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DELEGATE.start(new MedicineTakeHistoryDelegate());
+
+                    }
+                });
+                break;
             case ItemType.BANNER:
                 if(!mIsInitBanner)
                 {

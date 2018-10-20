@@ -1,5 +1,7 @@
 package com.dtmining.latte.mk.main.index;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +17,7 @@ import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.main.MkBottomDelegate;
 import com.dtmining.latte.ui.recycler.BaseDecoration;
+import com.dtmining.latte.ui.recycler.SimpleDividerItemDecoration;
 import com.dtmining.latte.ui.refresh.RefreshHandler;
 import com.joanzapata.iconify.widget.IconTextView;
 import butterknife.BindView;
@@ -47,20 +50,19 @@ public class IndexDelegate extends BottomItemDelegate {
     }
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        mRecyclerView.addItemDecoration
-                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.app_background),1));
+       /* mRecyclerView.addItemDecoration
+                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.app_background),1));*/
         mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter(),this.getParentDelegate());
         //final MkBottomDelegate mkBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情
         //mRecyclerView.addOnItemTouchListener(IndexItemClickListener.create(mkBottomDelegate));
     }
 
-
     private void initRecyclerView(){
         final GridLayoutManager manager=new GridLayoutManager(getContext(),3);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration
-                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.app_background),1));
+                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.blue_btn_bg_color),1));
         //final EcBottomDelegate ecBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情
         //mRecylerView.addOnItemTouchListener(IndexItemClickListener.create(ecBottomDelegate));
