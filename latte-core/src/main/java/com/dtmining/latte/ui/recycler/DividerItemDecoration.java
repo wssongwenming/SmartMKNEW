@@ -126,6 +126,9 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             if(i == childCount - 3&& pos ==childCount - 3){
                 continue;
             }
+            if(i == childCount - 4&& pos ==childCount - 4){
+                continue;
+            }
             final View child = parent.getChildAt(i);
             parent.getDecoratedBoundsWithMargins(child, mBounds);
             final int bottom = mBounds.bottom + Math.round(child.getTranslationY());

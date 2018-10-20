@@ -34,3 +34,12 @@ android {
         abortOnError false
     }
 }
+repositories {
+
+    mavenCentral()
+
+    maven {
+         url "http://dl.bintray.com/journeyapps/maven"
+        }
+
+}

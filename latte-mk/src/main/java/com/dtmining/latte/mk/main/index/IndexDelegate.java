@@ -1,5 +1,7 @@
 package com.dtmining.latte.mk.main.index;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -7,11 +9,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+
 import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.ui.recycler.BaseDecoration;
 
+import com.dtmining.latte.ui.recycler.CustomGridLayoutManager;
 import com.dtmining.latte.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.ui.refresh.RefreshHandler;
 
@@ -53,15 +60,40 @@ public class IndexDelegate extends BottomItemDelegate {
         //mRecyclerView.addOnItemTouchListener(IndexItemClickListener.create(mkBottomDelegate));
     }
 
-    private void initRecyclerView(){
-        final GridLayoutManager manager=new GridLayoutManager(getContext(),3);
+    private void initRecyclerView() {
+        final GridLayoutManager manager = new CustomGridLayoutManager(getContext(), 3);
         mRecyclerView.setLayoutManager(manager);
-          mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-                //(BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.main_orange_color),0));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        //(BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.main_orange_color),0));
         //final EcBottomDelegate ecBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情
         //mRecylerView.addOnItemTouchListener(IndexItemClickListener.create(ecBottomDelegate));
+        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //设置recyclerView高度
+                ViewGroup.LayoutParams layoutParams = mRecyclerView.getLayoutParams();
+                if (Build.VERSION.SDK_INT >= 16) {
+                    mRecyclerView.getViewTreeObserver()
+                            .removeOnGlobalLayoutListener(this);
+                } else {
+                    mRecyclerView.getViewTreeObserver()
+                            .removeGlobalOnLayoutListener(this);
+                }
+
+                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+                int height = wm.getDefaultDisplay().getWidth() / 2;
+                if (mRecyclerView.getHeight() < height && mRecyclerView.getHeight() > wm.getDefaultDisplay().getWidth() / 3) {
+                    layoutParams.height = 480;
+                } else {
+                    layoutParams.height = 300;
+                }
+                mRecyclerView.setLayoutParams(layoutParams);
+
+            }
+        });
     }
+
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
 
