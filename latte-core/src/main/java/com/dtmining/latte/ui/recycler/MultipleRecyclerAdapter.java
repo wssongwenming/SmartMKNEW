@@ -1,7 +1,6 @@
 package com.dtmining.latte.ui.recycler;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import com.bigkoo.convenientbanner.ConvenientBanner;
@@ -12,19 +11,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.R;
-import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.ui.banner.BannerCreator;
 import com.dtmining.latte.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
-import com.dtmining.latte.ui.sub_delegates.medicine_take_plan.MedicineTakePlan;
+import com.dtmining.latte.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 import com.dtmining.latte.ui.sub_delegates.scan_add.ScanAddDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.http.DELETE;
 
 /**
  * author:songwenming
@@ -178,11 +174,21 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
             case ItemType.SEPERATOR:
                 break;
             case ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_HISTORY:
-                View view_more =holder.getView(R.id.tv_item_medicine_history_more);
-                view_more.setOnClickListener(new View.OnClickListener() {
+                View view_more_medicine =holder.getView(R.id.tv_item_medicine_history_more);
+                view_more_medicine.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DELEGATE.start(new MedicineTakeHistoryDelegate());
+
+                    }
+                });
+                break;
+            case ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN:
+                View view_more_medicine_plan =holder.getView(R.id.tv_item_medicine_plan_more);
+                view_more_medicine_plan.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DELEGATE.start(new MedicineTakePlanDelegate());
 
                     }
                 });
@@ -232,7 +238,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                 DELEGATE.start(new MedicineMineDelegate());
                 break;
             case 4://点击了“用药计划”
-                DELEGATE.start(new MedicineTakePlan());
+                DELEGATE.start(new MedicineTakePlanDelegate());
                 break;
             case 5://点击了“用药记录”
                 DELEGATE.start(new MedicineTakeHistoryDelegate());

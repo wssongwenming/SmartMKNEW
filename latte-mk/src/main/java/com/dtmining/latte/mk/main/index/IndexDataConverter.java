@@ -48,6 +48,14 @@ public class IndexDataConverter extends DataConverter {
                 .build();
         ENTITIES.add(entity);
     }
+    //获取“用药计划  更多> ”
+    private void getMedicinePlanMore(){
+        final MultipleItemEntity entity= MultipleItemEntity.builder()
+                .setFiled(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN)
+                .setFiled(MultipleFields.SPAN_SIZE,3)
+                .build();
+        ENTITIES.add(entity);
+    }
     //获取文字图标按钮
     private void getImage_TextButton(){
         final MultipleItemEntity entity=MultipleItemEntity.builder()
@@ -130,6 +138,8 @@ public class IndexDataConverter extends DataConverter {
         getSeperator();
         getMedicineHistoryMore();
         convert();
+        getSeperator();
+        getMedicinePlanMore();
 /*        final JSONArray dataArray= JSON.parseObject(getJsonData()).getJSONArray("data");
         final int size= dataArray.size();
         for (int i = 0; i < size; i++) {

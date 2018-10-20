@@ -49,7 +49,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,Base
             }
         },2000);
     }
-    public void firstPage(String url){
+    public void firstPage_medicine_history(String url){
         //BEAN.setDelayed(1000);
         RestClient.builder()
                 .url(url)
@@ -58,6 +58,28 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,Base
                     public void onSuccess(String response) {
                         Toast.makeText(Latte.getApplicationContext(),response,Toast.LENGTH_LONG).show();
                        // final JSONObject object=JSON.parseObject(response);
+                        /*BEAN.setTotal(object.getInteger("total"))
+                                .setPageSize(object.getInteger("page_size"));*/
+                        //设置Adapter
+                        mAdapter=MultipleRecyclerAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
+                        mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
+                        RECYCLERVIEW.setAdapter(mAdapter);
+                        BEAN.addIndex();
+                    }
+                })
+                .build()
+                .get();
+
+    }
+    public void firstPage_medicine_plan(String url){
+        //BEAN.setDelayed(1000);
+        RestClient.builder()
+                .url(url)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Toast.makeText(Latte.getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        // final JSONObject object=JSON.parseObject(response);
                         /*BEAN.setTotal(object.getInteger("total"))
                                 .setPageSize(object.getInteger("page_size"));*/
                         //设置Adapter

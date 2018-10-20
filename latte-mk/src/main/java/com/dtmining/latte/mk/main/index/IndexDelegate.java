@@ -1,25 +1,20 @@
 package com.dtmining.latte.mk.main.index;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
-import com.dtmining.latte.mk.main.MkBottomDelegate;
 import com.dtmining.latte.ui.recycler.BaseDecoration;
-import com.dtmining.latte.ui.recycler.SimpleDividerItemDecoration;
+
+import com.dtmining.latte.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.ui.refresh.RefreshHandler;
-import com.joanzapata.iconify.widget.IconTextView;
+
 import butterknife.BindView;
 
 /**
@@ -61,8 +56,8 @@ public class IndexDelegate extends BottomItemDelegate {
     private void initRecyclerView(){
         final GridLayoutManager manager=new GridLayoutManager(getContext(),3);
         mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.addItemDecoration
-                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.blue_btn_bg_color),1));
+          mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+                //(BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.main_orange_color),0));
         //final EcBottomDelegate ecBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情
         //mRecylerView.addOnItemTouchListener(IndexItemClickListener.create(ecBottomDelegate));
@@ -73,7 +68,7 @@ public class IndexDelegate extends BottomItemDelegate {
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
         initRefreshLayout();
-        mRefreshHandler.firstPage("index");
+        mRefreshHandler.firstPage_medicine_history("index");
     }
     @Override
     public Object setLayout() {

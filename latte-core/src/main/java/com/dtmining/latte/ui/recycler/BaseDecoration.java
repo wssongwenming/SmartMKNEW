@@ -4,6 +4,7 @@ package com.dtmining.latte.ui.recycler;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.choices.divider.DividerItemDecoration;
@@ -22,48 +23,24 @@ public class BaseDecoration extends DividerItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        super.getItemOffsets(outRect, view, parent, state);
+        //super.getItemOffsets(outRect, view, parent, state);
         int childAdapterPosition = parent.getChildAdapterPosition(view);
-
 
         int lastCount = parent.getAdapter().getItemCount() - 1;
 
-        if (childAdapterPosition ==4) {
+        if (childAdapterPosition == 0) {
             outRect.set(0, 0, 0, 0);
             return;
         }
-        if (childAdapterPosition ==5) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-        if (childAdapterPosition ==6) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-        if (childAdapterPosition ==7) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-        if (childAdapterPosition ==8) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-        if (childAdapterPosition ==lastCount-1) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-        if (childAdapterPosition ==lastCount) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-        if (childAdapterPosition ==lastCount+1) {
-            outRect.set(0, 0, 0, 0);
+        if (childAdapterPosition == 11) {
+            outRect.set(0, 0, 0, 1);
             return;
         }
 
-
-        outRect.set(0, 0, 0, 1);
-
+        if (childAdapterPosition == lastCount) {
+            outRect.set(0, 0, 0, 1);
+            return;
+        }
 
     }
 }
