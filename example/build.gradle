@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.dtmining.smartmk.example"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,6 +17,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    allprojects {
+        repositories
+                { jcenter()
+                    maven { url "https://jitpack.io" }
+                    maven {
+                        url 'http://dl.bintray.com/dev-fingerlinks/maven'
+                    }
+                    mavenCentral() }}
+
+
 }
 
 dependencies {

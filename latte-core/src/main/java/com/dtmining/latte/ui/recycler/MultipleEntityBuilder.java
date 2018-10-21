@@ -17,7 +17,7 @@ public class MultipleEntityBuilder {
         FIELDS.put(MultipleFields.ITEM_TYPE,itemType);
         return this;
     }
-    public final MultipleEntityBuilder setFiled(Object key, Object value){
+    public final MultipleEntityBuilder setField(Object key, Object value){
         FIELDS.put(key,value);
         return this;
     }

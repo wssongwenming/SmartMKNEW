@@ -88,7 +88,8 @@ public class SignUpDelegate extends LatteDelegate {
             signModel.setDetail(user);
             //获取验证码
             String sMSJson = JSON.toJSON(signModel).toString();
-            RestClient.builder().url("http://10.0.2.2:8081/Web01_exec/SMSCode")
+            RestClient.builder()
+                    .url("http://10.0.2.2:8081/Web01_exec/SMSCode")
                     .raw(sMSJson)
                     .success(new ISuccess() {
                         @Override
@@ -123,7 +124,9 @@ public class SignUpDelegate extends LatteDelegate {
             signModel.setDetail(user);
             String singUpJson = JSON.toJSON(signModel).toString();
             Toast.makeText(this.getContext(),singUpJson,Toast.LENGTH_SHORT).show();
-            RestClient.builder().url("http://10.0.2.2:8081/Web01_exec/UserRegister")
+            RestClient.builder()
+                    .url("http://10.0.2.2:8081/Web01_exec/UserRegister")
+                    //.url("http://192.168.1.3:8081/Web01_exec/UserRegister")
                     .raw(singUpJson)
                     .success(new ISuccess() {
                         @Override

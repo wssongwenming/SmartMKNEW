@@ -1,15 +1,11 @@
 package com.dtmining.latte.mk.main.index;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.ui.recycler.DataConverter;
 import com.dtmining.latte.ui.recycler.ItemType;
-import com.dtmining.latte.ui.recycler.MultipleEntityBuilder;
 import com.dtmining.latte.ui.recycler.MultipleFields;
 import com.dtmining.latte.ui.recycler.MultipleItemEntity;
 
@@ -25,9 +21,9 @@ public class IndexDataConverter extends DataConverter {
         bannerImages.add(R.mipmap.banner_02);
         bannerImages.add(R.mipmap.banner_03);
             final MultipleItemEntity entity=MultipleItemEntity.builder()
-                    .setFiled(MultipleFields.ITEM_TYPE,ItemType.BANNER)
-                    .setFiled(MultipleFields.SPAN_SIZE,3)
-                    .setFiled(MultipleFields.BANNERS_INTEGER,bannerImages)
+                    .setField(MultipleFields.ITEM_TYPE,ItemType.BANNER)
+                    .setField(MultipleFields.SPAN_SIZE,3)
+                    .setField(MultipleFields.BANNERS_INTEGER,bannerImages)
                     .build();
         ENTITIES.add(entity);
     }
@@ -35,71 +31,71 @@ public class IndexDataConverter extends DataConverter {
     //获取分割线加到ENTITES
     private void getSeperator(){
         final MultipleItemEntity entity=MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.SEPERATOR)
-                .setFiled(MultipleFields.SPAN_SIZE,3)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.SEPERATOR)
+                .setField(MultipleFields.SPAN_SIZE,3)
                 .build();
         ENTITIES.add(entity);
     }
     //获取“用药记录  更多> ”
     private void getMedicineHistoryMore(){
         final MultipleItemEntity entity= MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_HISTORY)
-                .setFiled(MultipleFields.SPAN_SIZE,3)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_HISTORY)
+                .setField(MultipleFields.SPAN_SIZE,3)
                 .build();
         ENTITIES.add(entity);
     }
     //获取“用药计划  更多> ”
     private void getMedicinePlanMore(){
         final MultipleItemEntity entity= MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN)
-                .setFiled(MultipleFields.SPAN_SIZE,3)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN)
+                .setField(MultipleFields.SPAN_SIZE,3)
                 .build();
         ENTITIES.add(entity);
     }
     //获取文字图标按钮
     private void getImage_TextButton(){
         final MultipleItemEntity entity=MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
-                .setFiled(MultipleFields.ID,1)
-                .setFiled(MultipleFields.SPAN_SIZE,1)
-                .setFiled(MultipleFields.BUTTON_NAME,"扫码添加")
-                .setFiled(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_scan_add)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
+                .setField(MultipleFields.ID,1)
+                .setField(MultipleFields.SPAN_SIZE,1)
+                .setField(MultipleFields.BUTTON_NAME,"扫码添加")
+                .setField(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_scan_add)
                 .build();
         ENTITIES.add(entity);
         final MultipleItemEntity entity2=MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
-                .setFiled(MultipleFields.SPAN_SIZE,1)
-                .setFiled(MultipleFields.ID,2)
-                .setFiled(MultipleFields.BUTTON_NAME,"手动添加")
-                .setFiled(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_hand_add)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
+                .setField(MultipleFields.SPAN_SIZE,1)
+                .setField(MultipleFields.ID,2)
+                .setField(MultipleFields.BUTTON_NAME,"手动添加")
+                .setField(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_hand_add)
                 .build();
         ENTITIES.add(entity2);
         final MultipleItemEntity entity3=MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
-                .setFiled(MultipleFields.SPAN_SIZE,1)
-                .setFiled(MultipleFields.ID,3)
-                .setFiled(MultipleFields.BUTTON_NAME,"我的药品")
-                .setFiled(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_mdicine_mine)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
+                .setField(MultipleFields.SPAN_SIZE,1)
+                .setField(MultipleFields.ID,3)
+                .setField(MultipleFields.BUTTON_NAME,"我的药品")
+                .setField(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_mdicine_mine)
                 .build();
         ENTITIES.add(entity3);
         final MultipleItemEntity entity4=MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
-                .setFiled(MultipleFields.SPAN_SIZE,1)
-                .setFiled(MultipleFields.BUTTON_NAME,"用药计划")
-                .setFiled(MultipleFields.ID,4)
-                .setFiled(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_take_plan)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
+                .setField(MultipleFields.SPAN_SIZE,1)
+                .setField(MultipleFields.BUTTON_NAME,"用药计划")
+                .setField(MultipleFields.ID,4)
+                .setField(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_take_plan)
                 .build();
         ENTITIES.add(entity4);
         final MultipleItemEntity entity5=MultipleItemEntity.builder()
-                .setFiled(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
-                .setFiled(MultipleFields.SPAN_SIZE,1)
-                .setFiled(MultipleFields.ID,5)
-                .setFiled(MultipleFields.BUTTON_NAME,"用药记录")
-                .setFiled(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_take_plan)
+                .setField(MultipleFields.ITEM_TYPE,ItemType.IMAGE_TEXT_COMMAND_BUTTON)
+                .setField(MultipleFields.SPAN_SIZE,1)
+                .setField(MultipleFields.ID,5)
+                .setField(MultipleFields.BUTTON_NAME,"用药记录")
+                .setField(MultipleFields.BUTTON_IMAGE,R.mipmap.icon_medicine_take_plan)
                 .build();
         ENTITIES.add(entity5);
     }
-    private void convert(){
+    public ArrayList<MultipleItemEntity> convert(){
         ArrayList<String> medicinenames=new ArrayList<>();
         String atime=null;
         JSONObject jsonobject=JSON.parseObject(getJsonData());
@@ -119,15 +115,14 @@ public class IndexDataConverter extends DataConverter {
                 medicinenames.add(jsonarray6.getString(j));
             }
             final MultipleItemEntity entity=MultipleItemEntity.builder()
-                    .setFiled(MultipleFields.ITEM_TYPE,ItemType.TEXT_TEXT)
-                    .setFiled(MultipleFields.SPAN_SIZE,3)
-                    .setFiled(MultipleFields.MEDICINE_NAME,medicinenames.get(0))
-                    .setFiled(MultipleFields.ATIME,atime)
+                    .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_TEXT)
+                    .setField(MultipleFields.SPAN_SIZE,3)
+                    .setField(MultipleFields.MEDICINE_NAME,medicinenames.get(0))
+                    .setField(MultipleFields.ATIME,atime)
                     .build();
             ENTITIES.add(entity);
         }
-
-
+        return ENTITIES;
     }
    //获取网络数据
     @Override
@@ -168,12 +163,12 @@ public class IndexDataConverter extends DataConverter {
                 }
             }
             final MultipleItemEntity entity=MultipleItemEntity.builder()
-                    .setFiled(MultipleFields.ITEM_TYPE,type)
-                    .setFiled(MultipleFields.SPAN_SIZE,spanSize)
-                    .setFiled(MultipleFields.ID,id)
-                    .setFiled(MultipleFields.TEXT,text)
-                    .setFiled(MultipleFields.IMAGE_URL,imageUrl)
-                    .setFiled(MultipleFields.BANNERS,bannerImages)
+                    .setField(MultipleFields.ITEM_TYPE,type)
+                    .setField(MultipleFields.SPAN_SIZE,spanSize)
+                    .setField(MultipleFields.ID,id)
+                    .setField(MultipleFields.TEXT,text)
+                    .setField(MultipleFields.IMAGE_URL,imageUrl)
+                    .setField(MultipleFields.BANNERS,bannerImages)
                     .build();
             ENTITIES.add(entity);
         }*/
@@ -212,11 +207,11 @@ public class IndexDataConverter extends DataConverter {
              }
 
          final MultipleItemEntity entity=MultipleItemEntity.builder()
-                 .setFiled(MultipleFields.ITEM_TYPE,type)
-                 .setFiled(MultipleFields.SPAN_SIZE,3)
-                 .setFiled(MultipleFields.ID,id)
-                 .setFiled(MultipleFields.MEDICINE_NAME,medicinenames.get(0))
-                 .setFiled(MultipleFields.ATIME,atime)
+                 .setField(MultipleFields.ITEM_TYPE,type)
+                 .setField(MultipleFields.SPAN_SIZE,3)
+                 .setField(MultipleFields.ID,id)
+                 .setField(MultipleFields.MEDICINE_NAME,medicinenames.get(0))
+                 .setField(MultipleFields.ATIME,atime)
                  .build();
          ENTITIES.add(entity);
      }

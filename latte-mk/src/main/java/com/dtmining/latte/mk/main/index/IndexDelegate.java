@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
@@ -21,6 +22,9 @@ import com.dtmining.latte.ui.recycler.BaseDecoration;
 import com.dtmining.latte.ui.recycler.CustomGridLayoutManager;
 import com.dtmining.latte.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.ui.refresh.RefreshHandler;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 
 import butterknife.BindView;
 
@@ -52,8 +56,13 @@ public class IndexDelegate extends BottomItemDelegate {
     }
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-       /* mRecyclerView.addItemDecoration
-                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.app_background),1));*/
+        CallbackManager.getInstance()
+                .addCallback(CallbackType.ON_SCAN, new IGlobalCallback() {
+                    @Override
+                    public void executeCallback(@Nullable Object args) {
+                        Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
+                    }
+                });
         mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter(),this.getParentDelegate());
         //final MkBottomDelegate mkBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情

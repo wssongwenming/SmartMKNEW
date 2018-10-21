@@ -15,6 +15,7 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.launcher.LauncherDelegate;
 import com.dtmining.latte.mk.launcher.LauncherScrollDelegate;
 import com.dtmining.latte.mk.main.MkBottomDelegate;
+import com.dtmining.latte.mk.main.index.IndexDelegate;
 import com.dtmining.latte.mk.sign.ISignListener;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.sign.SignUpDelegate;
@@ -47,7 +48,7 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
         //return new ExampleDelegate();
         return new LauncherDelegate();
         //return new LauncherScrollDelegate();
-        //return new SignUpDelegate();
+        //return new IndexDelegate();
     }
 
     @Override

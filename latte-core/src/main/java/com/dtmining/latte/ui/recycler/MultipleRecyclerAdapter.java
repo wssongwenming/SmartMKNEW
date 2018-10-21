@@ -1,8 +1,17 @@
 package com.dtmining.latte.ui.recycler;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.bumptech.glide.Glide;
@@ -11,6 +20,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.R;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.ui.banner.BannerCreator;
 import com.dtmining.latte.ui.sub_delegates.hand_add.HandAddDelegate;
@@ -19,8 +30,11 @@ import com.dtmining.latte.ui.sub_delegates.medicine_take_history.MedicineTakeHis
 import com.dtmining.latte.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 import com.dtmining.latte.ui.sub_delegates.scan_add.ScanAddDelegate;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.http.DELETE;
 
 /**
  * author:songwenming
@@ -46,6 +60,9 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
         this.DELEGATE=delegate;
         init();
     }
+
+
+
     public static MultipleRecyclerAdapter create(List<MultipleItemEntity> data,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(data,delegate);
     }
@@ -229,7 +246,8 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
         switch (id)
         {
             case 1://点击了“扫码添加”
-                DELEGATE.start(new ScanAddDelegate());
+                DELEGATE.startScanWithCheck(DELEGATE);
+                Log.d("sm", "扫码添加 ");
                 break;
             case 2://点击了“手动添加”
                 DELEGATE.start(new HandAddDelegate());
@@ -255,5 +273,6 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
     public void onItemClick(int position) {
 
     }
+
 }
 

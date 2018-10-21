@@ -5,6 +5,7 @@ package com.dtmining.latte.ui.recycler;
  * Description:
  */
 public enum MultipleFields {
+    TITLE,
     ITEM_TYPE,
     TEXT,
     //用药历史中的药品名，或者是“开箱操作”？？

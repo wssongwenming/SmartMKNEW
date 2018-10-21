@@ -19,6 +19,7 @@ package com.dtmining.zxing.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetFieldescriptor;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -26,7 +27,8 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.xys.libzxing.R;
+import com.dtmining.zxing.R;
+import com.dtmining.zxing.activity.CaptureActivity;
 
 import java.io.Closeable;
 import java.io.IOException;

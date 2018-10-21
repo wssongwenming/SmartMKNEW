@@ -94,6 +94,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/intermediate-jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/library_and_local_jars_jni" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/packaged-aidl" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/packagedAssets" />
@@ -116,24 +117,29 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.pnikosis:materialish-progress-1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:retrofit:2.4.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: de.hdodenhof:circleimageview-2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.joanzapata.iconify:android-iconify-fontawesome-2.2.2" level="project" />
     <orderEntry type="library" name="Gradle: com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.1.6@jar" level="project" />
     <orderEntry type="library" name="Gradle: me.yokeyword:fragmentation-0.10.1" level="project" />
     <orderEntry type="library" name="Gradle: org.greenrobot:greendao-api:3.2.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: me.dm7.barcodescanner:zbar-1.9.8" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide:4.0.0-RC0@jar" level="project" />
     <orderEntry type="library" name="Gradle: me.yokeyword:swipebackfragment-0.2.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.14.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v4-25.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.hotchemi:permissionsdispatcher-3.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.bigkoo:convenientbanner-2.0.5" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.0.0-RC0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-annotations:8.6.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:adapter-rxjava2:2.4.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-25.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: me.dm7.barcodescanner:core-1.9.8" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:design-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: org.greenrobot:greendao-generator:3.2.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.joanzapata.iconify:android-iconify-ionicons-2.2.2" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-25.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.blankj:utilcode-1.14.4" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-25.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:okhttp3-integration-4.0.0-RC0" level="project" />
     <orderEntry type="library" name="Gradle: org.greenrobot:greendao:3.2.0@jar" level="project" />
@@ -158,6 +164,7 @@
     <orderEntry type="library" name="Gradle: com.alibaba:fastjson:1.1.57.android@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.10.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: me.yokeyword:fragmentation-swipeback-0.7.9" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.yalantis:ucrop-2.2.1-native" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:annotations:4.0.0-RC0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.f0ris.sweetalert:library-1.5.1" level="project" />
     <orderEntry type="module" module-name="latte-core" />

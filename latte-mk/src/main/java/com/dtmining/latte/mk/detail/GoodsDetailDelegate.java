@@ -23,8 +23,5 @@ public class GoodsDetailDelegate extends LatteDelegate {
 
     }
 
-    @Override
-    protected FragmentAnimator onCreateFragmentAnimator() {
-        return new DefaultHorizontalAnimator();
-    }
+
 }
