@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.ui.recycler.RgbValue;
+import com.dtmining.latte.mk.ui.recycler.RgbValue;
 
 
 public class TransLucentBehavior extends CoordinatorLayout.Behavior<Toolbar>{

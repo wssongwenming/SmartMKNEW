@@ -1,14 +1,12 @@
 package com.dtmining.latte.mk.sign;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.app.AccountManager;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
-import com.dtmining.latte.mk.database.DatabaseManager;
-import com.dtmining.latte.mk.database.UserProfile;
+import com.dtmining.latte.database.DatabaseManager;
+import com.dtmining.latte.database.UserProfile;
 
 /**
  * author:songwenming

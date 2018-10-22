@@ -31,7 +31,7 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
         super.onCreate(savedInstanceState);
         final ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null){
-            actionBar.hide();
+            //actionBar.hide();
         }
         //为微信回调保存Activity上下文
         Latte.getConfigurator().withActivity(this);

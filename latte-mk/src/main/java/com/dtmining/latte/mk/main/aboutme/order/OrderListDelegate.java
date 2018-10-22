@@ -12,7 +12,7 @@ import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.main.aboutme.AboutMeDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
-import com.dtmining.latte.ui.recycler.MultipleItemEntity;
+import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 
 import java.util.List;
 

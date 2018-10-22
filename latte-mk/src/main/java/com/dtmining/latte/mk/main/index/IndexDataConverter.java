@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.ui.recycler.DataConverter;
-import com.dtmining.latte.ui.recycler.ItemType;
-import com.dtmining.latte.ui.recycler.MultipleFields;
-import com.dtmining.latte.ui.recycler.MultipleItemEntity;
+import com.dtmining.latte.mk.ui.recycler.DataConverter;
+import com.dtmining.latte.mk.ui.recycler.ItemType;
+import com.dtmining.latte.mk.ui.recycler.MultipleFields;
+import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 
 import java.util.ArrayList;
 

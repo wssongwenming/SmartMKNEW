@@ -12,14 +12,12 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.ui.sub_delegates.hand_add.HandAddDelegate;
-import com.dtmining.latte.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
-import com.dtmining.latte.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
-import com.dtmining.latte.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 
 import java.util.List;
-
-import retrofit2.http.DELETE;
 
 /**
  * author:songwenming

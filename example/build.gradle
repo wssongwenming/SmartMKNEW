@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+dependencies {
+    compile 'org.greenrobot:greendao:3.2.0'
+}
 
+greendao{
+    schemaVersion 1 //数据库版本号，进行数据库升级时使用
+    daoPackage 'cn.justec.www.temperatureapp.gen'
+    targetGenDir 'src/main/java'
+}
 android {
     compileSdkVersion 25
     buildToolsVersion"25.0.2"

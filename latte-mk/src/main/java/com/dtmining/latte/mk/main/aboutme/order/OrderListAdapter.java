@@ -8,13 +8,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.ui.recycler.MultipleFields;
-import com.dtmining.latte.ui.recycler.MultipleItemEntity;
-import com.dtmining.latte.ui.recycler.MultipleRecyclerAdapter;
-import com.dtmining.latte.ui.recycler.MultipleViewHolder;
+import com.dtmining.latte.mk.ui.recycler.MultipleFields;
+import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
+import com.dtmining.latte.mk.ui.recycler.MultipleRecyclerAdapter;
+import com.dtmining.latte.mk.ui.recycler.MultipleViewHolder;
 
 import java.util.List;
-import java.util.zip.Deflater;
 
 /**
  * author:songwenming
