@@ -73,7 +73,7 @@ public class UserProfileDelegate extends LatteDelegate {
         //设置RecyclerView
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        final ListAdapter adapter = new ListAdapter(data);
+        final ListAdapter adapter = new ListAdapter(data,this.getParentDelegate());
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new UserProfileClickListener(this));
     }

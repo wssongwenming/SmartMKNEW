@@ -36,11 +36,6 @@ public class AboutMeDelegate extends BottomItemDelegate{
     public Object setLayout() {
         return R.layout.delegate_personal;
     }
-    @OnClick(R2.id.tv_all_order)
-    void onClickAllOrder(){
-        mArgs.putString(ORDER_TYPE,"all");
-        startOrderListByType();
-    }
     @OnClick(R2.id.img_user_avatar)
     void onClickAvatar(){
         getParentDelegate().start(new UserProfileDelegate());
@@ -53,23 +48,60 @@ public class AboutMeDelegate extends BottomItemDelegate{
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-       final ListBean address=new ListBean.Builder()
-                .setItemType(ListItemType.ITEM_NORMAL)
+        ListBean boxadd=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
                 .setId(1)
-                .setText("收获地址")
+                .setText("添加药箱")
+                .setImage(R.drawable.self_add)
                 .build();
-        ListBean system=new ListBean.Builder()
-                .setItemType(ListItemType.ITEM_NORMAL)
+        ListBean minebox=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
                 .setId(2)
-                .setText("系统设置")
+                .setText("我的药箱")
+                .setImage(R.drawable.self_mine)
+                .build();
+        ListBean medhistory=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
+                .setId(3)
+                .setText("用药记录")
+                .setImage(R.drawable.self_history)
+                .build();
+        ListBean message=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
+                .setId(4)
+                .setText("用户消息")
+                .setImage(R.drawable.self_message)
+                .build();
+        ListBean feedback=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
+                .setId(5)
+                .setText("反馈")
+                .setImage(R.drawable.self_reward)
+                .build();
+        ListBean cacheclean=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
+                .setId(6)
+                .setText("清除缓存")
+                .setImage(R.drawable.self_clean)
+                .build();
+        ListBean signout=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
+                .setId(7)
+                .setText("退出")
+                .setImage(R.drawable.self_exit)
                 .build();
         final List<ListBean>data=new ArrayList<>();
-        data.add(address);
-        data.add(system);
+        data.add(boxadd);
+        data.add(minebox);
+        data.add(medhistory);
+        data.add(message);
+        data.add(feedback);
+        data.add(cacheclean);
+        data.add(signout);
         //设置RecyclerView
         final LinearLayoutManager manager=new LinearLayoutManager(getContext());
         mRvSettings.setLayoutManager(manager);
-        final ListAdapter adapter=new ListAdapter(data);
+        final ListAdapter adapter=new ListAdapter(data,this.getParentDelegate());
         mRvSettings.setAdapter(adapter);
     }
 

@@ -23,5 +23,6 @@ public class HandAddDelegate extends LatteDelegate{
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
+
     }
 }

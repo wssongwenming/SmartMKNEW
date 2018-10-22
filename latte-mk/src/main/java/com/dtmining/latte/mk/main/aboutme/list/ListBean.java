@@ -14,22 +14,28 @@ public class ListBean implements MultiItemEntity {
     private String mImageUrl = null;
     private String mText = null;
     private String mValue = null;
+    private int mImage=0;
     private int mId = 0;
     private LatteDelegate mDelegate = null;
     private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = null;
 
-    public ListBean(int mItemType, String mImageUrl, String mText, String mValue, int mId, LatteDelegate mDelegate, CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener) {
+    public ListBean(int mItemType,int mImage, String mImageUrl, String mText, String mValue, int mId, LatteDelegate mDelegate, CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener) {
         this.mItemType = mItemType;
         this.mImageUrl = mImageUrl;
         this.mText = mText;
         this.mValue = mValue;
         this.mId = mId;
+        this.mImage=mImage;
         this.mDelegate = mDelegate;
         this.mOnCheckedChangeListener = mOnCheckedChangeListener;
     }
 
     public String getImageUrl() {
         return mImageUrl;
+    }
+
+    public int getmImage() {
+        return mImage;
     }
 
     public String getText() {
@@ -70,6 +76,7 @@ public class ListBean implements MultiItemEntity {
         private String imageUrl = null;
         private String text = null;
         private String value = null;
+        private int image=0;
         private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = null;
         private LatteDelegate delegate = null;
 
@@ -83,6 +90,11 @@ public class ListBean implements MultiItemEntity {
             return this;
         }
 
+        public Builder setImage(int imageRsID)
+        {
+            this.image=imageRsID;
+            return this;
+        }
         public Builder setImageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
             return this;
@@ -109,7 +121,7 @@ public class ListBean implements MultiItemEntity {
         }
 
         public ListBean build() {
-            return new ListBean(itemType, imageUrl, text, value, id, delegate, onCheckedChangeListener);
+            return new ListBean(itemType,image, imageUrl, text, value, id, delegate, onCheckedChangeListener);
         }
     }
 }
