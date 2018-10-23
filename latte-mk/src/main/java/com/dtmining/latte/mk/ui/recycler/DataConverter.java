@@ -1,6 +1,8 @@
 package com.dtmining.latte.mk.ui.recycler;
 
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.ArrayList;
 /**
  * author:songwenming

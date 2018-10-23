@@ -3,9 +3,8 @@ package com.dtmining.latte.mk.ui.sub_delegates.scan_add;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-
-import com.dtmining.latte.R;
 import com.dtmining.latte.delegates.LatteDelegate;
+import com.dtmining.latte.mk.R;
 
 
 /**
