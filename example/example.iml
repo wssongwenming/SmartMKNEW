@@ -116,6 +116,7 @@
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:retrofit:2.4.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: de.hdodenhof:circleimageview-2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.joanzapata.iconify:android-iconify-fontawesome-2.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:multidex-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.1.6@jar" level="project" />
     <orderEntry type="library" name="Gradle: me.yokeyword:fragmentation-0.10.1" level="project" />
     <orderEntry type="library" name="Gradle: org.greenrobot:greendao-api:3.2.0@jar" level="project" />

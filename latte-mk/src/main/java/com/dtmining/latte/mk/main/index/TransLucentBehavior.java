@@ -29,7 +29,7 @@ public class TransLucentBehavior extends CoordinatorLayout.Behavior<Toolbar>{
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, Toolbar child, View dependency) {
-        return dependency.getId()== R.id.rv_index ;
+        return dependency.getId()== R.id.rv_medicine_mine;
     }
 
     @Override

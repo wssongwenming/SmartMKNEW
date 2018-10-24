@@ -1,6 +1,8 @@
 package com.dtmining.smartmk.example;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.dtmining.latte.app.AccountManager;
@@ -64,5 +66,11 @@ public class ExampleApp  extends Application{
         {
             return null;
         }
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+
     }
 }

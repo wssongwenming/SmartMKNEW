@@ -23,6 +23,8 @@ import com.dtmining.latte.ui.launcher.ILauncherListener;
 import com.dtmining.latte.ui.launcher.OnLauncherFinishTag;
 import com.dtmining.latte.util.sms.SMSObserver;
 
+import qiu.niorgai.StatusBarCompat;
+
 public class ExampleActivity extends ProxyActivity implements ISignListener,ILauncherListener {
 
     private SMSObserver mObserver;
@@ -35,6 +37,7 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
         }
         //为微信回调保存Activity上下文
         Latte.getConfigurator().withActivity(this);
+        StatusBarCompat.translucentStatusBar(this,true);
         //接受短信验证码
         mObserver = new SMSObserver(this,Latte.getHandler());
         Uri uri = Uri.parse("content://sms");
