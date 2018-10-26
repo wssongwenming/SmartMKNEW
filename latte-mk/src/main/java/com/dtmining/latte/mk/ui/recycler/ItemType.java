@@ -21,5 +21,6 @@ public class ItemType {
     public static final int IMAGE=7;
     public static final int TEXT_TEXT=10;
     public static final int VERTICAL_MENU_LIST=8;
+    public static final int MEDICINE_MINE=12;
 
 }

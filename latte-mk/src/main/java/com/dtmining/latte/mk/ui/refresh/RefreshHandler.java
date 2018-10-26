@@ -9,32 +9,42 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.MultipleRecyclerAdapter;
+import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineRecyclerAdapter;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 
+import org.json.JSONObject;
 
-public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,BaseQuickAdapter.RequestLoadMoreListener{
+import java.util.HashSet;
+import java.util.Set;
+
+
+public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
+        BaseQuickAdapter.RequestLoadMoreListener{
     private final SwipeRefreshLayout REFESH_LAYOUT;
+    private Set<SwipeListLayout> SETS =null;
     private final PagingBean BEAN;
     private final RecyclerView RECYCLERVIEW;
-    private MultipleRecyclerAdapter mAdapter=null;
+
     private final DataConverter CONVERTER;
     private final LatteDelegate DELEGATE;
-    private RefreshHandler(SwipeRefreshLayout swipeRefreshLayout,
+    public RefreshHandler(SwipeRefreshLayout swipeRefreshLayout,
                            RecyclerView recyclerView,
-                           DataConverter converter,PagingBean pagingBean,LatteDelegate delegate){
+                           DataConverter converter,PagingBean pagingBean,LatteDelegate delegate,Set<SwipeListLayout> sets){
         this.REFESH_LAYOUT=swipeRefreshLayout;
         this.RECYCLERVIEW=recyclerView;
         this.CONVERTER=converter;
         this.BEAN=pagingBean;
         this.DELEGATE=delegate;
+        this.SETS=sets;
        REFESH_LAYOUT.setOnRefreshListener(this);
     }
 
     public static RefreshHandler create(SwipeRefreshLayout swipeRefreshLayout,
                                         RecyclerView recyclerView,
-                                        DataConverter converter,LatteDelegate delegate){
-        return new RefreshHandler(swipeRefreshLayout,recyclerView,converter,new PagingBean(),delegate);
+                                        DataConverter converter,LatteDelegate delegate,Set<SwipeListLayout> sets){
+        return new RefreshHandler(swipeRefreshLayout,recyclerView,converter,new PagingBean(),delegate,sets);
 
     }
 
@@ -60,7 +70,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,Base
                         /*BEAN.setTotal(object.getInteger("total"))
                                 .setPageSize(object.getInteger("page_size"));*/
                         //设置Adapter
-                        mAdapter=MultipleRecyclerAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
+                        MultipleRecyclerAdapter mAdapter=MultipleRecyclerAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
                         mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
                         BEAN.addIndex();
@@ -82,7 +92,26 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,Base
                         /*BEAN.setTotal(object.getInteger("total"))
                                 .setPageSize(object.getInteger("page_size"));*/
                         //设置Adapter
-                        mAdapter=MultipleRecyclerAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
+                        //mAdapter=MultipleRecyclerAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
+                       // mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
+                      //  RECYCLERVIEW.setAdapter(mAdapter);
+                        BEAN.addIndex();
+                    }
+                })
+                .build()
+                .get();
+
+    }
+
+    public void firstPage_medicine_mine(String url){
+        BEAN.setDelayed(1000);
+        RestClient.builder()
+                .url(url)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Toast.makeText(Latte.getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        MedicineMineRecyclerAdapter mAdapter= MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response),SETS);
                         mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
                         BEAN.addIndex();

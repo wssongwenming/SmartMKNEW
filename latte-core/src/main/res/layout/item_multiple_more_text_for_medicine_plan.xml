@@ -7,7 +7,7 @@
     android:layout_height="30dp">
     <TextView
         android:layout_width="100dp"
-        android:text="用药记录"
+        android:text="用药计划"
         android:textSize="18sp"
         android:textColor="@android:color/black"
         android:gravity="center_vertical"

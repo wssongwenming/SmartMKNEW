@@ -61,7 +61,7 @@ public class IndexDelegate extends BottomItemDelegate {
                         Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
                     }
                 });
-        mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter(),this.getParentDelegate());
+        mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter(),this.getParentDelegate(),null);
         //final MkBottomDelegate mkBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情
         //mRecyclerView.addOnItemTouchListener(IndexItemClickListener.create(mkBottomDelegate));

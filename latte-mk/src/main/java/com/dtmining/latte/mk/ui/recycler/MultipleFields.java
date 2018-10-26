@@ -20,5 +20,13 @@ public enum MultipleFields {
     SPAN_SIZE,
     ID,
     NAME,
-    TAG
+    TAG,
+
+    MEDICINECODE,
+    MEDICINEID,
+    MEDICINECOUNT,
+    MEDICINENAME,
+    MEDICINEIMGURL,
+    BOXID,
+    MEDICINEPAUSE
 }

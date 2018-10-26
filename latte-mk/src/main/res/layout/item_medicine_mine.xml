@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_gravity="center_vertical"
+    android:layout_height="match_parent"
+   android:id="@+id/itemview_swipe"
+>
+
+    <!--BottomViews-->
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_btn_item_medicine_mine_pause"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="#aaaaaa"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="暂停"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_btn_item_medicine_mine_start"
+                android:layout_width="80dp"
+                android:visibility="gone"
+                android:layout_height="match_parent"
+                android:background="#aaaaaa"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="开始" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_btn_item_medicine_mine_supply"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:background="@color/Energized"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="补充" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_delete"
+                android:layout_width="80dp"
+                android:focusable="false"
+                android:textColor="@color/white"
+                android:layout_height="match_parent"
+                android:background="@color/Assertive"
+                android:gravity="center"
+                android:text="删除" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+
+    <!--SurfaceViews-->
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/item_medicine_mine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="#66ffffff"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:orientation="horizontal" >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_item_medicine_mine"
+            android:layout_width="90dp"
+            android:background="@color/Gray0"
+            android:layout_gravity="center"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:paddingLeft="20dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_item_medicine_mine_medicine_name"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"
+                    android:textColor="#000"
+                    android:layout_height="wrap_content"/>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_item_medicine_mine_medicine_count"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="剩余：5片"
+                    android:textSize="13sp"
+                    android:textColor="@color/Energized"
+                    android:layout_height="wrap_content"  />
+            </android.support.v7.widget.LinearLayoutCompat>
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="40dp">
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_item_medicine_mine_in_use"
+                    android:text="在服"
+                    android:visibility="gone"
+                    android:textColor="@color/Assertive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_item_medicine_mine_overdue"
+                    android:text="已过期"
+                    android:visibility="gone"
+                    android:textColor="@color/Assertive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_item_medicine_mine_pause"
+                    android:text="已暂停"
+                    android:visibility="gone"
+                    android:textColor="@color/Assertive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+</com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout>
+</android.support.v7.widget.LinearLayoutCompat>

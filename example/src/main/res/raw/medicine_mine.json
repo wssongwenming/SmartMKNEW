@@ -1,0 +1,47 @@
+{
+  "code": 1,
+  "tel": "18622360904",
+  "detail": [
+    {
+      "medicineCode": "1",
+      "medicineId": "101",
+      "medicineCount": 50,
+      "medicineName": "感冒药",
+      "medicine_img_url":"http://pic.58pic.com/58pic/huace/00/06/74/00/52aa5e5b124cd.jpg",
+      "boxId": "1",
+      "medicinePause": 0,
+      "medicinePlan": [
+        {
+          "atime": "12:30",
+          "medicineId": "101",
+          "id": "1"
+        },
+        {
+          "atime": "13:00",
+          "medicineId": "101",
+          "id": "2"
+        }
+      ]
+    },{
+      "medicineCode": "2",
+      "medicineId": "101",
+      "medicineCount": 50,
+      "medicineName": "感冒药1",
+      "medicine_img_url":"http://pic.58pic.com/58pic/huace/00/06/74/00/52aa5e5b124cd.jpg",
+      "boxId": "1",
+      "medicinePause": 0,
+      "medicinePlan": [
+        {
+          "atime": "12:30",
+          "medicineId": "101",
+          "id": "1"
+        },
+        {
+          "atime": "13:00",
+          "medicineId": "101",
+          "id": "2"
+        }
+      ]
+    }
+  ]
+}
