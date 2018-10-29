@@ -123,7 +123,7 @@ public class SignUpDelegate extends LatteDelegate {
             user.setRole(role);
             signModel.setDetail(user);
             String singUpJson = JSON.toJSON(signModel).toString();
-            Toast.makeText(this.getContext(),singUpJson,Toast.LENGTH_SHORT).show();
+           //Toast.makeText(this.getContext(),singUpJson,Toast.LENGTH_SHORT).show();
             RestClient.builder()
                     .url("http://10.0.2.2:8081/Web01_exec/UserRegister")
                     //.url("http://192.168.1.3:8081/Web01_exec/UserRegister")

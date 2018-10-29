@@ -20,7 +20,9 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
+import com.dtmining.latte.mk.ui.recycler.MyDecoration;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
 import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
@@ -42,21 +44,21 @@ import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
  */
 public class MedicineMineDelegate extends LatteDelegate {
     private String tel=null;
-    @BindView(R2.id.srl_medicine_mine)
-    SwipeRefreshLayout mRefreshLayout=null;
+ /*   @BindView(R2.id.srl_medicine_mine)
+    SwipeRefreshLayout mRefreshLayout=null;*/
     @BindView(R2.id.rv_medicine_mine)
     RecyclerView mRecylerView=null;
-    @BindView(R2.id.ed_search_medicine)
+/*    @BindView(R2.id.ed_search_medicine)
     AppCompatEditText mEditText_Medicine_Name=null;
     @BindView(R2.id.btn_search_medicine)
     AppCompatButton mBtn_Search_Medicine=null;
     @BindView(R2.id.btn_scan_medicine)
     AppCompatButton mBtn_Scan_Medicine=null;
-    @BindView(R2.id.tb_medicine_mine)
+    @BindView(R2.id.tb_medicine_mine)*/
     Toolbar mToolbar=null;
     private RefreshHandler mRefreshHandler=null;
     private Set<SwipeListLayout> sets = new HashSet();
-    private void initRefreshLayout(){
+/*    private void initRefreshLayout(){
         mRefreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_light,
@@ -64,12 +66,12 @@ public class MedicineMineDelegate extends LatteDelegate {
 
         );
         mRefreshLayout.setProgressViewOffset(true,120,300);
-    }
+    }*/
 
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        initRefreshLayout();
+        //initRefreshLayout();
         initRecyclerView();
         mRefreshHandler.firstPage_medicine_mine("medicine_mine");
     }
@@ -81,7 +83,7 @@ public class MedicineMineDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecylerView,new MedincineMineDataConverter(),null,sets);
+        mRefreshHandler=RefreshHandler.create(null,mRecylerView,new MedincineMineDataConverter(),null,sets);
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         if(userProfile==null){
             startWithPop(new SignInDelegate());
@@ -107,7 +109,8 @@ public class MedicineMineDelegate extends LatteDelegate {
     private void initRecyclerView(){
         final LinearLayoutManager manager=new LinearLayoutManager(getContext());
         mRecylerView.setLayoutManager(manager);
-        mRecylerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecylerView.addItemDecoration(new MyDecoration(getContext(), DividerItemDecoration.VERTICAL));
+/*        mRecylerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -124,7 +127,7 @@ public class MedicineMineDelegate extends LatteDelegate {
 
                 }
             }
-        });
+        });*/
     }
 
 }

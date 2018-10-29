@@ -22,6 +22,7 @@ public enum MultipleFields {
     NAME,
     TAG,
 
+    TEL,
     MEDICINECODE,
     MEDICINEID,
     MEDICINECOUNT,

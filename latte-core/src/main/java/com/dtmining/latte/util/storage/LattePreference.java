@@ -56,6 +56,17 @@ public final class LattePreference {
                  .putBoolean(key,flag)
                  .apply();
      }
+
+    public static void setBoxID(String key ,String boxId){
+        getAppPreference()
+                .edit()
+                .putString(key,boxId)
+                .apply();
+    }
+    public static String getBoxId(String key){
+       return getAppPreference()
+                .getString(key,"99");
+    }
      public static boolean getAppFlag(String key){
          return getAppPreference()
                  .getBoolean(key,false);

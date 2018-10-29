@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="60dp">
 
 
 <com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout
@@ -52,7 +52,7 @@
                 android:text="补充" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_delete"
+                android:id="@+id/tv_btn_item_medicine_mine_delete"
                 android:layout_width="80dp"
                 android:focusable="false"
                 android:textColor="@color/white"
@@ -149,4 +149,10 @@
 
 
 </com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout>
+    <View
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+
+        android:background="@color/we_chat_black"/>
 </android.support.v7.widget.LinearLayoutCompat>

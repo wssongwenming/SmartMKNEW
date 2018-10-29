@@ -68,7 +68,8 @@ public class IndexDelegate extends BottomItemDelegate {
     }
 
     private void initRecyclerView() {
-        final GridLayoutManager manager = new CustomGridLayoutManager(getContext(), 3);
+        //final GridLayoutManager manager = new CustomGridLayoutManager(getContext(), 3);
+        final GridLayoutManager manager=new GridLayoutManager(getContext(),3);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         //(BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.main_orange_color),0));

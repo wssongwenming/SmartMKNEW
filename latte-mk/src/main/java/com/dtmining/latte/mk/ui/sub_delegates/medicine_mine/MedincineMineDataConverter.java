@@ -25,7 +25,9 @@ public class MedincineMineDataConverter extends DataConverter {
 
     @Override
     public ArrayList<MultipleItemEntity> convert() {
-        final JSONArray dataArray= JSON.parseObject(getJsonData()).getJSONArray("detail");
+        final JSONObject jsonObject=JSON.parseObject(getJsonData());
+        String tel=jsonObject.getString("tel");
+        final JSONArray dataArray= jsonObject.getJSONArray("detail");
         final int size=dataArray.size();
         for (int i = 0; i <size ; i++) {
             JSONObject data= (JSONObject) dataArray.get(i);
@@ -45,6 +47,7 @@ public class MedincineMineDataConverter extends DataConverter {
             int type= ItemType.MEDICINE_MINE;
             final MultipleItemEntity entity=MultipleItemEntity.builder()
                     .setField(MultipleFields.ITEM_TYPE,type)
+                    .setField(MultipleFields.TEL,tel)
                     .setField(MultipleFields.MEDICINEID,medicineId)
                     .setField(MultipleFields.MEDICINECOUNT,medicineCount)
                     .setField(MultipleFields.MEDICINENAME,medicineName)

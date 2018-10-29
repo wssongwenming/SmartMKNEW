@@ -32,7 +32,7 @@ public class UserProfile {
     private String entry_way=null;
     @Generated(hash = 362390032)
     public UserProfile(long tel, String username, String pwd, String role,
-            String entry_way) {
+                       String entry_way) {
         this.tel = tel;
         this.username = username;
         this.pwd = pwd;

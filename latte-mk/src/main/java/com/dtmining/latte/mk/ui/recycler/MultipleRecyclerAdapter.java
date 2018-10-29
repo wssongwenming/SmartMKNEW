@@ -235,7 +235,6 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
         {
             case 1://点击了“扫码添加”
                 DELEGATE.startScanWithCheck(DELEGATE);
-                Log.d("sm", "扫码添加 ");
                 break;
             case 2://点击了“手动添加”
                 DELEGATE.start(new HandAddDelegate());

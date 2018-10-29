@@ -56,7 +56,7 @@ public final class PagingBean {
         this.mDelayed = mDelayed;
         return this;
     }
-    PagingBean addIndex(){
+    public PagingBean addIndex(){
         mPageIndex++;
         return this;
     }

@@ -117,7 +117,7 @@ public class IndexDataConverter extends DataConverter {
             final MultipleItemEntity entity=MultipleItemEntity.builder()
                     .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_TEXT)
                     .setField(MultipleFields.SPAN_SIZE,3)
-                    .setField(MultipleFields.MEDICINE_NAME,medicinenames.get(0))
+                    .setField(MultipleFields.MEDICINE_NAME,medicinenames.get(i))
                     .setField(MultipleFields.ATIME,atime)
                     .build();
             ENTITIES.add(entity);
