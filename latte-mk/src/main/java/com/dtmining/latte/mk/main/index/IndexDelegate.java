@@ -102,6 +102,7 @@ public class IndexDelegate extends BottomItemDelegate {
         });
     }
 
+
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
 

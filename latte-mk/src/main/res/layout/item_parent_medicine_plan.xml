@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <TextView
+
+        android:id="@+id/tv_group"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:textColor="@color/Green"
+        android:gravity="center_vertical"
+        android:text="" />
+
+    <TextView
+        android:text="服药时间"
+        android:textColor="@color/Energized"
+        android:gravity="center_vertical"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/parent_title"
+        android:text="--:--"
+        android:paddingLeft="10dp"
+        android:textColor="@color/Energized"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp" />
+</LinearLayout>

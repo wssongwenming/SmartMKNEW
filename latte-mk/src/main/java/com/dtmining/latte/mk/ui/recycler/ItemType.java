@@ -23,5 +23,6 @@ public class ItemType {
     public static final int VERTICAL_MENU_LIST=8;
     public static final int MEDICINE_MINE=12;
     public static final int TYPE_FOOT=13;
+    public static final int MEDICINE_PLAN=16;
 
 }

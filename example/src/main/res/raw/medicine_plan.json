@@ -1,0 +1,25 @@
+{
+  "status":1,
+  "msg":"success",
+  "code":0,
+  "command":"/api/get_plan",
+  "detail":{
+    "planlist":[
+      {
+        "plan":[
+          {
+            "medicine_useCount":"3",
+            "atime":"19:00",
+            "medicine_name":"感冒颗粒"
+          },
+          {
+            "medicine_useCount":"5",
+            "atime":"19:00",
+            "medicine_name":"感冒清胶囊"
+          }
+        ],
+        "time":"19:00"
+      }
+    ]
+  }
+}

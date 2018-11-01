@@ -81,7 +81,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         final String medicineImageUrl;
         final String boxId;
         LinearLayoutCompat view = (LinearLayoutCompat) holder.itemView;
-         SwipeListLayout swipeListLayout=((SwipeListLayout)view.findViewById(R.id.itemview_swipe));
+        SwipeListLayout swipeListLayout=((SwipeListLayout)view.findViewById(R.id.itemview_swipe));
         swipeListLayout.setOnSwipeStatusListener(new onSlipStatusListener(swipeListLayout));
 
         //在服状态
