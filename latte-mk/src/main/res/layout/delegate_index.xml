@@ -33,8 +33,6 @@
             android:layout_height="8dp"
             android:layout_width="match_parent"
             android:background="@color/split_line"/>-->
-
-
    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

@@ -1,5 +1,7 @@
 package com.dtmining.latte.mk.ui.sub_delegates.hand_add;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -31,15 +33,20 @@ public class BoxListDataConverter  {
     public LinkedList<String> convert(){
 
         JSONObject jsonobject= JSON.parseObject(getJsonData());
+        BOXES.add("请选择药箱Id");
         //JSONObject jsonobject1=jsonobject.getJSONObject("detail");
-        JSONArray jsonarray=jsonobject.getJSONArray("detail");
-        int size=jsonarray.size();
-        for(int i=0;i<size;i++){
-            JSONObject jsonobject3=jsonarray.getJSONObject(i);
-            String boxid=jsonobject3.getString("boxid");
+        if(jsonobject!=null) {
+            JSONArray jsonarray = jsonobject.getJSONArray("detail");
 
-            BOXES.add(boxid);
+            int size = jsonarray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject jsonobject3 = jsonarray.getJSONObject(i);
+                String boxid = jsonobject3.getString("boxid");
+
+                BOXES.add(boxid);
+            }
         }
+        Log.d("boxid", BOXES.toString());
         return BOXES;
     }
     public BoxListDataConverter setJsonData(String json){
@@ -49,7 +56,7 @@ public class BoxListDataConverter  {
     protected String getJsonData(){
         if(mJsonData==null||mJsonData.isEmpty())
         {
-            throw new NullPointerException("DATA IS NULL");
+         //   throw new NullPointerException("DATA IS NULL");
         }
         return mJsonData;
     }

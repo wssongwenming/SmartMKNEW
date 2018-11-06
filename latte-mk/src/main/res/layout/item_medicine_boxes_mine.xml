@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:text="药箱"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_height="50dp" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_medicine_boxes_mine_boxid"
+                android:layout_width="wrap_content"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_height="50dp" />
+            <android.support.v7.widget.AppCompatTextView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp" />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_medicine_boxes_mine_more"
+                android:layout_width="60dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="更多"
+                android:background="@null"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="16sp"
+                android:layout_height="40dp" />
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:background="@color/Gray0"
+            android:layout_height="1px" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_marginTop="5dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:src="@mipmap/box"
+                android:layout_height="100dp" />
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="100dp">
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:paddingLeft="20dp"
+                    android:text="药箱容量情况"
+                    android:layout_height="50dp" />
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="50dp">
+                        <TextView
+                            android:id="@+id/tv_medicine_boxes_mine_onuse"
+                            android:layout_width="70dp"
+                            android:gravity="center"
+                            android:background="@drawable/stroke_edit_green"
+                            android:layout_height="30dp" />
+                    </android.support.v7.widget.LinearLayoutCompat>
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="50dp">
+                        <TextView
+                            android:id="@+id/tv_medicine_boxes_mine_pause"
+                            android:layout_width="70dp"
+
+                            android:gravity="center"
+                            android:background="@drawable/stroke_edit_red"
+                            android:layout_height="30dp" />
+                    </android.support.v7.widget.LinearLayoutCompat>
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_height="50dp">
+                        <TextView
+                            android:id="@+id/tv_medicine_boxes_mine_overdue"
+                            android:layout_width="70dp"
+                            android:background="@drawable/stroke_edit_yellow"
+                            android:gravity="center"
+                            android:layout_height="30dp" />
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+                </android.support.v7.widget.LinearLayoutCompat>
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v7.widget.LinearLayoutCompat>

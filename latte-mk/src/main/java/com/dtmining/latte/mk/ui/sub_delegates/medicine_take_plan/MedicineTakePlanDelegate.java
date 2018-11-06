@@ -3,14 +3,18 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
+import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
-import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
+import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 
@@ -18,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -30,6 +35,10 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     AppCompatButton mBtnAdd=null;
     @BindView(R2.id.elv_medicine_take_plan_expandableListView)
     ExpandableListView mExpandableListView=null;
+    @OnClick(R2.id.btn_medicine_take_plan_add)
+    void onClickAddPlan(){
+        start(new MedicinePlanAddChoiceDelegate());
+    }
     private Set<SwipeListLayout> sets = new HashSet();
     @Override
     public Object setLayout() {
@@ -38,7 +47,20 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+        UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
+        if(userProfile==null){
+            startWithPop(new SignInDelegate());
+        }else {
+            String tel=Long.toString(userProfile.getTel());
 
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("ok", "onResume: ");
     }
 
     @Override

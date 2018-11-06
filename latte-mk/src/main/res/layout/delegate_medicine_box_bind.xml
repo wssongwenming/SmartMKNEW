@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:text="绑定当前药箱"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="18sp"
+            android:gravity="center_vertical"
+            android:layout_height="40dp" />
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:background="@color/Gray"
+            android:layout_height="1px" />
+
+          <RelativeLayout
+            android:layout_width="match_parent"
+
+            android:layout_marginLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:id="@+id/tv_medicine_box"
+                android:text="药箱"
+                android:textSize="15sp"
+                android:gravity="center_vertical"
+                android:layout_height="40dp" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_medicine_box_bind_boxid"
+                android:layout_width="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignRight="@+id/tv_medicine_box"
+                android:layout_marginLeft="50dp"
+                android:entries="@array/boxId"
+                android:theme="@style/SpinnerStyle"
+                android:spinnerMode="dropdown"
+                android:layout_marginRight="40dp"
+                android:layout_height="40dp">
+
+            </android.support.v7.widget.AppCompatSpinner>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_medicine_box_bind_submit"
+            android:layout_margin="20dp"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:background="@drawable/area_radis"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+

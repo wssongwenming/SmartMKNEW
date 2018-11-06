@@ -1,4 +1,4 @@
-package com.dtmining.latte.mk.ui.sub_delegates;
+package com.dtmining.latte.mk.ui.sub_delegates.views;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;

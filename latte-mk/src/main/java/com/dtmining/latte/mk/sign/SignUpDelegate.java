@@ -54,9 +54,6 @@ public class SignUpDelegate extends LatteDelegate {
     Spinner mUserRole=null;
     @BindView(R2.id.btn_sign_up_send_identifying_code)
     Button mBtnSendIdentifyingCode;
-
-
-
     private ISignListener mISignListener=null;
     @Override
     public void onAttach(Activity activity) {
@@ -192,7 +189,6 @@ public class SignUpDelegate extends LatteDelegate {
         }
         if(role.isEmpty()||role.equalsIgnoreCase("请选择用户类型"))
         {
-
             ((TextView) mUserRole.getChildAt(0)).setError("请选择用户类型");
              isPass=false;
         }else{

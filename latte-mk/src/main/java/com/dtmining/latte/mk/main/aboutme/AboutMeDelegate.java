@@ -60,39 +60,46 @@ public class AboutMeDelegate extends BottomItemDelegate{
                 .setText("我的药箱")
                 .setImage(R.drawable.self_mine)
                 .build();
-        ListBean medhistory=new ListBean.Builder()
+        ListBean currentbox=new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_WITH_IMAGE)
                 .setId(3)
+                .setText("绑定当前药箱")
+                .setImage(R.drawable.current_box)
+                .build();
+        ListBean medhistory=new ListBean.Builder()
+                .setItemType(ListItemType.ITEM_WITH_IMAGE)
+                .setId(4)
                 .setText("用药记录")
                 .setImage(R.drawable.self_history)
                 .build();
         ListBean message=new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_WITH_IMAGE)
-                .setId(4)
+                .setId(5)
                 .setText("用户消息")
                 .setImage(R.drawable.self_message)
                 .build();
         ListBean feedback=new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_WITH_IMAGE)
-                .setId(5)
+                .setId(6)
                 .setText("反馈")
                 .setImage(R.drawable.self_reward)
                 .build();
         ListBean cacheclean=new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_WITH_IMAGE)
-                .setId(6)
+                .setId(7)
                 .setText("清除缓存")
                 .setImage(R.drawable.self_clean)
                 .build();
         ListBean signout=new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_WITH_IMAGE)
-                .setId(7)
+                .setId(8)
                 .setText("退出")
                 .setImage(R.drawable.self_exit)
                 .build();
         final List<ListBean>data=new ArrayList<>();
         data.add(boxadd);
         data.add(minebox);
+        data.add(currentbox);
         data.add(medhistory);
         data.add(message);
         data.add(feedback);

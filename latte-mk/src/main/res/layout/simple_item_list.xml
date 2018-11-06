@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:padding="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/layout_change_time"
+        android:layout_width="0dp"
+        android:layout_marginLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="@drawable/stroke_edit"
+        android:layout_weight="1"
+        android:layout_height="35dp">
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="10dp"
+            android:background="@mipmap/dropdown"
+            android:layout_height="10dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/btn_delete"
+        android:layout_width="60dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_height="30dp">
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="20dp"
+            android:background="@mipmap/delete"
+            android:layout_height="20dp" />
+    </LinearLayout>
+</LinearLayout>

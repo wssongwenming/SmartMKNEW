@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:text="取消"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:text="请选择时间"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_select"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:text="确定"
+            android:textColor="@color/Green"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/Green" />
+
+    <!--<LinearLayout-->
+        <!--android:padding="10dp"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<TextView-->
+            <!--android:layout_width="0dip"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:text="用量设置"/>-->
+        <!--<EditText-->
+            <!--android:id="@+id/medicine_use_count"-->
+            <!--android:layout_width="0dip"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:inputType="number"-->
+            <!--android:layout_height="40dp"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="20dp"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/clock"
+            android:background="@drawable/area_circle"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="15dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="15dp">
+
+            <com.dtmining.latte.mk.ui.sub_delegates.views.DatePickerView
+                android:id="@+id/hour_pv"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="3" />
+
+            <TextView
+                android:id="@+id/hour_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="时"
+                android:textColor="@color/Green"
+                android:textSize="14sp" />
+
+            <com.dtmining.latte.mk.ui.sub_delegates.views.DatePickerView
+                android:id="@+id/minute_pv"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_weight="3" />
+
+            <TextView
+                android:id="@+id/minute_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="分"
+                android:textColor="@color/Green"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

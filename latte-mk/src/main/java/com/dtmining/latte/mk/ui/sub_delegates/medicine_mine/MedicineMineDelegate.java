@@ -2,15 +2,10 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 
 import com.dtmining.latte.app.ConfigKeys;
@@ -21,20 +16,16 @@ import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
-import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 import com.dtmining.latte.mk.ui.recycler.MyDecoration;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
-import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
-import com.dtmining.latte.net.RestClient;
-import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxByScanDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import butterknife.BindView;
-
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 
 /**
@@ -44,10 +35,10 @@ import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
  */
 public class MedicineMineDelegate extends LatteDelegate {
     private String tel=null;
- /*   @BindView(R2.id.srl_medicine_mine)
+ /* @BindView(R2.id.srl_medicine_mine)
     SwipeRefreshLayout mRefreshLayout=null;*/
     @BindView(R2.id.rv_medicine_mine)
-    RecyclerView mRecylerView=null;
+    RecyclerView mRecyclerView=null;
 /*    @BindView(R2.id.ed_search_medicine)
     AppCompatEditText mEditText_Medicine_Name=null;
     @BindView(R2.id.btn_search_medicine)
@@ -57,6 +48,8 @@ public class MedicineMineDelegate extends LatteDelegate {
     @BindView(R2.id.tb_medicine_mine)*/
     Toolbar mToolbar=null;
     private RefreshHandler mRefreshHandler=null;
+    private static final String BOX_ID = "BOX_ID";
+    private String mBoxId ="";
     private Set<SwipeListLayout> sets = new HashSet();
 /*    private void initRefreshLayout(){
         mRefreshLayout.setColorSchemeResources(
@@ -67,6 +60,22 @@ public class MedicineMineDelegate extends LatteDelegate {
         );
         mRefreshLayout.setProgressViewOffset(true,120,300);
     }*/
+
+
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Bundle args = getArguments();
+        if (args != null) {
+            mBoxId = args.getString(BOX_ID);
+        }
+    }
+    public static MedicineMineDelegate newInstance(String boxId){
+        final Bundle args = new Bundle();
+        args.putString(BOX_ID,boxId);
+        final MedicineMineDelegate delegate = new MedicineMineDelegate();
+        delegate.setArguments(args);
+        return delegate;
+    }
 
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
@@ -83,14 +92,14 @@ public class MedicineMineDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        mRefreshHandler=RefreshHandler.create(null,mRecylerView,new MedincineMineDataConverter(),null,sets);
+        mRefreshHandler=RefreshHandler.create(null,mRecyclerView,new MedincineMineDataConverter(),null,sets);
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         if(userProfile==null){
             startWithPop(new SignInDelegate());
         }else {
             tel=Long.toString(userProfile.getTel());
         }
-/*        RestClient.builder()
+/*      RestClient.builder()
                 .url("medicine_mine")
                 .success(new ISuccess() {
                     @Override
@@ -104,12 +113,11 @@ public class MedicineMineDelegate extends LatteDelegate {
                 })
                 .build()
                 .get();*/
-
     }
     private void initRecyclerView(){
         final LinearLayoutManager manager=new LinearLayoutManager(getContext());
-        mRecylerView.setLayoutManager(manager);
-        mRecylerView.addItemDecoration(new MyDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.addItemDecoration(new MyDecoration(getContext(), DividerItemDecoration.VERTICAL));
 /*        mRecylerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

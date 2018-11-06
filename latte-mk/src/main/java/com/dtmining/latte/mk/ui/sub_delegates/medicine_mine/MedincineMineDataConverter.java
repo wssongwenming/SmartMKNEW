@@ -25,38 +25,40 @@ public class MedincineMineDataConverter extends DataConverter {
 
     @Override
     public ArrayList<MultipleItemEntity> convert() {
-        final JSONObject jsonObject=JSON.parseObject(getJsonData());
-        String tel=jsonObject.getString("tel");
-        final JSONArray dataArray= jsonObject.getJSONArray("detail");
-        final int size=dataArray.size();
-        for (int i = 0; i <size ; i++) {
-            JSONObject data= (JSONObject) dataArray.get(i);
-            final String medicineId=data.getString("medicineId");
-            Log.d("convert", medicineId);
-            final int    medicineCount=data.getInteger("medicineCount");
-            Log.d("convert", medicineCount+"");
-            final String medicineName=data.getString("medicineName");
-            Log.d("convert", medicineName);
+        if(getJsonData()!=null) {
+            final JSONObject jsonObject = JSON.parseObject(getJsonData());
+            String tel = jsonObject.getString("tel");
+            final JSONArray dataArray = jsonObject.getJSONArray("detail");
+            final int size = dataArray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject data = (JSONObject) dataArray.get(i);
+                final String medicineId = data.getString("medicineId");
+                Log.d("convert", medicineId);
+                final int medicineCount = data.getInteger("medicineCount");
+                Log.d("convert", medicineCount + "");
+                final String medicineName = data.getString("medicineName");
+                Log.d("convert", medicineName);
 
-            final String medicine_img_url=data.getString("medicine_img_url");
-            Log.d("convert", medicine_img_url);
-            final String boxId=data.getString("boxId");
-            Log.d("convert", boxId+"");
-            final int medicinePause=data.getInteger("medicinePause");
-            Log.d("convert", medicinePause+"");
-            int type= ItemType.MEDICINE_MINE;
-            final MultipleItemEntity entity=MultipleItemEntity.builder()
-                    .setField(MultipleFields.ITEM_TYPE,type)
-                    .setField(MultipleFields.TEL,tel)
-                    .setField(MultipleFields.MEDICINEID,medicineId)
-                    .setField(MultipleFields.MEDICINECOUNT,medicineCount)
-                    .setField(MultipleFields.MEDICINENAME,medicineName)
-                    .setField(MultipleFields.MEDICINEIMGURL,medicine_img_url)
-                    .setField(MultipleFields.BOXID,boxId)
-                    .setField(MultipleFields.MEDICINEPAUSE,medicinePause)
-                    .build();
-            ENTITIES.add(entity);
+                final String medicine_img_url = data.getString("medicine_img_url");
+                Log.d("convert", medicine_img_url);
+                final String boxId = data.getString("boxId");
+                Log.d("convert", boxId + "");
+                final int medicinePause = data.getInteger("medicinePause");
+                Log.d("convert", medicinePause + "");
+                int type = ItemType.MEDICINE_MINE;
+                final MultipleItemEntity entity = MultipleItemEntity.builder()
+                        .setField(MultipleFields.ITEM_TYPE, type)
+                        .setField(MultipleFields.TEL, tel)
+                        .setField(MultipleFields.MEDICINEID, medicineId)
+                        .setField(MultipleFields.MEDICINECOUNT, medicineCount)
+                        .setField(MultipleFields.MEDICINENAME, medicineName)
+                        .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.BOXID, boxId)
+                        .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
+                        .build();
+                ENTITIES.add(entity);
 
+            }
         }
         return ENTITIES;
     }

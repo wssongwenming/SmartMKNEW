@@ -1,14 +1,12 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -16,9 +14,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
-
-import org.w3c.dom.Text;
+import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
+import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.ISuccess;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +31,7 @@ import java.util.Set;
  */
 public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAdapter {
     private String jsonString;
-    private static Map<String, List<MedicinePlanModel>> dataset = new HashMap<>();
+    private static Map<String, List<MedicinePlan>> dataset = new HashMap<>();
     private static ArrayList<String> parentList=new ArrayList<>();
     private Set<SwipeListLayout> sets=null;
 
@@ -52,13 +50,14 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
             parentList.add(jsondata.getString("time"));
             JSONArray jsonArray=jsondata.getJSONArray("plan");
             int lenght=jsonArray.size();
-            List<MedicinePlanModel> childrenList = new ArrayList<>();
+            List<MedicinePlan> childrenList = new ArrayList<>();
             for (int j = 0; j <lenght ; j++) {
                 JSONObject jsonObject1= (JSONObject) jsonArray.get(j);
-                MedicinePlanModel medicinePlanModel=new MedicinePlanModel();
+                MedicinePlan medicinePlanModel=new MedicinePlan();
                 medicinePlanModel.setAtime(jsonObject1.getString("attime"));
                 medicinePlanModel.setMedicineUseCount(jsonObject1.getString("medicine_useCount"));
                 medicinePlanModel.setMedicineName(jsonObject1.getString("medicine_name"));
+                medicinePlanModel.setMedicineId(jsonObject1.getString("medicineId"));
                 childrenList.add(medicinePlanModel);
             }
             dataset.put(parentList.get(i),childrenList);
@@ -118,33 +117,69 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         convertView.setTag(R.layout.item_child_medicine_plan, -1);
         TextView text = (TextView) convertView.findViewById(R.id.parent_title);
         text.setText(parentList.get(groupPosition));
-         return convertView;
+        return convertView;
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = ((Activity)Latte.getConfiguration(ConfigKeys.ACTIVITY)).getLayoutInflater();
             convertView= inflater.inflate(R.layout.item_child_medicine_plan, null);
         }
         final SwipeListLayout sll = (SwipeListLayout) convertView.findViewById(R.id.item_child_medicine_plan_sll);
-        sll.setOnSwipeStatusListener(new MyOnSlipStatusListener(sll));
+        sll.setOnSwipeStatusListener(new onSlipStatusListener(sll));
         convertView.setTag(R.layout.item_parent_medicine_plan, groupPosition);
         convertView.setTag(R.layout.item_child_medicine_plan, childPosition);
         TextView medicineName = (TextView) convertView.findViewById(R.id.tv_medicine_plan_medicine_name);
         TextView medicineCount= (TextView) convertView.findViewById(R.id.tv_medicine_plan_medicine_count);
-        String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineNname();
+        TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
+        TextView change = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_change);
+        final String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineName();
         String medicnecount=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineUseCount();
-        Log.d("info", medicnecount+","+medicinename);
+        //修改或删除计划时，需要药品标识medicineId
+        final String medicineId  =dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineId();
         medicineCount.setText(medicnecount);
         medicineName.setText(medicinename);
- /*       text.setOnClickListener(new View.OnClickListener() {
+        delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(ExpandableListViewTestActivity.this, "点到了内置的textview",
-                        Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Log.d("click", "onClick: ");
+                RestClient.builder()
+                        .url("http://10.0.2.2:8081/Web01_exec/Delete_plan")
+                        .raw(medicinename)//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+
+                                dataset.get(parentList.get(groupPosition)).remove(childPosition);
+                                if(dataset.get(parentList.get(groupPosition)).size()==0)
+                                {
+                                    dataset.remove(parentList.get(groupPosition));
+                                }
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .build()
+                        .post();
+
             }
-        });*/
+        });
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RestClient.builder()
+                        .url("http://10.0.2.2:8081/Web01_exec/Delete_plan")
+                        .raw(medicinename)//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+
+                            }
+                        })
+                        .build()
+                        .post();
+            }
+        });
         return convertView;
     }
 
@@ -154,11 +189,11 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
     }
 
 
-    class MyOnSlipStatusListener implements SwipeListLayout.OnSwipeStatusListener {
+    class onSlipStatusListener implements SwipeListLayout.OnSwipeStatusListener {
 
         private SwipeListLayout slipListLayout;
 
-        public MyOnSlipStatusListener(SwipeListLayout slipListLayout) {
+        public onSlipStatusListener(SwipeListLayout slipListLayout) {
             this.slipListLayout = slipListLayout;
         }
 

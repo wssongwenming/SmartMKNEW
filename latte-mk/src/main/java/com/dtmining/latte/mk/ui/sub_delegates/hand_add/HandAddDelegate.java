@@ -1,6 +1,4 @@
 package com.dtmining.latte.mk.ui.sub_delegates.hand_add;
-
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +6,13 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
@@ -25,9 +29,9 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.log.LatteLogger;
-
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 
 
 /**
@@ -51,14 +55,60 @@ public class HandAddDelegate extends LatteDelegate {
     AppCompatSpinner mBoxidSpinner=null;
     @BindView(R2.id.btn_medicine_hand_add_submit)
     AppCompatButton mSubmit=null;
+    String boxId=null;
+    @OnItemSelected(R2.id.spinner_medicine_hand_add_boxid)
+    void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+        //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
+        boxId=parent.getItemAtPosition(position).toString();
+    }
+
 
     private BoxListDataConverter converter=null;
     private BoxListAdapter mAdapter=null;
     private String tel=null;
-    @OnClick()
+    @OnClick(R2.id.btn_medicine_hand_add_submit)
     void onClickSubmit(){
-
+        checkForm();
     }
+    //表单验证
+    private boolean checkForm(){
+        final String medicineName= mMedicinName.getText().toString();
+        final String overdueTime=mBtnOverdueTimeSelect.getText().toString();
+        Log.d("over", overdueTime);
+        final String medicineCount=mMedicineCount.getText().toString();
+        boolean isPass=true;
+        if(medicineName.isEmpty()||medicineName==null){
+            mMedicinName.setError("请填写药品名！");
+            isPass=false;
+        }else{
+         mMedicinName.setError(null);
+        }
+        if(medicineCount.isEmpty()||medicineCount==null){
+            mMedicineCount.setError("请填写数量！");
+            isPass=false;
+        }else{
+            mMedicineCount.setError(null);
+        }
+        if(overdueTime.isEmpty()||overdueTime.equalsIgnoreCase("请选择过期时间")){
+            mBtnOverdueTimeSelect.setError("请选择过期时间");
+            isPass=false;
+        }else{
+            mBtnOverdueTimeSelect.setError(null);
+        }
+        if(((AppCompatTextView)mBoxidSpinner.getChildAt(0)).getText().toString().equalsIgnoreCase("请选择药箱Id"))
+       {
+           ((TextView) mBoxidSpinner.getChildAt(0)).setError("请选择药箱Id");
+           isPass=false;
+       }else {
+            ((TextView) mBoxidSpinner.getChildAt(0)).setError(null);;
+        }
+        return isPass;
+    }
+
+
+
+
+
     @OnClick(R2.id.btn_medicine_hand_add_please_select_overdue_time)
     void onSelectOverDueTimeClick(){
         final DateDialogUtil dateDialogUtil = new DateDialogUtil();
@@ -138,19 +188,18 @@ public class HandAddDelegate extends LatteDelegate {
             startWithPop(new SignInDelegate());
         }else {
             tel=Long.toString(userProfile.getTel());
-            getBoxId();
+            getBoxIdList();
         }
-
     }
 
-    private void getBoxId(){
+    private void getBoxIdList(){
         RestClient.builder()
                 .url("http://10.0.2.2:8081/Web01_exec/get_box")
                 .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        converter=new BoxListDataConverter();
+                      converter=new BoxListDataConverter();
                       mAdapter= BoxListAdapter.create(converter.setJsonData(response),R.layout.simple_single_item_list);
                       mBoxidSpinner.setAdapter(mAdapter);
                     }

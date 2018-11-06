@@ -1,7 +1,6 @@
 package com.dtmining.latte.mk.main.aboutme.list;
 
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,10 +11,11 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
+import com.dtmining.latte.mk.main.aboutme.medicineboxbind.BoxBindDelegate;
+import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineBoxesMineDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 
 import java.util.List;
 
@@ -81,20 +81,28 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
         final int id=Id;
         switch (id)
         {
-            case 1://点击了“扫码添加”
-                DELEGATE.startScanWithCheck(DELEGATE);
-                Log.d("sm", "扫码添加 ");
+            case 1://点击了“添加药箱”
+                DELEGATE.start(new AddMedicineBoxDelegate());
                 break;
-            case 2://点击了“手动添加”
-                DELEGATE.start(new HandAddDelegate());
+            case 2://点击了“我的药箱”
+                DELEGATE.start(new MedicineBoxesMineDelegate());
                 break;
-            case 3://点击了“我的药品”
-                DELEGATE.start(new MedicineMineDelegate());
+            case 3://点击了“绑定当前药箱”
+                DELEGATE.start(new BoxBindDelegate());
                 break;
-            case 4://点击了“用药计划”
-                DELEGATE.start(new MedicineTakePlanDelegate());
+            case 4://点击了“用药记录”
+                DELEGATE.start(new MedicineTakeHistoryDelegate());
                 break;
-            case 5://点击了“用药记录”
+            case 5://点击了“用户消息”
+                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                break;
+            case 6://点击了“反馈”
+                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                break;
+            case 7://点击了“清除缓冲”
+                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                break;
+            case 8://点击了“退出”
                 DELEGATE.start(new MedicineTakeHistoryDelegate());
                 break;
         }

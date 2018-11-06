@@ -10,14 +10,11 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.MultipleRecyclerAdapter;
-import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
+import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineRecyclerAdapter;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 
-import org.json.JSONObject;
-
-import java.util.HashSet;
 import java.util.Set;
 
 

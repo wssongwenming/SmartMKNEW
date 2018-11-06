@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.ui.sub_delegates.hand_add;
 
+import android.util.Log;
 import android.widget.SpinnerAdapter;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -25,22 +26,12 @@ public class BoxListAdapter extends CustomBaseAdapter<String> {
     public BoxListAdapter(LinkedList<String> mData, int mLayoutRes) {
         super(mData, mLayoutRes);
     }
-
-
-
     public static BoxListAdapter create(LinkedList<String> data,int mLayoutRes){
         return new BoxListAdapter((LinkedList<String>) data,mLayoutRes);
     }
-
     public static BoxListAdapter create(BoxListDataConverter converter,int mLayoutRes){
         return new BoxListAdapter(converter.convert(),mLayoutRes);
     }
-
-
-
-
-
-
     @Override
     public void bindView(ViewHolder holder, String obj) {
         holder.setText(R.id.single_item_tv,obj);

@@ -2,11 +2,9 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
@@ -17,15 +15,13 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.mk.R2;
 
-import com.dtmining.latte.mk.sign.SignHandler;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 import com.dtmining.latte.mk.ui.recycler.MultipleViewHolder;
-import com.dtmining.latte.mk.ui.sub_delegates.SwipeListLayout;
+import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineState;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineStateModel;
 import com.dtmining.latte.net.RestClient;
@@ -35,8 +31,6 @@ import com.dtmining.latte.util.storage.LattePreference;
 
 import java.util.List;
 import java.util.Set;
-
-import butterknife.BindView;
 
 /**
  * author:songwenming

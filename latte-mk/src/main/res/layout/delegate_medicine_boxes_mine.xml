@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:text="我的药箱"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:layout_height="40dp" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_delegate_medicine_boxes_mine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_delegate_medicine_boxes_mine"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</android.support.v7.widget.LinearLayoutCompat>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:paddingLeft="15dp"
+        android:text="添加用药计划"
+        android:textSize="18sp"
+        android:background="@color/color1"
+        android:gravity="center_vertical"
+        android:layout_height="30dp" />
+    <android.support.v7.widget.AppCompatButton
+        android:layout_marginTop="60dp"
+        android:id="@+id/add_plan_by_drugs"
+        android:layout_width="240dp"
+        android:layout_gravity="center"
+        android:background="@drawable/add_plan_by_drugs"
+        android:layout_height="60dp" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:id="@+id/add_plan_by_time"
+        android:layout_width="240dp"
+        android:background="@drawable/add_plan_by_time"
+        android:layout_height="60dp" />
+
+
+</android.support.v7.widget.LinearLayoutCompat>

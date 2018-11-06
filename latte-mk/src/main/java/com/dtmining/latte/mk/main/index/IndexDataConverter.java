@@ -98,29 +98,28 @@ public class IndexDataConverter extends DataConverter {
     public ArrayList<MultipleItemEntity> convert(){
         ArrayList<String> medicinenames=new ArrayList<>();
         String atime=null;
-        JSONObject jsonobject=JSON.parseObject(getJsonData());
-        JSONObject jsonobject1=jsonobject.getJSONObject("detail");
-        JSONArray jsonarray=jsonobject1.getJSONArray("histories");
-        int size=jsonarray.size();
-        for(int i=0;i<size;i++){
-            JSONObject jsonobject3=jsonarray.getJSONObject(i);
-            String tel=jsonobject3.getString("tel");
-            atime=jsonobject3.getString("atime");
-            JSONArray jsonarray6=jsonobject3.getJSONArray("medicine_names");
-            int size5=jsonarray6.size();
-
-
-            for(int j=0;j<size5;j++)
-            {
-                medicinenames.add(jsonarray6.getString(j));
+        if(getJsonData()!=null) {
+            JSONObject jsonobject = JSON.parseObject(getJsonData());
+            JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
+            JSONArray jsonarray = jsonobject1.getJSONArray("histories");
+            int size = jsonarray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject jsonobject3 = jsonarray.getJSONObject(i);
+                String tel = jsonobject3.getString("tel");
+                atime = jsonobject3.getString("atime");
+                JSONArray jsonarray6 = jsonobject3.getJSONArray("medicine_names");
+                int size5 = jsonarray6.size();
+                for (int j = 0; j < size5; j++) {
+                    medicinenames.add(jsonarray6.getString(j));
+                }
+                final MultipleItemEntity entity = MultipleItemEntity.builder()
+                        .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
+                        .setField(MultipleFields.SPAN_SIZE, 3)
+                        .setField(MultipleFields.MEDICINE_NAME, medicinenames.get(i))
+                        .setField(MultipleFields.ATIME, atime)
+                        .build();
+                ENTITIES.add(entity);
             }
-            final MultipleItemEntity entity=MultipleItemEntity.builder()
-                    .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_TEXT)
-                    .setField(MultipleFields.SPAN_SIZE,3)
-                    .setField(MultipleFields.MEDICINE_NAME,medicinenames.get(i))
-                    .setField(MultipleFields.ATIME,atime)
-                    .build();
-            ENTITIES.add(entity);
         }
         return ENTITIES;
     }

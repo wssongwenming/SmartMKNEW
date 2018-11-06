@@ -6,5 +6,20 @@
         <item>医生</item>
         <item>家属</item>
     </string-array>
+    <string-array name="boxId">
+        <item>请选择药箱Id</item>
+
+    </string-array>
+    <string-array name="timeSpan">
+        <item>0:每天</item>
+        <item>1:间隔1天</item>
+        <item>2:间隔2天</item>
+        <item>3:间隔3天</item>
+        <item>4:间隔4天</item>
+        <item>5:间隔5天</item>
+        <item>6:间隔6天</item>
+        <item>7:间隔7天</item>
+
+    </string-array>
 
 </resources>

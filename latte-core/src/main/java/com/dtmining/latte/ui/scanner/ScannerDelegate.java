@@ -63,7 +63,7 @@ public class ScannerDelegate extends LatteDelegate implements ZBarScannerView.Re
  /*     final Bundle bundle =new Bundle();
         bundle.putString("SCAN_RESULLT",result.getContents());
         setFragmentResult(RequestCodes.SCAN,bundle);*/
-
+        this.pop();//放到末尾导致，扫码后无法弹出后续delegate
         @SuppressWarnings("unchecked")
         final IGlobalCallback<String> callback = CallbackManager
                 .getInstance()
@@ -71,6 +71,6 @@ public class ScannerDelegate extends LatteDelegate implements ZBarScannerView.Re
         if (callback != null) {
             callback.executeCallback(result.getContents());
         }
-        this.pop();
+        //this.pop();
     }
 }

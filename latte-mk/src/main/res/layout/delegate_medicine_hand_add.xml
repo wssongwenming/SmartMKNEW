@@ -14,7 +14,7 @@
             android:layout_marginRight="20dp"
             android:textSize="18sp"
             android:gravity="center_vertical"
-            android:layout_height="30dp" />
+            android:layout_height="40dp" />
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:background="@color/Gray"
@@ -191,10 +191,13 @@
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner_medicine_hand_add_boxid"
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginBottom="10dp"
                 android:layout_alignRight="@+id/tv_medicine_box"
                 android:layout_marginLeft="40dp"
+                android:entries="@array/boxId"
+                android:theme="@style/SpinnerStyle"
+                android:spinnerMode="dropdown"
                 android:layout_marginRight="40dp"
                 android:layout_height="40dp">
 

@@ -17,6 +17,7 @@ import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 
+import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.CustomGridLayoutManager;
 import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
@@ -59,6 +60,7 @@ public class IndexDelegate extends BottomItemDelegate {
                     @Override
                     public void executeCallback(@Nullable Object args) {
                         Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
+
                     }
                 });
         mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter(),this.getParentDelegate(),null);

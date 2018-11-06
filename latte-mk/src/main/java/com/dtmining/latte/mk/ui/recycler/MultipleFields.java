@@ -29,5 +29,9 @@ public enum MultipleFields {
     MEDICINENAME,
     MEDICINEIMGURL,
     BOXID,
-    MEDICINEPAUSE
+    MEDICINEPAUSE,
+
+    OVERDUE,
+    ONUSE,
+    PAUSE
 }

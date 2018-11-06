@@ -4,20 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@color/Gray0"
+    android:background="@color/white"
     android:layout_height="match_parent"
     >
-
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:paddingLeft="15dp"
+        android:text="用药计划"
+        android:textSize="18sp"
+        android:background="@color/color1"
+        android:gravity="center_vertical"
+        android:layout_height="30dp" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_medicine_take_plan_add"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:text="添加用药计划"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:background="@drawable/area_big_redis_white"
-        android:layout_height="40dp" />
+        android:layout_height="35dp" />
 
     <ExpandableListView
         android:id="@+id/elv_medicine_take_plan_expandableListView"
@@ -29,6 +36,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-
-
 </android.support.v7.widget.LinearLayoutCompat>
