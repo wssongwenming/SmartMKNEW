@@ -67,7 +67,23 @@
         </com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview>
 
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_width="90dp"
+            android:text="剂量"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/stroke_edit"
+            android:layout_height="40dp"
+            android:id="@+id/et_delegate_medicine_take_plan_add_by_drug_medicine_count"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,27 +100,11 @@
             android:gravity="center"
             android:background="@drawable/stroke_edit"
             android:layout_height="40dp"
-            android:id="@+id/btn_delegate_medicine_take_plan_add_by_drug_time_span"
+            android:id="@+id/sp_delegate_medicine_take_plan_add_by_drug_time_span"
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:layout_height="60dp">
-        <TextView
-            android:layout_width="90dp"
-            android:text="剂量"
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/stroke_edit"
-            android:layout_height="40dp"
-            android:id="@+id/et_count"
-            />
-    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -134,57 +134,5 @@
         android:textColor="@color/white"
         android:background="@drawable/area_radis"
         android:layout_height="wrap_content" />
-    <!--<TextView-->
-    <!--android:id="@+id/medicinename"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:text="某药品用药计划"-->
-    <!--android:background="@color/Positive"-->
-    <!--android:gravity="center"-->
-    <!--android:textSize="14sp"-->
-    <!--android:layout_height="40dp" />-->
 
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:gravity="center"-->
-    <!--android:layout_marginTop="10dp"-->
-    <!--android:layout_height="40dp">-->
-    <!--<TextView-->
-    <!--android:layout_width="0dip"-->
-    <!--android:layout_weight="1"-->
-    <!--android:text="服药时间"-->
-    <!--android:gravity="center"-->
-    <!--android:layout_height="wrap_content" />-->
-    <!--<TextView-->
-    <!--android:layout_width="0dip"-->
-    <!--android:gravity="center"-->
-    <!--android:layout_weight="1"-->
-    <!--android:text="用量"-->
-    <!--android:layout_height="wrap_content" />-->
-
-    <!--</LinearLayout>-->
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:background="@color/Positive"-->
-    <!--android:layout_height="1px" />-->
-    <!--<ListView-->
-    <!--android:id="@+id/planlistview"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:dividerHeight="1px"-->
-    <!--android:divider="@color/Positive"-->
-    <!--android:layout_height="wrap_content">-->
-
-    <!--</ListView>-->
-
-    <!--<Button-->
-    <!--android:id="@+id/add_plan"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="40dp"-->
-    <!--android:layout_marginLeft="30dp"-->
-    <!--android:layout_marginRight="30dp"-->
-    <!--android:background="@drawable/area_radis"-->
-    <!--android:text="添加计划"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:gravity="center"-->
-    <!--android:textSize="18sp"-->
-    <!--android:layout_marginTop="20dp"/>-->
 </LinearLayout>

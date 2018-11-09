@@ -54,7 +54,7 @@ public class BoxBindDelegate extends LatteDelegate {
         }
     }
     private boolean checkForm(){
-        Toast.makeText(getContext(),((AppCompatTextView)mBoxidSpinner.getChildAt(0)).getText(),Toast.LENGTH_LONG).show();
+
         boolean isPass=true;
         if(((AppCompatTextView)mBoxidSpinner.getChildAt(0)).getText().toString().equalsIgnoreCase("请选择药箱Id")){
             ((TextView) mBoxidSpinner.getChildAt(0)).setError("请选择药箱Id");
