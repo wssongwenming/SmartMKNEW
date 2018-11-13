@@ -24,6 +24,7 @@ import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
+import com.dtmining.latte.util.storage.LattePreference;
 
 import butterknife.BindView;
 
@@ -58,11 +59,18 @@ public class IndexDelegate extends BottomItemDelegate {
         CallbackManager.getInstance()
                 .addCallback(CallbackType.ON_SCAN, new IGlobalCallback() {
                     @Override
-                    public void executeCallback(@Nullable Object args) {
+                    public void executeCallback(@Nullable Object args){
                         Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
 
                     }
-                });
+                })
+        .addCallback(CallbackType.ON_BIND_BOXID, new IGlobalCallback() {
+            @Override
+            public void executeCallback(@Nullable Object args) {
+                Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId("boxId"),Toast.LENGTH_LONG).show();
+            }
+        });
+
         mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter(),this.getParentDelegate(),null);
         //final MkBottomDelegate mkBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情

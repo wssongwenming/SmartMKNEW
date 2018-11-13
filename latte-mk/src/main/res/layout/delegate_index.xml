@@ -27,6 +27,14 @@
             android:id="@+id/rv_index"
             android:layout_width="match_parent"
             android:layout_height="600dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_index_history"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_index_plan"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"/>
         <!--显示分割线-->
 
 <!--        <android.support.v7.widget.AppCompatTextView

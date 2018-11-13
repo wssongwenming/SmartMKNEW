@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,10 +21,15 @@ import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListDataConverter;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.regex.RegexTool;
+import com.dtmining.latte.util.storage.LattePreference;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 
 /**
  * author:songwenming
@@ -32,10 +39,27 @@ import butterknife.OnClick;
 public class BoxBindDelegate extends LatteDelegate {
     @BindView(R2.id.spinner_medicine_box_bind_boxid)
     AppCompatSpinner mBoxidSpinner=null;
+    @OnItemSelected(R2.id.spinner_medicine_box_bind_boxid)
+    void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+        //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
+        boxId=parent.getItemAtPosition(position).toString();
+
+    }
     @OnClick(R2.id.btn_medicine_box_bind_submit)
     void onSubmit(){
-        checkForm();
+        if(checkForm()){
+            LattePreference.setBoxID("boxId",boxId);
+            Toast.makeText(getContext(),"成功绑定当前药箱ID:"+LattePreference.getBoxId("boxId"),Toast.LENGTH_LONG).show();
+            final IGlobalCallback<String> callback = CallbackManager
+                    .getInstance()
+                    .getCallback(CallbackType.ON_BIND_BOXID);
+            if (callback != null) {
+                callback.executeCallback(boxId);
+            }
+            pop();
+        }
     }
+    private String boxId;
     private BoxListDataConverter converter=null;
     private BoxListAdapter mAdapter=null;
     private String tel=null;
@@ -51,16 +75,18 @@ public class BoxBindDelegate extends LatteDelegate {
             startWithPop(new SignInDelegate());
         }else {
             tel=Long.toString(userProfile.getTel());
+            getBoxId();
         }
     }
     private boolean checkForm(){
 
         boolean isPass=true;
-        if(((AppCompatTextView)mBoxidSpinner.getChildAt(0)).getText().toString().equalsIgnoreCase("请选择药箱Id")){
-            ((TextView) mBoxidSpinner.getChildAt(0)).setError("请选择药箱Id");
+        if(((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).getText().toString().equalsIgnoreCase("请选择药箱Id")){
+            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError("请选择药箱Id");
             isPass=false;
         }else {
-            ((TextView) mBoxidSpinner.getChildAt(0)).setError(null);;
+            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError(null);
+
         }
         return isPass;
     }

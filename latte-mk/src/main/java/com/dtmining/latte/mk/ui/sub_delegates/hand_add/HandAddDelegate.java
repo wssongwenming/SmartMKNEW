@@ -95,12 +95,12 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
             mBtnOverdueTimeSelect.setError(null);
         }
-        if(((AppCompatTextView)mBoxidSpinner.getChildAt(0)).getText().toString().equalsIgnoreCase("请选择药箱Id"))
-       {
-           ((TextView) mBoxidSpinner.getChildAt(0)).setError("请选择药箱Id");
-           isPass=false;
-       }else {
-            ((TextView) mBoxidSpinner.getChildAt(0)).setError(null);;
+        if(((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).getText().toString().equalsIgnoreCase("请选择药箱Id")){
+            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError("请选择药箱Id");
+            isPass=false;
+        }else {
+            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError(null);
+
         }
         return isPass;
     }

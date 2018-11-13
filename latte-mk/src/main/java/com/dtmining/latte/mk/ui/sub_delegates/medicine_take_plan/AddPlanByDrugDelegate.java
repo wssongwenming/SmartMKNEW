@@ -192,9 +192,12 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                                     HashMap<String,ArrayList<String>> map_starttime = item_interval.getValue();
                                                                     for (Map.Entry<String,ArrayList<String>> item_starttime : map_starttime.entrySet()){
                                                                         String starttime=null;
+                                                                        String message=null;
                                                                         if(item_starttime!=null)
                                                                         {
                                                                             starttime=item_starttime.getKey();
+                                                                            message= item_starttime.getValue().toString();
+
                                                                         }
                                                                     }
                                                                 }
