@@ -69,6 +69,10 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.0'
     //微信依赖（包含统）
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
+    //qq依赖
+    compile files('libs/mta-sdk-1.6.2.jar')
+    compile files('libs/open_sdk_r5793_lite.jar')
     //RecyclerView依赖
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.16'
     //RecyclerView分割线
@@ -101,4 +105,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.2'
     //AndroidSwipeLayout滑动布局
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+
+
 }

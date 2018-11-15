@@ -10,10 +10,18 @@ greendao{
     targetGenDir 'src/main/java'
 }
 android {
+    signingConfigs {
+        release {
+            keyAlias '智能药箱终端'
+            keyPassword '123456'
+            storeFile file('E:/SmartMK/example/MedicalKit')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion"25.0.2"
     defaultConfig {
-        applicationId "com.dtmining.smartmk.example"
+        applicationId "com.dtmining.MedicalKit.myapplication"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -24,6 +32,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     allprojects {

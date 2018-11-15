@@ -5,6 +5,7 @@ import android.app.Activity;
 
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
+import com.dtmining.latte.wechat.callbacks.IWeChatGetOpenIdCallback;
 import com.dtmining.latte.wechat.callbacks.IWeChatSignInCallback;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -17,6 +18,7 @@ public class LatteWeChat {
     //登陆和支付所需
     private final IWXAPI WXAPI;
     private IWeChatSignInCallback mSignInCallback=null;
+    private IWeChatGetOpenIdCallback mOpenIdCallback=null;
     //LatteWeChat懒汉单例模式
     private static final class Holder{
         private static final LatteWeChat INSTANCE=new LatteWeChat();
@@ -45,6 +47,16 @@ public class LatteWeChat {
     public IWeChatSignInCallback getSignInCallback() {
         return mSignInCallback;
     }
+
+    public IWeChatGetOpenIdCallback getmOpenIdCallback() {
+        return mOpenIdCallback;
+    }
+
+    public LatteWeChat onGetOpenIdSuccess(IWeChatGetOpenIdCallback mOpenIdCallback) {
+        this.mOpenIdCallback = mOpenIdCallback;
+        return this;
+    }
+
     //点击“微信登陆”按钮调用
     public final void signIn(){
         final SendAuth.Req req=new SendAuth.Req();

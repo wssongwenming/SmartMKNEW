@@ -18,6 +18,7 @@ import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.regex.RegexTool;
 import com.dtmining.latte.wechat.LatteWeChat;
+import com.dtmining.latte.wechat.callbacks.IWeChatGetOpenIdCallback;
 import com.dtmining.latte.wechat.callbacks.IWeChatSignInCallback;
 
 import butterknife.BindView;
@@ -85,12 +86,21 @@ public class SignInDelegate extends LatteDelegate {
     //微信登陆
     @OnClick(R2.id.icon_sign_in_wechat)
     void onClickWeChat(){
-        LatteWeChat.getInstancee().onSignSuccess(new IWeChatSignInCallback() {
-            @Override
-            public void onSignInSuccess(String userInfo) {
-                Toast.makeText(getContext(),userInfo,Toast.LENGTH_LONG).show();
-            }
-        }).signIn();
+
+        LatteWeChat.getInstancee()
+                .onSignSuccess(new IWeChatSignInCallback() {
+                    @Override
+                    public void onSignInSuccess(String userInfo) {
+                       // Toast.makeText(getContext(),userInfo,Toast.LENGTH_LONG).show();
+                        }
+                        })
+                .onGetOpenIdSuccess(new IWeChatGetOpenIdCallback() {
+                    @Override
+                    public void onGetOpenIdSuccess(String openId) {
+                        Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
+                    }
+                })
+                .signIn();
 
     }
     //尚未注册

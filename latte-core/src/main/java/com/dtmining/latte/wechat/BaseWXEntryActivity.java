@@ -1,5 +1,7 @@
 package com.dtmining.latte.wechat;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -17,6 +19,7 @@ public abstract class BaseWXEntryActivity extends BaseWXActivity {
     //用户登录成功后的回调
     protected abstract void onSignInSuccess(String userInfo);
 
+    protected abstract void onGetOpenIdSuccess(String openId);
 
     // 微信发送请求到第三方应用后的回调
     @Override
@@ -26,19 +29,46 @@ public abstract class BaseWXEntryActivity extends BaseWXActivity {
     // 第三方应用发送请求到微信后的回调
     @Override
     public void onResp(BaseResp baseResp) {
-        final String code=((SendAuth.Resp)baseResp).code;
-        //拿到ｃｏｄｅ后就可以进行第一次请求
-        final StringBuilder authUrl=new StringBuilder();
-        authUrl
-                .append("https://api.weixin.qq.com/sns/oauth2/access_token?appid=")
-                .append(LatteWeChat.APP_ID)
-                .append("&secret=")
-                .append(LatteWeChat.APP_SECRET)
-                .append("&code=")
-                .append(code)
-                .append("&grant_type=authorization_code");
-        LatteLogger.d("authUrl",authUrl.toString());
-        getAuth(authUrl.toString());
+        String result = "";
+        switch (baseResp.errCode) {
+            case BaseResp.ErrCode.ERR_OK:
+                final String code = ((SendAuth.Resp) baseResp).code;
+                // Log.d("base", ((SendAuth.Resp)baseResp).code);
+                //拿到ｃｏｄｅ后就可以进行第一次请求
+                final StringBuilder authUrl = new StringBuilder();
+                authUrl
+                        .append("https://api.weixin.qq.com/sns/oauth2/access_token?appid=")
+                        .append(LatteWeChat.APP_ID)
+                        .append("&secret=")
+                        .append(LatteWeChat.APP_SECRET)
+                        .append("&code=")
+                        .append(code)
+                        .append("&grant_type=authorization_code");
+                LatteLogger.d("authUrl", authUrl.toString());
+                getAuth(authUrl.toString());
+            break;
+            case BaseResp.ErrCode.ERR_USER_CANCEL:
+                result = "发送取消";
+                Log.d("message","发送取消");
+                finish();
+                break;
+            case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                result = "发送被拒绝";
+                Log.d("message", "发送被拒绝");
+                finish();
+                break;
+            case BaseResp.ErrCode.ERR_BAN:
+                result = "签名错误";
+                Log.d("message", "签名错误");
+
+                break;
+            default:
+                result = "发送返回";
+//                showMsg(0,result);
+                Log.d("message", "发送返回");
+                finish();
+                break;
+        }
     }
     private void getAuth(String authUrl){
         RestClient
@@ -58,6 +88,7 @@ public abstract class BaseWXEntryActivity extends BaseWXActivity {
                         .append(openId)
                         .append("&lang=")
                         .append("zh_CN");
+                onGetOpenIdSuccess(openId);
                 LatteLogger.d("userInfoUrl",userInfoUrl.toString());
                 getUserInfo(userInfoUrl.toString());
 
