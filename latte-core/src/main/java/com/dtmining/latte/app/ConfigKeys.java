@@ -22,5 +22,6 @@ public enum ConfigKeys {
     MYHANDLER,
     JAVASCRIPT_INTERFACE,
     WEB_HOST,
-    LOCAL_USER
+    LOCAL_USER,
+    QQ_APP_ID
 }

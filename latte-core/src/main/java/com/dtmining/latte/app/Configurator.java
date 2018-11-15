@@ -118,6 +118,10 @@ public class Configurator {
         LATTE_CONFIGS.put(ConfigKeys.WE_CHAT_APP_SECRET,appSecret);
         return this;
     }
+    public final Configurator withQQAppID(String appID){
+        LATTE_CONFIGS.put(ConfigKeys.QQ_APP_ID,appID);
+        return this;
+    }
     //微信拉取他的回调Activity时会需要一个Activity的上下文,这时用全局的congtext是不合适的
     public final Configurator withActivity(Activity activity)
     {
