@@ -1,13 +1,19 @@
 package com.dtmining.latte.mk.sign;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.alibaba.fastjson.JSON;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
@@ -20,9 +26,17 @@ import com.dtmining.latte.util.regex.RegexTool;
 import com.dtmining.latte.wechat.LatteWeChat;
 import com.dtmining.latte.wechat.callbacks.IWeChatGetOpenIdCallback;
 import com.dtmining.latte.wechat.callbacks.IWeChatSignInCallback;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.common.Constants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
+
+import org.json.JSONException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
 
 /**
  * author:songwenming
@@ -35,9 +49,11 @@ public class SignInDelegate extends LatteDelegate {
     EditText mPhone=null;
     @BindView(R2.id.edit_sign_in_password)
     EditText mPassword=null;
-
+    private Tencent mTencent;
+    private String QQ_uid;//qq_openid
+    private UserInfo userInfo;
     private ISignListener mISignListener=null;
-
+    private BaseUiListener listener = new BaseUiListener();
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -103,6 +119,15 @@ public class SignInDelegate extends LatteDelegate {
                 .signIn();
 
     }
+    //QQ登陆
+    @OnClick(R2.id.icon_sign_in_qq)
+    void onClickQQ(){
+        if (!mTencent.isSessionValid())
+        {
+            //注销登录 mTencent.logout(this);
+            mTencent.login((Activity) Latte.getConfiguration(ConfigKeys.ACTIVITY), "all", listener);
+        }
+    }
     //尚未注册
     @OnClick(R2.id.tv_link_sign_up)
     void onClickLink(){
@@ -134,6 +159,77 @@ public class SignInDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+        String qq_app_id=Latte.getConfiguration(ConfigKeys.QQ_APP_ID).toString();
+        Context applicationContext=(Context)Latte.getConfigurations().get(ConfigKeys.APPLICATION_CONTEXT);
+        mTencent = Tencent.createInstance(qq_app_id,applicationContext);
+     }
+    class BaseUiListener implements IUiListener {
 
+        @Override
+        public void onComplete(Object o) {
+            Log.d("授权:",o.toString());
+            try {
+                org.json.JSONObject jsonObject = new org.json.JSONObject(o.toString());
+                initOpenidAndToken(jsonObject);
+                updateUserInfo();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onError(UiError e) {
+            Log.d("error","onError:code:" + e.errorCode + ", msg:"
+                    + e.errorMessage + ", detail:" + e.errorDetail);
+        }
+        @Override
+        public void onCancel() {
+            Log.d("onCancel","cancel");
+        }
     }
+    /**
+     * 获取登录QQ腾讯平台的权限信息(用于访问QQ用户信息)
+     * @param jsonObject
+     */
+    public void initOpenidAndToken(org.json.JSONObject jsonObject) {
+        try {
+            String token = jsonObject.getString(Constants.PARAM_ACCESS_TOKEN);
+            String expires = jsonObject.getString(Constants.PARAM_EXPIRES_IN);
+            String openId = jsonObject.getString(Constants.PARAM_OPEN_ID);
+            if (!TextUtils.isEmpty(token) && !TextUtils.isEmpty(expires)
+                    && !TextUtils.isEmpty(openId)) {
+                mTencent.setAccessToken(token, expires);
+                mTencent.setOpenId(openId);
+                QQ_uid = openId;
+            }
+        } catch(Exception e) {
+        }
+    }
+
+    private void updateUserInfo() {
+        if (mTencent != null && mTencent.isSessionValid()) {
+            IUiListener listener = new IUiListener() {
+                @Override
+                public void onError(UiError e) {
+                }
+                @Override
+                public void onComplete(final Object response) {
+                    Message msg = new Message();
+                    msg.obj = response;
+                    Log.d("response","................"+response.toString());
+                    msg.what = 0;
+                    mHandler.sendMessage(msg);
+                }
+                @Override
+                public void onCancel() {
+                    Log.d("cancel","登录取消..");
+                }
+            };
+            userInfo = new UserInfo((Activity) Latte.getConfiguration(ConfigKeys.ACTIVITY), mTencent.getQQToken());
+            userInfo.getUserInfo(listener);
+        }
+    }
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {}
+    };
 }

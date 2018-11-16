@@ -68,7 +68,7 @@ dependencies {
     compile 'org.greenrobot:greendao-generator:3.2.0'
     compile 'org.greenrobot:greendao:3.2.0'
     //微信依赖（包含统）
-    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    //compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:1.1.6'
 
     //qq依赖
     compile files('libs/mta-sdk-1.6.2.jar')
