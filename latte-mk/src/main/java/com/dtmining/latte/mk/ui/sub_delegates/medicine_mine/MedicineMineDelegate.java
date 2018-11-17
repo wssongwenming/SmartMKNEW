@@ -92,7 +92,7 @@ public class MedicineMineDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        mRefreshHandler=RefreshHandler.create(null,mRecyclerView,new MedincineMineDataConverter(),null,sets);
+        mRefreshHandler=RefreshHandler.create(null,mRecyclerView,null,new MedincineMineDataConverter(),null,sets);
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         if(userProfile==null){
             startWithPop(new SignInDelegate());

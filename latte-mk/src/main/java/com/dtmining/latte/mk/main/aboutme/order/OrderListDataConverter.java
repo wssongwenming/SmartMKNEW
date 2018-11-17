@@ -11,6 +11,7 @@ import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * author:songwenming
@@ -45,5 +46,20 @@ public class OrderListDataConverter extends DataConverter {
             ENTITIES.add(entity);
         }
         return ENTITIES;
+    }
+
+    @Override
+    public ArrayList<MultipleItemEntity> convertMedicineHistory() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<MultipleItemEntity> convertMedicinePlan() {
+        return null;
+    }
+
+    @Override
+    public List<MultipleItemEntity> getTop() {
+        return null;
     }
 }

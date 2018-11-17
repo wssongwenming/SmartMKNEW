@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -13,7 +13,7 @@
         <LinearLayout
 
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
@@ -22,7 +22,7 @@
                 android:layout_width="80dp"
                 android:focusable="false"
                 android:textColor="@color/white"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/Assertive"
                 android:gravity="center"
                 android:text="修改" />
@@ -31,7 +31,7 @@
                 android:layout_width="80dp"
                 android:focusable="false"
                 android:textColor="@color/white"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/Assertive"
                 android:gravity="center"
                 android:text="删除" />
@@ -40,7 +40,7 @@
         <LinearLayout
             android:id="@+id/item_medicine_mine"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:paddingRight="20dp"

@@ -80,7 +80,7 @@ public class SignInDelegate extends LatteDelegate {
             String singInJson = JSON.toJSON(signModel).toString();
             RestClient.builder()
                     .url("http://10.0.2.2:8081/Web01_exec/UserLogin")
-                    //.url("http://192.168.1.3:8081/Web01_exec/UserLogin")
+                    //.url("http://127.0.0.1:8081/Web01_exec/UserLogin")
                     .raw(singInJson)
                     .success(new ISuccess() {
                         @Override

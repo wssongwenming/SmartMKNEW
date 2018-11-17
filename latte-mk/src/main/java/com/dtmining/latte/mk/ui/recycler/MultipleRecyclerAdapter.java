@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.R;
 import com.dtmining.latte.delegates.LatteDelegate;
+import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.ui.banner.BannerCreator;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
@@ -54,11 +55,20 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
     public static MultipleRecyclerAdapter create(List<MultipleItemEntity> data,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(data,delegate);
     }
-
     public static MultipleRecyclerAdapter create(DataConverter converter,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(converter.getEntities(),delegate);
     }
+    public static MultipleRecyclerAdapter createMedicineHistory(DataConverter converter,LatteDelegate delegate){
+        //return new MultipleRecyclerAdapter(converter.getEntities(),delegate);
+        return new MultipleRecyclerAdapter(((IndexDataConverter)converter).getMedicineHistory(),delegate);
+    }
 
+    public static MultipleRecyclerAdapter getTop(DataConverter converter,LatteDelegate delegate){
+        return new MultipleRecyclerAdapter(converter.getTop(),delegate);
+    }
+    public static MultipleRecyclerAdapter getHistoryMore(DataConverter converter,LatteDelegate delegate){
+        return new MultipleRecyclerAdapter(((IndexDataConverter)converter).getMedicineHistoryMore(),delegate);
+    }
     private void init(){
         //设置不同的item布局
         addItemType(ItemType.TEXT, R.layout.item_mutiple_text);

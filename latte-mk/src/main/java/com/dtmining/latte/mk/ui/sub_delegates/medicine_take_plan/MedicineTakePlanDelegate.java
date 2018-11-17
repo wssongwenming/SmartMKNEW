@@ -71,7 +71,6 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-
                         MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets);
                         MedicinePlanExpandableListViewAdapter.convert(response);
                         mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);

@@ -8,20 +8,14 @@ import java.io.Serializable;
  * Description:
  */
 public class MedicinePlan implements Serializable {
-    private String startTime=null;//开始提示时间
+    private String startRemind=null;//开始提示时间
     private String interval=null;// 服药的周期间隔是每天、隔天或其它
     private String atime=null;
     private String medicineUseCount=null;
     private String medicineName=null;
     private String medicineId=null;
 
-    public String getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
 
     public String getInterval() {
         return interval;

@@ -1,45 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
     android:orientation="vertical">
-
-<!--    <com.bigkoo.convenientbanner.ConvenientBanner
-        android:id="@+id/banner_recycler_item"
-        android:layout_width="match_parent"
-        android:layout_height="180dp">
-
-    </com.bigkoo.convenientbanner.ConvenientBanner>-->
-
- <!--   <android.support.v7.widget.AppCompatTextView
-        android:layout_height="8dp"
-        android:layout_width="match_parent"
-        android:background="@color/split_line"/>-->
-
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_index"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:background="@color/Green"
+        android:layout_height="wrap_content">
         <!--显示图标按钮-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_index"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="600dp"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_index_history"
-            android:layout_width="match_parent"
-            android:layout_height="600dp"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_index_plan"
-            android:layout_width="match_parent"
-            android:layout_height="600dp"/>
-        <!--显示分割线-->
+            android:layout_height="wrap_content">
+            <com.bigkoo.convenientbanner.ConvenientBanner
+                android:id="@+id/banner_recycler_item"
+                android:layout_width="match_parent"
+                android:background="@color/main_orange_color"
+                android:layout_height="180dp">
 
-<!--        <android.support.v7.widget.AppCompatTextView
-            android:layout_height="8dp"
-            android:layout_width="match_parent"
-            android:background="@color/split_line"/>-->
-   </android.support.v4.widget.SwipeRefreshLayout>
+            </com.bigkoo.convenientbanner.ConvenientBanner>
+            <com.dtmining.latte.mk.ui.sub_delegates.views.MyGridView
+                android:id="@+id/grid_photo_index"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginTop="10dp"
+                android:numColumns="3" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:background="@color/split_line"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_index_history"
+                android:layout_width="match_parent"
+                android:background="@color/colorAccent"
+                android:layout_height="60dp"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:background="@color/split_line"/>
+
+            <ExpandableListView
+                android:id="@+id/elv_index_plan"
+                android:layout_marginTop="1dp"
+                android:groupIndicator="@null"
+                android:divider="@color/Gray0"
+                android:dividerHeight="1px"
+                android:background="@color/main_orange_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <!--显示分割线-->
+
+            <!--        <android.support.v7.widget.AppCompatTextView
+                        android:layout_height="8dp"
+                        android:layout_width="match_parent"
+                        android:background="@color/split_line"/>-->
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

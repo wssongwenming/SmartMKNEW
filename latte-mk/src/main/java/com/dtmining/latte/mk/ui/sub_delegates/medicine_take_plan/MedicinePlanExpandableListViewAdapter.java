@@ -109,6 +109,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             LayoutInflater inflater = ((Activity)Latte.getConfiguration(ConfigKeys.ACTIVITY)).getLayoutInflater();
             convertView= inflater.inflate(R.layout.item_parent_medicine_plan, null);

@@ -10,6 +10,7 @@ import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class IndexDataConverter extends DataConverter {
 
@@ -37,15 +38,16 @@ public class IndexDataConverter extends DataConverter {
         ENTITIES.add(entity);
     }
     //获取“用药记录  更多> ”
-    private void getMedicineHistoryMore(){
+    public ArrayList<MultipleItemEntity> getMedicineHistoryMore(){
         final MultipleItemEntity entity= MultipleItemEntity.builder()
                 .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_HISTORY)
                 .setField(MultipleFields.SPAN_SIZE,3)
                 .build();
         ENTITIES.add(entity);
+        return ENTITIES;
     }
     //获取“用药计划  更多> ”
-    private void getMedicinePlanMore(){
+    public void getMedicinePlanMore(){
         final MultipleItemEntity entity= MultipleItemEntity.builder()
                 .setField(MultipleFields.ITEM_TYPE,ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN)
                 .setField(MultipleFields.SPAN_SIZE,3)
@@ -95,7 +97,7 @@ public class IndexDataConverter extends DataConverter {
                 .build();
         ENTITIES.add(entity5);
     }
-    public ArrayList<MultipleItemEntity> convert(){
+    public ArrayList<MultipleItemEntity> convertMedicineHistory(){
         ArrayList<String> medicinenames=new ArrayList<>();
         String atime=null;
         if(getJsonData()!=null) {
@@ -123,17 +125,34 @@ public class IndexDataConverter extends DataConverter {
         }
         return ENTITIES;
     }
-   //获取网络数据
+
+    @Override
+     public ArrayList<MultipleItemEntity>getTop(){
+        getBanner();
+        getSeperator();
+        getImage_TextButton();
+        getSeperator();
+        return ENTITIES;
+    }
+
+
+
+    public ArrayList<MultipleItemEntity> getMedicineHistory() {
+        getMedicineHistoryMore();
+        convertMedicineHistory();
+        return ENTITIES;
+    }
+    //获取网络数据
     @Override
     public ArrayList<MultipleItemEntity> getEntities() {
         getBanner();
         getSeperator();
         getImage_TextButton();
         getSeperator();
-        getMedicineHistoryMore();
-        convert();
-        getSeperator();
-        getMedicinePlanMore();
+        //getMedicineHistoryMore();
+        //convert();
+        //getSeperator();
+        //getMedicinePlanMore();
 /*        final JSONArray dataArray= JSON.parseObject(getJsonData()).getJSONArray("data");
         final int size= dataArray.size();
         for (int i = 0; i < size; i++) {
@@ -172,6 +191,17 @@ public class IndexDataConverter extends DataConverter {
             ENTITIES.add(entity);
         }*/
         return ENTITIES;
+    }
+
+    @Override
+    public ArrayList<MultipleItemEntity> convert() {
+        return null;
+    }
+
+
+    @Override
+    public ArrayList<MultipleItemEntity> convertMedicinePlan() {
+        return null;
     }
 /*  @Override
 
