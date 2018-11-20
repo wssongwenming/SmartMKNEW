@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/item_medicine_mine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="#66ffffff"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/iv_medicine_over_due_medicine_pic"
+                android:layout_width="90dp"
+                android:background="@color/Gray0"
+                android:layout_gravity="center"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:paddingLeft="20dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_medicine_over_due_medicine_name"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="药品名"
+                        android:gravity="center_vertical"
+                        android:textSize="15sp"
+                        android:textColor="#000"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_medicine_over_due_medicine_count"
+                        android:layout_width="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="剩余：5片"
+                        android:textSize="13sp"
+                        android:textColor="@color/Energized"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/induetag"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:text="有效期至:  "
+                            android:textColor="@color/Assertive"
+                            android:textSize="13sp"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_medicine_over_due_validity_time"
+                            android:textColor="@color/Assertive"
+                            android:layout_width="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content" />
+                        <Button
+                            android:id="@+id/btn_medicine_over_due_delete"
+                            android:layout_width="60dp"
+                            android:text="删除"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:background="@drawable/area_radis_red"
+                            android:layout_height="20dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

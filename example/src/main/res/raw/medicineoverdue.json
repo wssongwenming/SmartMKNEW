@@ -1,0 +1,25 @@
+{
+  "code": 1,
+  "detail": [
+    {
+      "boxId": "101",
+      "medicineId": "2e96fc184d134174865d2f840313a1d1",
+      "medicinePause": 0,
+      "medicineImage":"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2727496081,2353247082&fm=26&gp=0.jpg",
+      "medicineCode": "6903724000151",
+      "medicineValidity": "2018-07-20",
+      "medicineName": "乳宁胶囊",
+      "medicineCount": 7
+    },
+    {
+      "boxId": "101",
+      "medicineId": "a697ad3fe32641389b5dca46adb0636b",
+      "medicinePause": 1,
+      "medicineImage":"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2727496081,2353247082&fm=26&gp=0.jpg",
+      "medicineValidity": "2018-07-20",
+      "medicineName": "感冒片",
+      "medicineCount": 50
+    }
+  ],
+  "message": "success"
+}

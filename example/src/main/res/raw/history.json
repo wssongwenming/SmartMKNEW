@@ -6,13 +6,32 @@
   "detail":{
     "histories":[
       {
-        "tel":"15620151475","showtip":"1","medicine_names":["清喉利利咽颗粒"],"medicine_count":1,"atime":"2018-10-27 15:31:00","id":"3edc5fe4-8c07-11e8-bf24-00163e109404"
+        "boxId": "102",
+        "medicineUseTime": "2018-10-17 16:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "3"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-17 12:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "2"
       },  {
-        "tel":"15620151475","showtip":"1","medicine_names":["清喉利利咽颗粒"],"medicine_count":1,"atime":"2018-10-27 15:31:00","id":"3edc5fe4-8c07-11e8-bf24-00163e109404"
-      },  {
-        "tel":"15620151475","showtip":"1","medicine_names":["清喉利利咽颗粒"],"medicine_count":1,"atime":"2018-10-27 15:31:00","id":"3edc5fe4-8c07-11e8-bf24-00163e109404"
+        "boxId": "102",
+        "medicineUseTime": "2018-10-17 16:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "3"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-17 12:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "2"
       }
-
     ]
   }
 }

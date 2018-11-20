@@ -57,15 +57,15 @@ public final class LattePreference {
                  .apply();
      }
 
-    public static void setBoxID(String key ,String boxId){
+    public static void setBoxID(String boxId){
         getAppPreference()
                 .edit()
-                .putString(key,boxId)
+                .putString("boxId",boxId)
                 .apply();
     }
-    public static String getBoxId(String key){
+    public static String getBoxId(){
        return getAppPreference()
-                .getString(key,"99");
+                .getString("boxId","99");
     }
      public static boolean getAppFlag(String key){
          return getAppPreference()

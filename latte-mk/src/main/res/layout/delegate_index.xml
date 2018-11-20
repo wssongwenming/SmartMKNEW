@@ -2,12 +2,12 @@
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
+
     android:orientation="vertical">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_index"
         android:layout_width="match_parent"
-        android:background="@color/Green"
+
         android:layout_height="wrap_content">
         <!--显示图标按钮-->
         <LinearLayout
@@ -15,9 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.bigkoo.convenientbanner.ConvenientBanner
-                android:id="@+id/banner_recycler_item"
+                android:id="@+id/banner_index"
                 android:layout_width="match_parent"
-                android:background="@color/main_orange_color"
                 android:layout_height="180dp">
 
             </com.bigkoo.convenientbanner.ConvenientBanner>
@@ -26,8 +25,8 @@
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_marginTop="10dp"
                 android:numColumns="3" />
 
@@ -35,34 +34,80 @@
                 android:layout_height="2dp"
                 android:layout_width="match_parent"
                 android:background="@color/split_line"/>
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_height="30dp">
+                <TextView
+                    android:layout_width="100dp"
+                    android:text="用药记录"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_more_medicine_history_index"
+                    android:layout_width="50dp"
+                    android:text="更多"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="10dp"
+                    android:background="@mipmap/single_forword"
+                    android:layout_gravity="center"
+                    android:layout_height="10dp"/>
+            </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_index_history"
                 android:layout_width="match_parent"
-                android:background="@color/colorAccent"
-                android:layout_height="60dp"/>
+                android:layout_height="90dp"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_height="2dp"
                 android:layout_width="match_parent"
                 android:background="@color/split_line"/>
-
+            <LinearLayout
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+                <TextView
+                    android:layout_width="100dp"
+                    android:text="用药计划"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_more_medicine_plan_index"
+                    android:layout_width="50dp"
+                    android:text="更多"
+                    android:gravity="center"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:layout_width="10dp"
+                    android:background="@mipmap/single_forword"
+                    android:layout_gravity="center"
+                    android:layout_height="10dp" />
+            </LinearLayout>
             <ExpandableListView
                 android:id="@+id/elv_index_plan"
-                android:layout_marginTop="1dp"
                 android:groupIndicator="@null"
                 android:divider="@color/Gray0"
                 android:dividerHeight="1px"
-                android:background="@color/main_orange_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
-            <!--显示分割线-->
-
-            <!--        <android.support.v7.widget.AppCompatTextView
-                        android:layout_height="8dp"
-                        android:layout_width="match_parent"
-                        android:background="@color/split_line"/>-->
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 

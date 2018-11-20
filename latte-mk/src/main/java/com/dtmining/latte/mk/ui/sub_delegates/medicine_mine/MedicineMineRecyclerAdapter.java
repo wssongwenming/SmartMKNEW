@@ -144,15 +144,16 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     public void onClick(View v) {
                         MedicineState medicineState=new MedicineState();
                         MedicineStateModel medicineStateModel=new MedicineStateModel();
-                        medicineState.setBoxId(LattePreference.getBoxId("boxId"));
-                        medicineState.setCaseId("caseid");//caseid没有得到？？？？？
-                        medicineState.setMedicinId(medicineId);
+                        medicineState.setBoxId(LattePreference.getBoxId());
+                        medicineState.setMedicineId(medicineId);
                         medicineState.setTel(tel);
+                        medicineState.setMedicinePause("1");
                         medicineStateModel.setDetail(medicineState);
-                        String singInJson = JSON.toJSON(medicineStateModel).toString();
+                        String json = JSON.toJSON(medicineStateModel).toString();
                         RestClient.builder()
+                                .clearParams()
                                 .url("http://10.0.2.2:8081/Web01_exec/Medicine_update_state")
-                                .raw(singInJson)
+                                .raw(json)
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
@@ -188,9 +189,8 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     public void onClick(View v) {
                         MedicineState medicineState=new MedicineState();
                         MedicineStateModel medicineStateModel=new MedicineStateModel();
-                        medicineState.setBoxId(LattePreference.getBoxId("boxId"));
-                        medicineState.setMedicinId(medicineId);
-                        medicineState.setCaseId("caseid");//caseid没有得到？？？？？
+                        medicineState.setBoxId(LattePreference.getBoxId());
+                        medicineState.setMedicineId(medicineId);
                         medicineStateModel.setDetail(medicineState);
                         String singInJson = JSON.toJSON(medicineStateModel).toString();
                         RestClient.builder()

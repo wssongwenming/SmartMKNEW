@@ -46,6 +46,10 @@ public class RestClientBuilder {
         this.PARAMS.putAll(params);
         return this;
     }
+    public final RestClientBuilder clearParams(){
+        this.PARAMS.clear();
+        return this;
+    }
 
     public final RestClientBuilder params(String key,Object value){
 

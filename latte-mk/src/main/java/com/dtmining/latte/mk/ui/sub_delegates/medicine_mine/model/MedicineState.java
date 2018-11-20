@@ -6,11 +6,26 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model;
  * Description:
  */
 public class MedicineState {
-    public String caseId;
-    public String medicinId;
-    public String medicine_pause;
+    public String medicineId;
+    public String medicinePause;
     public String boxId;
     public String tel;
+
+    public String getMedicineId() {
+        return medicineId;
+    }
+
+    public void setMedicineId(String medicineId) {
+        this.medicineId = medicineId;
+    }
+
+    public String getMedicinePause() {
+        return medicinePause;
+    }
+
+    public void setMedicinePause(String medicinePause) {
+        this.medicinePause = medicinePause;
+    }
 
     public String getTel() {
         return tel;
@@ -20,33 +35,10 @@ public class MedicineState {
         this.tel = tel;
     }
 
-    public String getCaseId() {
-        return caseId;
-    }
-
-    public String getMedicinId() {
-        return medicinId;
-    }
-
-    public String getMedicine_pause() {
-        return medicine_pause;
-    }
-
     public String getBoxId() {
         return boxId;
     }
 
-    public void setCaseId(String caseId) {
-        this.caseId = caseId;
-    }
-
-    public void setMedicinId(String medicinId) {
-        this.medicinId = medicinId;
-    }
-
-    public void setMedicine_pause(String medicine_pause) {
-        this.medicine_pause = medicine_pause;
-    }
 
     public void setBoxId(String boxId) {
         this.boxId = boxId;

@@ -48,8 +48,8 @@ public class BoxBindDelegate extends LatteDelegate {
     @OnClick(R2.id.btn_medicine_box_bind_submit)
     void onSubmit(){
         if(checkForm()){
-            LattePreference.setBoxID("boxId",boxId);
-            Toast.makeText(getContext(),"成功绑定当前药箱ID:"+LattePreference.getBoxId("boxId"),Toast.LENGTH_LONG).show();
+            LattePreference.setBoxID(boxId);
+            Toast.makeText(getContext(),"成功绑定当前药箱ID:"+LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             final IGlobalCallback<String> callback = CallbackManager
                     .getInstance()
                     .getCallback(CallbackType.ON_BIND_BOXID);
@@ -81,12 +81,16 @@ public class BoxBindDelegate extends LatteDelegate {
     private boolean checkForm(){
 
         boolean isPass=true;
-        if(((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).getText().toString().equalsIgnoreCase("请选择药箱Id")){
-            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError("请选择药箱Id");
-            isPass=false;
-        }else {
-            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError(null);
+        TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
+        if(textView!=null){
+            if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
+            {
+                textView.setError("请选择药箱Id");
+                isPass=false;
+            }else {
+                textView.setError(null);
 
+            }
         }
         return isPass;
     }

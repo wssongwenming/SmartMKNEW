@@ -138,4 +138,8 @@ public class MedicineMineDelegate extends LatteDelegate {
         });*/
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="50dp"
+>
+
+    <Button
+        android:id="@+id/btn_medicine_add_by_hand"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="手动添加"/>
+
+
+    <Button
+        android:id="@+id/btn_medicine_add_by_scan"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="扫描添加"/>
+</LinearLayout>

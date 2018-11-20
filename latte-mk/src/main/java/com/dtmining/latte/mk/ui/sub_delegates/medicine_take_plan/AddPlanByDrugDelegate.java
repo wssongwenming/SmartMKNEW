@@ -50,6 +50,7 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
+
     String tel=null;
     String boxId=null;
     String interval=null;
@@ -113,6 +114,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             RestClient.builder()
                     .url("http://10.0.2.2:8081/Web01_exec/UserLogin")//提交计划
                     .raw(planJson)
+                    .clearParams()
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
@@ -244,7 +246,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
-        boxId=LattePreference.getBoxId("boxId");
+        boxId=LattePreference.getBoxId();
         if(userProfile==null){
             startWithPop(new SignInDelegate());
         }else {

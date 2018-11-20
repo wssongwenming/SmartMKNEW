@@ -10,9 +10,11 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
@@ -22,6 +24,9 @@ import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxByScanDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineAddModel;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModel;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
@@ -40,17 +45,40 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class HandAddDelegate extends LatteDelegate {
-
+    private static final String MEDICINE_CODE = "MEDICINE_CODE";
+    //药品名称
     @BindView(R2.id.edit_medicine_hand_add_medicine_name)
     AppCompatEditText mMedicinName=null;
-    @BindView(R2.id.btn_medicine_hand_add_please_select_production_time)
-    AppCompatButton mBtnProductionTimeSelection=null;
-    @BindView(R2.id.btn_medicine_hand_add_please_select_overdue_time)
-    AppCompatButton mBtnOverdueTimeSelect=null;
+    //药品条形码
+    @BindView(R2.id.edit_medicine_hand_add_medicine_code)
+    AppCompatEditText mMedicineCode=null;
+    // 药品有效期
+    @BindView(R2.id.btn_medicine_hand_add_please_select_medicine_validity_time)
+    AppCompatButton mBtnValidityTimeSelection=null;
+    //药品添加数量
     @BindView(R2.id.edit_medicine_hand_add_medicine_count)
     AppCompatEditText mMedicineCount=null;
+    //开始提醒时间
+    @BindView(R2.id.btn_medicine_hand_add_please_select_start_remind_time)
+    AppCompatButton mBtnStartRemindTimeSelection=null;
+    //结束提醒时间
+    @BindView(R2.id.btn_medicine_hand_add_please_select_end_remind_time)
+    AppCompatButton mBtnEndRemindTimeSelection=null;
+    //服药间隔
+    @BindView(R2.id.edit_medicine_hand_add_day_interval)
+    AppCompatEditText mInterval=null;
+    //每天服药次数
+    @BindView(R2.id.edit_medicine_hand_add_times_onday)
+    AppCompatEditText mTimesOnDay=null;
+    //单次服药量
+    @BindView(R2.id.edit_medicine_hand_add_medicine_usecount)
+    AppCompatEditText mMedicineUseCount=null;
+    //外包装
     @BindView(R2.id.img_medicine_hand_add_appearance)
     AppCompatImageView mMedicineImage=null;
+    //外包装图片回传路径
+    String medicineImage="";
+    //药箱ID
     @BindView(R2.id.spinner_medicine_hand_add_boxid)
     AppCompatSpinner mBoxidSpinner=null;
     @BindView(R2.id.btn_medicine_hand_add_submit)
@@ -61,21 +89,75 @@ public class HandAddDelegate extends LatteDelegate {
         //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
         boxId=parent.getItemAtPosition(position).toString();
     }
-
-
+    private String medicineCode=null;
     private BoxListDataConverter converter=null;
     private BoxListAdapter mAdapter=null;
     private String tel=null;
     @OnClick(R2.id.btn_medicine_hand_add_submit)
     void onClickSubmit(){
-        checkForm();
+        if(checkForm()){
+            MedicineModel medicineModel=new MedicineModel();
+            MedicineAddModel medicineAddModel=new MedicineAddModel();
+            medicineModel.setBoxId(boxId);
+            medicineModel.setDayInterval(mInterval.getText().toString());
+            medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
+            medicineModel.setMedicineCode(mMedicineCode.getText().toString());
+            medicineModel.setMedicineCount(mMedicineCount.getText().toString());
+            medicineModel.setMedicineImage(medicineImage);
+            medicineModel.setMedicineName(mMedicinName.getText().toString());
+            medicineModel.setMedicineUseCount(mMedicineUseCount.getText().toString());
+            medicineModel.setMedicineValidity(mBtnValidityTimeSelection.getText().toString());
+            medicineModel.setStartRemind(mBtnStartRemindTimeSelection.getText().toString());
+            medicineModel.setTel(tel);
+            medicineModel.setTimesOnDay(mTimesOnDay.getText().toString());
+            medicineAddModel.setDetail(medicineModel);
+            String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
+            RestClient.builder()
+                    .url("http://39.105.97.128:8080/medicinebox/api/Medicine_add")
+                    .raw(medicineAddJson)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            
+                        }
+                    })
+                    .build()
+                    .post();
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Bundle args = getArguments();
+        if (args != null) {
+            medicineCode = args.getString(MEDICINE_CODE);
+        }
+    }
+    public static HandAddDelegate newInstance(String medicineCode){
+        final Bundle args = new Bundle();
+        args.putString(MEDICINE_CODE,medicineCode);
+        final HandAddDelegate delegate = new HandAddDelegate();
+        delegate.setArguments(args);
+        return delegate;
+    }
+
+    private void initData() {
+        if(medicineCode!=null) {
+            mMedicineCode.setText(medicineCode);
+        }
     }
     //表单验证
     private boolean checkForm(){
         final String medicineName= mMedicinName.getText().toString();
-        final String overdueTime=mBtnOverdueTimeSelect.getText().toString();
-        Log.d("over", overdueTime);
+        final String medicineCode=mMedicineCode.getText().toString();
+        final String validityTime=mBtnValidityTimeSelection.getText().toString();
         final String medicineCount=mMedicineCount.getText().toString();
+        final String medicineStartTime=mBtnStartRemindTimeSelection.getText().toString();
+        final String medicineEndTime=mBtnEndRemindTimeSelection.getText().toString();
+        final String interval=mInterval.getText().toString();
+        final String timesOneDay=mTimesOnDay.getText().toString();
+        final String medicineUseCount=mMedicineUseCount.getText().toString();
         boolean isPass=true;
         if(medicineName.isEmpty()||medicineName==null){
             mMedicinName.setError("请填写药品名！");
@@ -83,51 +165,101 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
          mMedicinName.setError(null);
         }
+        if(medicineCode.isEmpty()||medicineCode==null){
+            mMedicineCode.setError("请填写药品条形码！");
+            isPass=false;
+        }else{
+            mMedicineCode.setError(null);
+        }
+        if(validityTime.isEmpty()||validityTime.equalsIgnoreCase("请选择有效期")){
+            mBtnValidityTimeSelection.setError("请选择有效期");
+            isPass=false;
+        }else{
+            mBtnValidityTimeSelection.setError(null);
+        }
         if(medicineCount.isEmpty()||medicineCount==null){
-            mMedicineCount.setError("请填写数量！");
+            mMedicineCount.setError("请填写药品添加数量！");
             isPass=false;
         }else{
             mMedicineCount.setError(null);
         }
-        if(overdueTime.isEmpty()||overdueTime.equalsIgnoreCase("请选择过期时间")){
-            mBtnOverdueTimeSelect.setError("请选择过期时间");
+
+        if(medicineStartTime.isEmpty()||medicineStartTime.equalsIgnoreCase("请选择开始提醒时间")){
+            mBtnStartRemindTimeSelection.setError("请选择开始提醒时间！");
             isPass=false;
         }else{
-            mBtnOverdueTimeSelect.setError(null);
+            mBtnStartRemindTimeSelection.setError(null);
         }
-        if(((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).getText().toString().equalsIgnoreCase("请选择药箱Id")){
-            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError("请选择药箱Id");
+        if(medicineEndTime.isEmpty()||medicineEndTime.equalsIgnoreCase("请选择结束提醒时间")){
+            mBtnEndRemindTimeSelection.setError("请选择结束提醒时间！");
             isPass=false;
-        }else {
-            ((TextView)((mBoxidSpinner.getChildAt(0)).findViewById(R.id.single_item_tv))).setError(null);
-
+        }else{
+            mBtnEndRemindTimeSelection.setError(null);
         }
+        if(interval.isEmpty()||interval==null){
+            mInterval.setError("请填写服药间隔！");
+            isPass=false;
+        }else{
+            mInterval.setError(null);
+        }
+        if(timesOneDay.isEmpty()||timesOneDay==null){
+            mTimesOnDay.setError("请填写服药次数/每天！");
+            isPass=false;
+        }else{
+            mTimesOnDay.setError(null);
+        }
+        if(medicineUseCount.isEmpty()||medicineUseCount==null){
+            mMedicineUseCount.setError("请填写单次服药量！");
+            isPass=false;
+        }else{
+            mMedicineUseCount.setError(null);
+        }
+        TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
+        if(textView!=null){
+            if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
+            {
+                textView.setError("请选择药箱Id");
+                isPass=false;
+            }else {
+                textView.setError(null);
+
+            }
+        }
+
         return isPass;
     }
 
-
-
-
-
-    @OnClick(R2.id.btn_medicine_hand_add_please_select_overdue_time)
-    void onSelectOverDueTimeClick(){
+    @OnClick(R2.id.btn_medicine_hand_add_please_select_medicine_validity_time)
+    void onSelectValidityTimeClick(){
         final DateDialogUtil dateDialogUtil = new DateDialogUtil();
         dateDialogUtil.setDateListener(new DateDialogUtil.IDateListener() {
             @Override
             public void onDateChange(String date) {
-                mBtnOverdueTimeSelect.setText(date.replace("年","-").replace("月","-").replace("日",""));
+                mBtnValidityTimeSelection.setText(date.replace("年","-").replace("月","-").replace("日",""));
             }
         });
         dateDialogUtil.showDialog(getContext());
     }
 
-    @OnClick(R2.id.btn_medicine_hand_add_please_select_production_time)
-    void onSelectProductionTimeClick(){
+    @OnClick(R2.id.btn_medicine_hand_add_please_select_start_remind_time)
+    void onSelectStartRemindTimeClick(){
         final DateDialogUtil dateDialogUtil = new DateDialogUtil();
         dateDialogUtil.setDateListener(new DateDialogUtil.IDateListener() {
             @Override
             public void onDateChange(String date) {
-                mBtnProductionTimeSelection.setText(date.replace("年","-").replace("月","-").replace("日",""));
+                mBtnStartRemindTimeSelection.setText(date.replace("年","-").replace("月","-").replace("日",""));
+            }
+        });
+        dateDialogUtil.showDialog(getContext());
+    }
+
+    @OnClick(R2.id.btn_medicine_hand_add_please_select_end_remind_time)
+    void onSelectEndRemindTimeClick(){
+        final DateDialogUtil dateDialogUtil = new DateDialogUtil();
+        dateDialogUtil.setDateListener(new DateDialogUtil.IDateListener() {
+            @Override
+            public void onDateChange(String date) {
+                mBtnEndRemindTimeSelection.setText(date.replace("年","-").replace("月","-").replace("日",""));
             }
         });
         dateDialogUtil.showDialog(getContext());
@@ -147,14 +279,14 @@ public class HandAddDelegate extends LatteDelegate {
                                 .url(UploadConfig.UPLOAD_IMG)
                                 .loader(getContext())
                                 .file(args.getPath())
-/*                                .success(new ISuccess() {
+                                .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
-                                        LatteLogger.d("ON_CROP_UPLOAD", response);
-                                        final String path = JSON.parseObject(response).getJSONObject("result")
+
+                                        medicineImage = JSON.parseObject(response).getJSONObject("detail")
                                                 .getString("path");
 
-                                        //通知服务器更新信息
+/*                                        //通知服务器更新信息
                                         RestClient.builder()
                                                 .url("user_profile.php")
                                                 .params("avatar", path)
@@ -167,9 +299,9 @@ public class HandAddDelegate extends LatteDelegate {
                                                     }
                                                 })
                                                 .build()
-                                                .post();
+                                                .post();*/
                                     }
-                                })*/
+                                })
                                 .build()
                                 .upload();
                     }
@@ -190,6 +322,7 @@ public class HandAddDelegate extends LatteDelegate {
             tel=Long.toString(userProfile.getTel());
             getBoxIdList();
         }
+        initData();
     }
 
     private void getBoxIdList(){

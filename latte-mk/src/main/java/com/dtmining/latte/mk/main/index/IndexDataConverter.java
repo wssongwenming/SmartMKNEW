@@ -98,34 +98,72 @@ public class IndexDataConverter extends DataConverter {
         ENTITIES.add(entity5);
     }
     public ArrayList<MultipleItemEntity> convertMedicineHistory(){
-        ArrayList<String> medicinenames=new ArrayList<>();
-        String atime=null;
+        String medicineId=null;
+        String medicineName=null;
+        String medicineUseTime=null;
+        String tel=null;
+        String boxId=null;
+        String id=null;
         if(getJsonData()!=null) {
             JSONObject jsonobject = JSON.parseObject(getJsonData());
             JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
             JSONArray jsonarray = jsonobject1.getJSONArray("histories");
             int size = jsonarray.size();
             for (int i = 0; i < size; i++) {
-                JSONObject jsonobject3 = jsonarray.getJSONObject(i);
-                String tel = jsonobject3.getString("tel");
-                atime = jsonobject3.getString("atime");
-                JSONArray jsonarray6 = jsonobject3.getJSONArray("medicine_names");
-                int size5 = jsonarray6.size();
-                for (int j = 0; j < size5; j++) {
-                    medicinenames.add(jsonarray6.getString(j));
-                }
+                JSONObject jsonobject2 = jsonarray.getJSONObject(i);
+                boxId=jsonobject2.getString("boxId");
+                medicineName=jsonobject2.getString("medicineNames");
+                medicineUseTime=jsonobject2.getString("medicineUseTime");
+                tel=jsonobject2.getString("tel");
+                id=jsonobject2.getString("id");
+
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
                         .setField(MultipleFields.SPAN_SIZE, 3)
-                        .setField(MultipleFields.MEDICINE_NAME, medicinenames.get(i))
-                        .setField(MultipleFields.ATIME, atime)
+                        .setField(MultipleFields.MEDICINE_NAME,medicineName)
+                        .setField(MultipleFields.MEDICINEUSERTIME,medicineUseTime)
+                        .setField(MultipleFields.BOXID,boxId)
+                        .setField(MultipleFields.TEL,tel)
+                        .setField(MultipleFields.ID,id)
                         .build();
                 ENTITIES.add(entity);
             }
         }
         return ENTITIES;
     }
+    public ArrayList<MultipleItemEntity> convertMedicineHistoryDetail(){
+        String medicineId=null;
+        String medicineName=null;
+        String medicineUseTime=null;
+        String tel=null;
+        String boxId=null;
+        String id=null;
+        if(getJsonData()!=null) {
+            JSONObject jsonobject = JSON.parseObject(getJsonData());
+            JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
+            JSONArray jsonarray = jsonobject1.getJSONArray("histories");
+            int size = jsonarray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject jsonobject2 = jsonarray.getJSONObject(i);
+                boxId=jsonobject2.getString("boxId");
+                medicineName=jsonobject2.getString("medicineNames");
+                medicineUseTime=jsonobject2.getString("medicineUseTime");
+                tel=jsonobject2.getString("tel");
+                id=jsonobject2.getString("id");
 
+                final MultipleItemEntity entity = MultipleItemEntity.builder()
+                        .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_HISTORY)
+                        .setField(MultipleFields.MEDICINE_NAME,medicineName)
+                        .setField(MultipleFields.MEDICINEUSERTIME,medicineUseTime)
+                        .setField(MultipleFields.BOXID,boxId)
+                        .setField(MultipleFields.TEL,tel)
+                        .setField(MultipleFields.ID,id)
+                        .build();
+                ENTITIES.add(entity);
+            }
+        }
+        return ENTITIES;
+    }
     @Override
      public ArrayList<MultipleItemEntity>getTop(){
         getBanner();
@@ -138,7 +176,7 @@ public class IndexDataConverter extends DataConverter {
 
 
     public ArrayList<MultipleItemEntity> getMedicineHistory() {
-        getMedicineHistoryMore();
+        //getMedicineHistoryMore();
         convertMedicineHistory();
         return ENTITIES;
     }

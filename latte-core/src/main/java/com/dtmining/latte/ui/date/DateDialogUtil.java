@@ -33,7 +33,7 @@ public class DateDialogUtil {
 
         picker.setLayoutParams(lp);
 
-        picker.init(1990, 1, 1, new DatePicker.OnDateChangedListener() {
+        picker.init(2016, 1, 1, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 final Calendar calendar = Calendar.getInstance();

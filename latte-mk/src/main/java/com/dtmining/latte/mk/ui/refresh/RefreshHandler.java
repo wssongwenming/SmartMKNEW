@@ -52,7 +52,6 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
     public static RefreshHandler create(SwipeRefreshLayout swipeRefreshLayout,RecyclerView recyclerViewHistoy,ExpandableListView expandableListView,
                                         DataConverter converter,LatteDelegate delegate,Set<SwipeListLayout> sets){
         return new RefreshHandler(swipeRefreshLayout,recyclerViewHistoy,expandableListView,converter,new PagingBean(),delegate,sets);
-
     }
 
     private void refresh(){
@@ -95,7 +94,6 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
         TOPRECYCLERVIEW.setAdapter(mAdapter);
     }
 */
-
     public void firstPage_medicine_history(String url,String tel){
         //BEAN.setDelayed(1000);
         BEAN.setPageIndex(0);
@@ -113,7 +111,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                         /*BEAN.setTotal(object.getInteger("total"))
                                 .setPageSize(object.getInteger("page_size"));*/
                         //设置Adapter
-                        mAdapter=MultipleRecyclerAdapter.createMedicineHistory(CONVERTER.setJsonData(response),DELEGATE);
+                        mAdapter=MultipleRecyclerAdapter.getMedicineHistory(CONVERTER.setJsonData(response),DELEGATE);
                         mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
 
@@ -122,7 +120,39 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                 })
                 .build()
                 .get();
+    }
+    public void get_medicine_history(String url,String tel,String boxId)
+    {
+        BEAN.setPageIndex(0);
+        BEAN.setPageSize(20);
+        RestClient.builder()
+                .url(url)
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .params("page",BEAN.getPageIndex())
+                .params("count",BEAN.getPageSize())
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        //Toast.makeText(Latte.getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        // final JSONObject object=JSON.parseObject(response);
+                        /*BEAN.setTotal(object.getInteger("total"))
+                                .setPageSize(object.getInteger("page_size"));*/
+                        //设置Adapter
+                        mAdapter=MultipleRecyclerAdapter.getMedicineHistoryForDetail(CONVERTER.setJsonData(response),DELEGATE);
+                        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                            @Override
+                            public void onLoadMoreRequested() {
 
+                            }
+                        }, RECYCLERVIEW);
+                        RECYCLERVIEW.setAdapter(mAdapter);
+
+                        BEAN.addIndex();
+                    }
+                })
+                .build()
+                .get();
     }
 /*    public void firstPage_medicine_plan(String url){
         //BEAN.setDelayed(1000);
@@ -206,5 +236,8 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                 }
             }, 1000);
         }
+    }
+    private void paging_medicine_history(){
+
     }
 }

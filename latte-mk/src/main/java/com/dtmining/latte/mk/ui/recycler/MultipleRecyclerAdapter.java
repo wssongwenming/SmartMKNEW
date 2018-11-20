@@ -3,8 +3,10 @@ package com.dtmining.latte.mk.ui.recycler;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSON;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.bumptech.glide.Glide;
@@ -15,6 +17,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.R;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.main.index.IndexDataConverter;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDataConverter;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.DeleteOverDue;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.MedicineInfo;
+import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.banner.BannerCreator;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
@@ -58,11 +65,17 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
     public static MultipleRecyclerAdapter create(DataConverter converter,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(converter.getEntities(),delegate);
     }
-    public static MultipleRecyclerAdapter createMedicineHistory(DataConverter converter,LatteDelegate delegate){
-        //return new MultipleRecyclerAdapter(converter.getEntities(),delegate);
+    public static MultipleRecyclerAdapter getMedicineHistory(DataConverter converter,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(((IndexDataConverter)converter).getMedicineHistory(),delegate);
     }
 
+    public static MultipleRecyclerAdapter getMedicineHistoryForDetail(DataConverter converter,LatteDelegate delegate){
+        return new MultipleRecyclerAdapter(((IndexDataConverter)converter).convertMedicineHistoryDetail(),delegate);
+    }
+    public static MultipleRecyclerAdapter getMedicineOverdue(DataConverter converter,LatteDelegate delegate)
+    {
+        return new MultipleRecyclerAdapter(((MedicineOverdueDataConverter)converter).getMedicineOverdue(),delegate);
+    }
     public static MultipleRecyclerAdapter getTop(DataConverter converter,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(converter.getTop(),delegate);
     }
@@ -80,6 +93,8 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
         addItemType(ItemType.TEXT_IMAGE,R.layout.item_multiple_image_text);
         addItemType(ItemType.BANNER,R.layout.item_multiple_banner);
         addItemType(ItemType.TEXT_TEXT,R.layout.item_mutiple_text_text);
+        addItemType(ItemType.MEDICINE_OVER_DUE,R.layout.item_medicine_overdue);
+        addItemType(ItemType.MEDICINE_HISTORY,R.layout.item_medicine_history);
         //设置宽度监听,只要参数实现了SpanSizeLookup接口
         setSpanSizeLookup(this);
         openLoadAnimation();
@@ -133,10 +148,15 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
     return MultipleViewHolder.create(view);
 }
     @Override
-    protected void convert(MultipleViewHolder holder, MultipleItemEntity entity) {
+    protected void convert(final MultipleViewHolder holder, MultipleItemEntity entity) {
         final String text;
-        final String medicinename;
-        final String atime;
+        final String medicineName;
+        final String medicineId;
+        final String medicineUseTime;
+        final String boxId;
+        final String tel;
+        final String validity;
+        final String medicineCount;
         final String button_name;
         final Integer button_image;
         final String imageUrl;
@@ -179,11 +199,11 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                     }
                 });
                 break;
-            case ItemType.TEXT_TEXT:
-                medicinename=entity.getField(MultipleFields.MEDICINE_NAME);
-                atime=entity.getField(MultipleFields.ATIME);
-                holder.setText(R.id.medicine_name,medicinename);
-                holder.setText(R.id.medicine_at_time,atime);
+            case ItemType.TEXT_TEXT://首页的用药历史
+                medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
+                medicineUseTime=entity.getField(MultipleFields.MEDICINEUSERTIME);
+                holder.setText(R.id.medicine_name,medicineName);
+                holder.setText(R.id.medicine_at_time,medicineUseTime);
                 break;
 
             case ItemType.SEPERATOR:
@@ -197,6 +217,57 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
 
                     }
                 });
+                break;
+            case ItemType.MEDICINE_OVER_DUE:
+                medicineName=entity.getField(MultipleFields.MEDICINENAME);
+                medicineCount=entity.getField(MultipleFields.MEDICINECOUNT);
+                validity=entity.getField(MultipleFields.MEDICINEVALIDITY);
+                imageUrl=entity.getField(MultipleFields.MEDICINEIMGURL);
+                medicineId=entity.getField(MultipleFields.MEDICINEID);
+                boxId=entity.getField(MultipleFields.BOXID);
+                tel=entity.getField(MultipleFields.TEL);
+                holder.setText(R.id.tv_medicine_over_due_medicine_name,medicineName);
+                holder.setText(R.id.tv_medicine_over_due_medicine_count,"剩余"+medicineCount);
+                holder.setText(R.id.tv_medicine_over_due_validity_time,validity);
+                Glide.with(mContext)
+                        .load(imageUrl)
+                        .apply(REQUEST_OPTIONS)
+                        .into((ImageView) holder.getView(R.id.iv_medicine_over_due_medicine_pic));
+                View delete=holder.getView(R.id.btn_medicine_over_due_delete);
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MedicineInfo medicineInfo=new MedicineInfo();
+                        DeleteOverDue deleteOverDue=new DeleteOverDue();
+                        medicineInfo.setBoxId(boxId);
+                        medicineInfo.setMedicineId(medicineId);
+                        medicineInfo.setTel(tel);
+                        deleteOverDue.setDetail(medicineInfo);
+                        String deleteString =  JSON.toJSON(deleteOverDue).toString();
+                        RestClient.builder().clearParams()
+                                .url("http://10.0.2.2:8081/Web01_exec/UserLogin")//
+                                .raw(deleteString)
+                                .success(new ISuccess() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        final int currentPosition = holder.getAdapterPosition();
+                                        getData().remove(holder.getAdapterPosition());
+                                        notifyItemRemoved(currentPosition);
+                                       // notifyDataSetChanged();
+                                        notifyItemRangeChanged(currentPosition,getData().size());
+                                    }
+                                })
+                                .build()
+                                .post();
+
+                    }
+                });
+                break;
+            case ItemType.MEDICINE_HISTORY://这里是单独的用药历史列表,不同于首页的用药历史
+                medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
+                medicineUseTime=entity.getField(MultipleFields.MEDICINEUSERTIME);
+                holder.setText(R.id.tv_medicine_history_medicine_time,medicineUseTime);
+                holder.setText(R.id.tv_medicine_history_medicine_name,medicineName);
                 break;
             case ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN:
                 View view_more_medicine_plan =holder.getView(R.id.tv_item_medicine_plan_more);
