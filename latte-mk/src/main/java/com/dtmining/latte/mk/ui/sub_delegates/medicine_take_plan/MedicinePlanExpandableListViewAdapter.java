@@ -1,6 +1,7 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +14,23 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
+import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import retrofit2.http.DELETE;
+
+import static com.dtmining.latte.ui.camera.LatteCamera.start;
 
 /**
  * author:songwenming
@@ -34,10 +42,12 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
     private static Map<String, List<MedicinePlan>> dataset = new HashMap<>();
     private static ArrayList<String> parentList=new ArrayList<>();
     private Set<SwipeListLayout> sets=null;
-
-    public MedicinePlanExpandableListViewAdapter(String reponse,Set<SwipeListLayout> sets) {
+    private LatteDelegate DELEGATE=null;
+    public MedicinePlanExpandableListViewAdapter(String reponse, Set<SwipeListLayout> sets, LatteDelegate delegate) {
         jsonString=reponse;
         this.sets=sets;
+        this.DELEGATE=delegate;
+
     }
     public static void convert(String jsonString){
         final JSONObject jsonObject= JSON.parseObject(jsonString);
@@ -141,19 +151,24 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
         TextView change = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_change);
         final String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineName();
-        int  medicneUsecount=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineUseCount();
+        final String atime= dataset.get(parentList.get(groupPosition)).get(childPosition).getAtime();
+        final int  medicneUsecount=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineUseCount();
         //修改或删除计划时，需要Id
-        final String Id  =dataset.get(parentList.get(groupPosition)).get(childPosition).getId();
+        final String planId  =dataset.get(parentList.get(groupPosition)).get(childPosition).getId();
         medicineCount.setText(medicneUsecount+"");
         medicineName.setText(medicinename);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject jsonObject=new JSONObject();
+                JsonObject detail=new JsonObject();
+                detail.addProperty("planId",planId);
+                JsonObject jsonForDelete=new JsonObject();
+                jsonForDelete.add("detail",detail);
 
                 RestClient.builder()
                         .url("http://10.0.2.2:8081/Web01_exec/Delete_plan")
-                        .raw(medicinename)//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
+                        .clearParams()
+                        .raw(jsonForDelete.toString())//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
@@ -171,19 +186,18 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
             }
         });
         change.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                RestClient.builder()
-                        .url("http://10.0.2.2:8081/Web01_exec/Delete_plan")
-                        .raw(medicinename)//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
-                        .success(new ISuccess() {
-                            @Override
-                            public void onSuccess(String response) {
-
-                            }
-                        })
-                        .build()
-                        .post();
+                JsonObject detail=new JsonObject();
+                detail.addProperty("planId",planId);
+                detail.addProperty("medicineUseCount",medicneUsecount);
+                detail.addProperty("atime",atime);
+                detail.addProperty("medicineName",medicinename);
+                JsonObject jsonForChange=new JsonObject();
+                jsonForChange.add("detail",detail);
+                UpdatePlanDelegate delegate=UpdatePlanDelegate.newInstance(jsonForChange.toString());
+                DELEGATE.start(delegate);
             }
         });
         return convertView;

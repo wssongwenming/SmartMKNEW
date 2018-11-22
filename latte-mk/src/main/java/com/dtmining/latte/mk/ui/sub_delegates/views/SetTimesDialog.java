@@ -38,8 +38,8 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     private ClickListenerInterface clickListenerInterface;
     private CustomDatePicker customDatePicker;
     private ListView lv_set_time;
-    private ArrayList<String> time_list=new ArrayList<>();
-    private ArrayList<String> count_list=new ArrayList<>();//用药量
+    private ArrayList<String> time_list;
+    private ArrayList<String> count_list;//用药量
     private  MedicineSimpleAdapter adapter;
     private ClickListenerInterface mclicklistenerinterface;
 

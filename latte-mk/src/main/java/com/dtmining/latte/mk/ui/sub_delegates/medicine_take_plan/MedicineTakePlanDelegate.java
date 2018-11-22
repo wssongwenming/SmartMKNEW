@@ -17,7 +17,6 @@ import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +70,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets);
+                        MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets,MedicineTakePlanDelegate.this);
                         MedicinePlanExpandableListViewAdapter.convert(response);
                         mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
                     }

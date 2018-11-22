@@ -74,7 +74,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets);
+                        MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets,DELEGATE);
                         MedicinePlanExpandableListViewAdapter.convert(response);
                         PLANEXPANDABLELISTVIEW.setAdapter(medicinePlanExpandableListViewAdapter);
                     }

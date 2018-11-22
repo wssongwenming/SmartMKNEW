@@ -113,7 +113,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             for (int i = 0; i <size ; i++) {
                 TimeCountPair pair=new TimeCountPair();
                 pair.setMedicine_time(timeSet.get(i));
-                pair.setMedicine_useCount(timeSet.get(i));
+                pair.setMedicine_useCount(useCountSet.get(i));
                 medicinePlan.addPair(pair);
               /*  MedicinePlan medicinePlan=new MedicinePlan();
                 medicinePlan.setAtime(timeSet.get(i).toString());
