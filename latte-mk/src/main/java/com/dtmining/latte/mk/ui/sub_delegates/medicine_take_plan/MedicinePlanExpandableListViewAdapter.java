@@ -48,16 +48,21 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         for (int i = 0; i <size ; i++) {
             JSONObject jsondata= (JSONObject) dataArray.get(i);
             parentList.add(jsondata.getString("time"));
-            JSONArray jsonArray=jsondata.getJSONArray("plan");
+            JSONArray jsonArray=jsondata.getJSONArray("plans");
             int lenght=jsonArray.size();
             List<MedicinePlan> childrenList = new ArrayList<>();
             for (int j = 0; j <lenght ; j++) {
                 JSONObject jsonObject1= (JSONObject) jsonArray.get(j);
                 MedicinePlan medicinePlanModel=new MedicinePlan();
-                medicinePlanModel.setAtime(jsonObject1.getString("attime"));
-                medicinePlanModel.setMedicineUseCount(jsonObject1.getString("medicine_useCount"));
-                medicinePlanModel.setMedicineName(jsonObject1.getString("medicine_name"));
-                medicinePlanModel.setMedicineId(jsonObject1.getString("medicineId"));
+                medicinePlanModel.setAtime(jsonObject1.getString("atime"));
+                medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
+                medicinePlanModel.setId(jsonObject1.getString("id"));
+                medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
+                medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
+                medicinePlanModel.setBoxId(jsonObject1.getString("boxId"));
+
                 childrenList.add(medicinePlanModel);
             }
             dataset.put(parentList.get(i),childrenList);
@@ -136,22 +141,22 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
         TextView change = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_change);
         final String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineName();
-        String medicnecount=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineUseCount();
-        //修改或删除计划时，需要药品标识medicineId
-        final String medicineId  =dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineId();
-        medicineCount.setText(medicnecount);
+        int  medicneUsecount=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineUseCount();
+        //修改或删除计划时，需要Id
+        final String Id  =dataset.get(parentList.get(groupPosition)).get(childPosition).getId();
+        medicineCount.setText(medicneUsecount+"");
         medicineName.setText(medicinename);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("click", "onClick: ");
+                JSONObject jsonObject=new JSONObject();
+
                 RestClient.builder()
                         .url("http://10.0.2.2:8081/Web01_exec/Delete_plan")
                         .raw(medicinename)//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
-
                                 dataset.get(parentList.get(groupPosition)).remove(childPosition);
                                 if(dataset.get(parentList.get(groupPosition)).size()==0)
                                 {

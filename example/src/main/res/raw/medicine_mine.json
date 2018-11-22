@@ -13,6 +13,7 @@
       "medicinePlan": [
         {
           "atime": "12:30",
+          "medicineUseCount":12,
           "medicineId": "101",
           "id": "1"
         },

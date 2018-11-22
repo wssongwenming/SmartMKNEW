@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,10 @@ import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListDataConverter;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.Detail;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlan;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanNetModel;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.TimeCountPair;
 import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SetTimesDialog;
 import com.dtmining.latte.net.RestClient;
@@ -39,6 +44,7 @@ import com.dtmining.latte.util.storage.LattePreference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,19 +60,21 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     String tel=null;
     String boxId=null;
     String interval=null;
+    String medicineId=null;
     boolean alarmSet=false;
     MedicineModel medicineModel=null;
     SetTimesDialog setTimesDialog=null;
     private MedicineListDataConverter converter=null;
     private MedicineListAdapter mAdapter=null;
     private ArrayList<String> timeSet=new ArrayList<String>();
-    private ArrayList<MedicinePlan> plans =new ArrayList<>();
+    private ArrayList<String> useCountSet=new ArrayList<String>();
+    //private ArrayList<MedicinePlan> plans =new ArrayList<>();
     @BindView(R2.id.take_plan_add_by_drug_horizontallistview)
     HorizontalListview mHorizontalListView=null;
     //药名列表
     @BindView(R2.id.sp_delegate_medicine_take_plan_add_by_drug_medicine_name)
     Spinner mMedicineListSpinner=null;
-    //时间间隔
+/*    //时间间隔
     @BindView(R2.id.sp_delegate_medicine_take_plan_add_by_drug_time_span)
     Spinner mTimeSpanSpinner=null;
 
@@ -76,7 +84,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
     //用药量
     @BindView(R2.id.et_delegate_medicine_take_plan_add_by_drug_medicine_count)
-    EditText mMedicineUseCount=null;
+    EditText mMedicineUseCount=null;*/
     //时间设置
     @BindView(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     Button setTimeButton=null;
@@ -89,27 +97,36 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     void setPlanTime(){
-        setTimesDialog = new SetTimesDialog(getContext() , "确定","取消", this);
+        setTimesDialog = new SetTimesDialog(getContext() ,timeSet,useCountSet, "确定","取消", this);
         setTimesDialog.show();
     }
     //确定提交整个表单
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_confirm)
     void confirmPlan(){
         if (checkForm()) {
-            String medicineUseCount = mMedicineUseCount.getText().toString();
+            //String medicineUseCount = mMedicineUseCount.getText().toString();
             int size=timeSet.size();
-            MedicinePlans medicinePlans=new MedicinePlans();
+            //MedicinePlans medicinePlans=new MedicinePlans();
+            MedicinePlan medicinePlan=new MedicinePlan();
+            Detail detail=new Detail();
+            MedicinePlanNetModel medicinePlanNetModel=new MedicinePlanNetModel();
             for (int i = 0; i <size ; i++) {
-                MedicinePlan medicinePlan=new MedicinePlan();
+                TimeCountPair pair=new TimeCountPair();
+                pair.setMedicine_time(timeSet.get(i));
+                pair.setMedicine_useCount(timeSet.get(i));
+                medicinePlan.addPair(pair);
+              /*  MedicinePlan medicinePlan=new MedicinePlan();
                 medicinePlan.setAtime(timeSet.get(i).toString());
-                medicinePlan.setMedicineUseCount(medicineUseCount);
+               // medicinePlan.setMedicineUseCount(medicineUseCount);
                 medicinePlan.setMedicineName(medicineModel.getMedicineName());
                 medicinePlan.setMedicineId(medicineModel.getMedicineId());
                 medicinePlan.setInterval(interval);
-                medicinePlans.addMedicinePlan(medicinePlan);
+                medicinePlans.addMedicinePlan(medicinePlan);*/
             }
-            medicineModel.setMedicinePlans(medicinePlans);
-            String planJson = JSON.toJSON( medicineModel).toString();
+            detail.setMedicine_plan(medicinePlan);
+            detail.setMedicineId(medicineModel.getMedicineId());
+            medicinePlanNetModel.setDetail(detail);
+            String planJson = JSON.toJSON( medicinePlanNetModel).toString();
             Log.d("json", planJson);
             RestClient.builder()
                     .url("http://10.0.2.2:8081/Web01_exec/UserLogin")//提交计划
@@ -230,11 +247,17 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
         if(medicinePlans!=null)
         {
             timeSet=medicineModel.getMedicinePlans().getTime();
-            set_time_tag(timeSet);
+            useCountSet= medicineModel.getMedicinePlans().getUseCount();
+            int size=timeSet.size();
+            ArrayList<String> time_count=new ArrayList<>();
+            for (int i = 0; i <size ; i++) {
+                time_count.add(timeSet.get(i)+"剂量:"+useCountSet.get(i));
+            }
+            set_time_count_tag(time_count);
 
         }else
         {
-            set_time_tag(new ArrayList<String>());
+            set_time_count_tag(new ArrayList<String>());
         }
     }
     @Override
@@ -255,8 +278,8 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                 Toast.makeText(getContext(),"App未绑定当前药箱",Toast.LENGTH_LONG).show();
             }
         }
-        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
-        mTimeSpanSpinner.setAdapter(adap);
+        //ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
+        //mTimeSpanSpinner.setAdapter(adap);
         getMedicineList();
     }
     private void getMedicineList(){
@@ -277,16 +300,22 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
 
     }
     // 设置时间提示标签　tips
-    private void set_time_tag(ArrayList<String> the_time_tags){
+    private void set_time_count_tag(ArrayList<String> the_time_tags){
         SimpleHorizontalAdapter  horizontalAdapter = new SimpleHorizontalAdapter(the_time_tags, getContext());
         mHorizontalListView.setAdapter(horizontalAdapter);
         //horizontalAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void doConfirm(ArrayList<String> times) {
+    public void doConfirm(ArrayList<String> times,ArrayList<String>counts) {
         timeSet=times;
-        set_time_tag(timeSet);
+        useCountSet=counts;
+        ArrayList<String>time_useCount=new ArrayList<>();
+        int size=times.size();
+        for (int i = 0; i <size ; i++) {
+            time_useCount.add(timeSet.get(i)+"剂量:"+useCountSet.get(i));
+        }
+        set_time_count_tag(time_useCount);
         setTimesDialog.dismiss();
     }
 
@@ -295,29 +324,37 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
         setTimesDialog.dismiss();
     }
     public boolean checkForm(){
-        String medicineUseCount=mMedicineUseCount.getText().toString();
+
         boolean isPass=true;
-        if(mMedicineListSpinner.getChildAt(0)!=null) {
+
+
+        TextView textView= (TextView) mMedicineListSpinner.getChildAt(0);
+        if(textView!=null){
+            if(textView.getText().toString().equalsIgnoreCase("请选择药品"))
+            {
+                textView.setError("请选择药品");
+                isPass=false;
+            }else {
+                textView.setError(null);
+
+            }
+        }
+   /*     if(mMedicineListSpinner.getChildAt(0)!=null) {
             if (((TextView) mMedicineListSpinner.getChildAt(0).findViewById(R.id.single_item_tv)).getText().toString().equalsIgnoreCase("请选择药品")) {
                 ((TextView) mMedicineListSpinner.getChildAt(0).findViewById(R.id.single_item_tv)).setError("请选择药箱Id");
                 isPass = false;
             } else {
                 ((TextView) mMedicineListSpinner.getChildAt(0).findViewById(R.id.single_item_tv)).setError(null);
             }
-        }
+        }*/
         if(timeSet.size()==0)
         {
-            setTimeButton.setError("时间设置");
+            setTimeButton.setError("请设置服药时间和剂量");
 
         }else {
             setTimeButton.setError(null);
         }
-        if(medicineUseCount.isEmpty())
-        {
-            mMedicineUseCount.setError("请填写剂量");
-        }else{
-            mMedicineUseCount.setError(null);
-        }
+
 /*      if(!alarmSet)
         {
             setAlarmButton.setError("设置提醒音乐");

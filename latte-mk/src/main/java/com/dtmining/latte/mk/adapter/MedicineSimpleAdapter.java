@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,7 +19,8 @@ import java.util.ArrayList;
  */
 
 public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickListener{
-    private ArrayList<String> data;
+    private ArrayList<String> time_list;
+    private ArrayList<String> count_list;
     private Context context;
     private String method;
     private Callback mcallback;
@@ -26,9 +28,10 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
     public interface Callback {
         public void click(View v);
     }
-    public MedicineSimpleAdapter(ArrayList<String> data, Context context, String method, Callback callback){
+    public MedicineSimpleAdapter(ArrayList<String> time_list,ArrayList<String> count_list, Context context, String method, Callback callback){
 
-        this.data=data;
+        this.time_list=time_list;
+        this.count_list=count_list;
         this.method=method;
         this.context=context;
         this.mcallback=callback;
@@ -36,7 +39,7 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
 
     @Override
     public int getCount(){
-        return data.size();
+        return time_list.size();
     }
 
     @Override
@@ -55,7 +58,8 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
             if(convertView==null){
                 convertView = LayoutInflater.from(context).inflate(R.layout.simple_item_list,parent,false);
                 holder=new Holder_Time_Add();
-                holder.time = (TextView) convertView.findViewById(R.id.tv_time);
+                holder.time = (TextView) convertView.findViewById(R.id.tv_time_for_plan_set);
+                holder.medicineUseCount=(EditText)convertView.findViewById(R.id.et_medicine_usecount_for_plan_set);
                 holder.btn_delete = (LinearLayout) convertView.findViewById(R.id.btn_delete);
                 holder.change_time = (LinearLayout) convertView.findViewById(R.id.layout_change_time);
                 convertView.setTag(holder);
@@ -65,7 +69,10 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
                 holder = (Holder_Time_Add)convertView.getTag();
             }
 
-            holder.time.setText(data.get(position));
+            holder.time.setText(time_list.get(position));
+            if(count_list.size()>position) {
+                holder.medicineUseCount.setText(count_list.get(position));
+            }
             holder.btn_delete.setOnClickListener(this);
             holder.btn_delete.setTag(position);
             holder.change_time.setOnClickListener(this);
@@ -83,6 +90,7 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
 
     private static class Holder_Time_Add{
         TextView time;
+        EditText medicineUseCount;
         LinearLayout btn_delete;
         LinearLayout change_time;
     }

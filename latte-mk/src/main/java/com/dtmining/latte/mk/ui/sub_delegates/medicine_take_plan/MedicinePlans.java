@@ -26,4 +26,11 @@ public class MedicinePlans {
         }
         return medicine_time;
     }
+    public ArrayList<String> getUseCount() {
+        ArrayList<String> use_count=new ArrayList<>();
+        for(int i=0;i<plans.size();i++){
+            use_count.add(plans.get(i).getMedicineUseCount()+"");
+        }
+        return use_count;
+    }
 }

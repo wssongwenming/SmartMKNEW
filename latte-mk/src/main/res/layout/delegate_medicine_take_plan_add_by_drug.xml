@@ -41,11 +41,11 @@
         android:layout_height="60dp">
         <TextView
             android:layout_width="90dp"
-            android:text="服药时间"
+            android:text="时间和剂量"
             android:layout_height="wrap_content" />
         <Button
             android:layout_width="0dp"
-            android:text="时间设置"
+            android:text="请设置服药时间和剂量"
             style="?android:attr/borderlessButtonStyle"
             android:layout_weight="1"
             android:background="@drawable/stroke_edit"
@@ -67,7 +67,7 @@
         </com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview>
 
     </LinearLayout>
-    <LinearLayout
+   <!-- <LinearLayout
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:layout_height="60dp">
@@ -102,9 +102,7 @@
             android:layout_height="40dp"
             android:id="@+id/sp_delegate_medicine_take_plan_add_by_drug_time_span"
             />
-    </LinearLayout>
-
-
+    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"

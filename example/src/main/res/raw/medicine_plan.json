@@ -1,25 +1,59 @@
 {
-  "status":1,
-  "msg":"success",
-  "code":0,
-  "command":"/api/get_plan",
-  "detail":{
-    "planlist":[
+  "code": 1,
+  "detail": {
+    "planlist": [
       {
-        "plan":[
+        "plans": [
           {
-            "medicine_useCount":"3",
-            "atime":"19:00",
-            "medicine_name":"感冒颗粒"
+            "endRemind": "2018-8-20",
+            "atime": "08:00",
+            "id": "1",
+            "medicineUseCount": 4,
+            "dayInterval": 1,
+            "startRemind": "2018-7-20",
+            "medicineName": "感冒片",
+            "boxId": "102"
           },
           {
-            "medicine_useCount":"5",
-            "atime":"19:00",
-            "medicine_name":"感冒清胶囊"
+            "endRemind": "2018-8-20",
+            "atime": "08:00",
+            "id": "3",
+            "medicineUseCount": 2,
+            "dayInterval": 1,
+            "startRemind": "2018-7-20",
+            "medicineName": "牛黄上清片",
+            "boxId": "102"
           }
         ],
-        "time":"19:00"
+        "time": "08:00"
+      },
+      {
+        "plans": [
+          {
+            "endRemind": "2018-8-20",
+            "atime": "12:00",
+            "id": "2",
+            "medicineUseCount": 5,
+            "dayInterval": 1,
+            "startRemind": "2018-7-20",
+            "medicineName": "感冒片",
+            "boxId": "102"
+          },
+          {
+            "endRemind": "2018-8-20",
+            "atime": "12:00",
+            "id": "4",
+            "medicineUseCount": 2,
+            "dayInterval": 1,
+            "startRemind": "2018-7-20",
+            "medicineName": "牛黄上清片",
+            "boxId": "102"
+          }
+        ],
+        "time": "12:00"
       }
     ]
-  }
+  },
+  "message": "success"
 }
+

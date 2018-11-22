@@ -5,7 +5,17 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
  * Date:2018/11/5
  * Description:
  */
+/*
+"medicineValidity": "2018-07-20",
+        "medicineId": "24c7e5416d9547e6a2ab410387e5d4bb",
+        "medicineCount": 50,
+        "medicineName": "牛黄上清片1",
+        "boxId": "102",
+        "medicinePause": 2,
+        "medicinePlan":*/
+
 public class MedicineModel {
+    private String medicineValidity;
     private String medicineName;
     private String medicineId;
     private String boxId;
