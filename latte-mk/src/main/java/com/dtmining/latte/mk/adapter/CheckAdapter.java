@@ -54,7 +54,7 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.ViewHolder> 
                 medicineState.setChecked(!medicineState.isChecked());
                 holder.cb_add_plan_by_time_checkbox.setChecked(medicineState.isChecked());
                 if (null != mCheckListener) {
-                    mCheckListener.itemChecked(medicineState, holder.cb_add_plan_by_time_checkbox.isChecked());
+                    mCheckListener.itemChecked(medicineState,position,holder.cb_add_plan_by_time_checkbox.isChecked());
                 }
                 notifyDataSetChanged();
             }
@@ -84,6 +84,6 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.ViewHolder> 
 
     public interface CheckItemListener {
 
-        void itemChecked(MedicineState checkBean, boolean isChecked);
+        void itemChecked(MedicineState checkBean,int position, boolean isChecked);
     }
 }

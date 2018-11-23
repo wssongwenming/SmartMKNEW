@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.views;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -14,7 +15,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +63,8 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private CheckBox check_all_cb;
     //列表数据
     private List<MedicineState> medicines=new ArrayList<>();
-    private List<MedicineState> checkedList=new ArrayList<>();
+    private List<MedicineState> checkedMedicine=new ArrayList<>();
+    private List<Integer>checkedPosition=new ArrayList<>();
 
 
 
@@ -67,15 +72,31 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private String tel;
     private Context context;
     private ClickListenerInterface mclickListenerInterface;
-
+    private Button button=null;
 
     @Override
-    public void itemChecked(MedicineState checkBean, boolean isChecked) {
-
+    public void itemChecked(MedicineState checkMedicine,int position,boolean isChecked) {
+        //处理Item点击选中回调事件
+        if (isChecked) {
+            //选中处理
+            if (!checkedMedicine.contains(checkMedicine)) {
+                checkedMedicine.add(checkMedicine);
+                checkedPosition.add(position);
+            }
+        } else {
+            //未选中处理
+            if (checkedMedicine.contains(checkMedicine)) {
+                checkedMedicine.remove(checkMedicine);
+                checkedPosition.remove(position);
+            }
+        }
     }
 
+
+
+
     public interface ClickListenerInterface {
-        public void doConfirm(ArrayList<MedicineState> input);
+        public void doConfirm(List<MedicineState> input);
     }
 
     public CheckMedicinesDialog(Context context , ClickListenerInterface clickListenerInterface) {
@@ -89,6 +110,15 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.medicine_select_check_dialog);
+        button= (Button) findViewById(R.id.btn_add_plan_by_time_confirm);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkUseCount()){
+                    mclickListenerInterface.doConfirm(checkedMedicine);
+                }
+            }
+        });
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         boxId= LattePreference.getBoxId();
         if(userProfile==null){
@@ -145,66 +175,22 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
         check_rcy.setAdapter(mCheckAdapter);
 
     }
-/*    private void get_medicine(){
-        RestClient.builder()
-                .url("medicine_mine")
-                .params("tel",tel)
-                .params("boxId",boxId)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        if(response!=null) {
-                            final JSONObject jsonObject = JSON.parseObject(response);
-                            String tel = jsonObject.getString("tel");
-                            final JSONArray dataArray = jsonObject.getJSONArray("detail");
-                            final int size = dataArray.size();
-                            for (int i = 0; i < size; i++) {
-                                JSONObject data = (JSONObject) dataArray.get(i);
-                                final String medicineId = data.getString("medicineId");
-                                final int medicineCount = data.getInteger("medicineCount");
-                                final String medicineName = data.getString("medicineName");
-                                final String medicine_img_url = data.getString("medicine_img_url");
-                                final String boxId = data.getString("boxId");
-                                final int medicinePause = data.getInteger("medicinePause");
-                                MedicineState medicineState=new MedicineState();
-                                medicineState.setMedicineId(medicineId);
-                                medicineState.setBoxId(boxId);
-                                medicineState.setMedicineName(medicineName);
-                                medicines.add(medicineState);
-
-                            }
-
-                        }
-                    }
-                })
-                .build()
-                .get();
-    }*/
-
-   /* public void init() {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.medicine_select_check_dialog, null);
-        setContentView(view);
-
-        //get_medicine();
-        btnConfim= (Button) findViewById(R.id.btn_add_plan_by_time_confirm);
-        checkBoxAdapter=new CheckBoxAdapter(context,medicines);
-        drugs_lv= (ListView) findViewById(R.id.add_plan_by_time_drugs_lv);
-        drugs_lv.setAdapter(checkBoxAdapter);
-        drugs_lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        btnConfim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+    private boolean checkUseCount(){
+        boolean isPass=true;
+        for (int i = 0; i < checkedPosition.size(); i++) {
+            int positions=checkedPosition.get(i);
+            RelativeLayout layout = (RelativeLayout)  check_rcy.getChildAt(positions);
+            AppCompatEditText et_content = (AppCompatEditText) layout.findViewById(R.id.et_add_plan_by_time_medicine_usecount);
+            if(et_content.getText().toString().isEmpty())
+            {
+                et_content.setError("请输入用药量");
+                isPass=false;
             }
-        });
-
-        Window dialogWindow = getWindow();
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-        DisplayMetrics d = context.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-        lp.width = (int) (d.widthPixels * 0.8); // 高度设置为屏幕的0.6
-        dialogWindow.setAttributes(lp);
-    }*/
-
-
+            else
+            {
+                et_content.setError(null);
+            }
+        }
+        return  isPass;
+    }
 }

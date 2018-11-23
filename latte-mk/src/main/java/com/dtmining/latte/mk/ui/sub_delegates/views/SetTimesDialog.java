@@ -88,6 +88,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     }
 
     public void init() {
+
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.view_edit_time_dialog, null);
         setContentView(view);

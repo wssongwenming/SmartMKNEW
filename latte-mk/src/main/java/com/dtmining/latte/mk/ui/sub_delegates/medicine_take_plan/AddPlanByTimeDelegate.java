@@ -16,6 +16,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.views.CustomDatePicker;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -80,7 +81,7 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
     }
 
     @Override
-    public void doConfirm(ArrayList<MedicineState> input) {
+    public void doConfirm(List<MedicineState> input) {
 
     }
 }
