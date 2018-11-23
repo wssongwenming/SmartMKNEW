@@ -148,10 +148,11 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         convertView.setTag(R.layout.item_child_medicine_plan, childPosition);
         TextView medicineName = (TextView) convertView.findViewById(R.id.tv_medicine_plan_medicine_name);
         TextView medicineCount= (TextView) convertView.findViewById(R.id.tv_medicine_plan_medicine_count);
-        TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
+        final TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
         TextView change = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_change);
         final String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineName();
         final String atime= dataset.get(parentList.get(groupPosition)).get(childPosition).getAtime();
+        final String boxId= dataset.get(parentList.get(groupPosition)).get(childPosition).getBoxId();
         final int  medicneUsecount=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineUseCount();
         //修改或删除计划时，需要Id
         final String planId  =dataset.get(parentList.get(groupPosition)).get(childPosition).getId();
@@ -194,6 +195,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
                 detail.addProperty("medicineUseCount",medicneUsecount);
                 detail.addProperty("atime",atime);
                 detail.addProperty("medicineName",medicinename);
+                detail.addProperty("boxId",boxId);
                 JsonObject jsonForChange=new JsonObject();
                 jsonForChange.add("detail",detail);
                 UpdatePlanDelegate delegate=UpdatePlanDelegate.newInstance(jsonForChange.toString());

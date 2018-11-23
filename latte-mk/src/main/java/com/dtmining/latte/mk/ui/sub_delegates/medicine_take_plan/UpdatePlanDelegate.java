@@ -17,7 +17,10 @@ import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.CustomDatePicker;
+import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.regex.RegexTool;
+import com.google.gson.JsonObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,8 +38,9 @@ import butterknife.OnFocusChange;
 public class UpdatePlanDelegate extends LatteDelegate {
     private  String medicineName=null;
     private String planId =null;
-    private String medicineUsecount=null;
+    private String medicineUsecount;
     private String atime=null;
+    private String boxId=null;
     private CustomDatePicker customDatePicker;
     private static final String PLAN_DATA = "PLAN_DATA";
     private String planString=null;
@@ -56,6 +60,35 @@ public class UpdatePlanDelegate extends LatteDelegate {
     @OnClick(R2.id.btn_plan_update_submit)
     void submit(){
         if(checkForm()){
+            String medicineName=mMedicineName.getText().toString();
+            String planid =planId;
+            int medicineUsecount=Integer.parseInt(mMedicineUseCount.getText().toString());
+            String atime=mMedicineUseTime.getText().toString();
+            String boxid=boxId;
+            JsonObject plan=new JsonObject();
+            JsonObject detail=new JsonObject();
+            JsonObject updateJson=new JsonObject();
+            plan.addProperty("atime",atime);
+            plan.addProperty("id",planid);
+            plan.addProperty("medicineUseCount",medicineUsecount);
+            plan.addProperty("boxId",boxid);
+            plan.addProperty("medicineName",medicineName);
+            detail.add("plan",plan);
+            updateJson.add("detai",detail);
+            RestClient.builder()
+                    .clearParams()
+                    .raw(updateJson.toString())
+                    .url("")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            pop();
+                        }
+                    })
+                    .build()
+                    .post();
+
+            Toast.makeText(getContext(),updateJson.toString(),Toast.LENGTH_LONG).show();
 
         }
     }
@@ -65,7 +98,7 @@ public class UpdatePlanDelegate extends LatteDelegate {
         final String atime=mMedicineUseTime.getText().toString();
         boolean isPass=true;
         if(medicineName.isEmpty()){
-            mMedicineName.setError("请填写正确的电话号码！");
+            mMedicineName.setError("请填写药品名！");
             isPass=false;
         }else{
             mMedicineName.setError(null);
@@ -77,16 +110,14 @@ public class UpdatePlanDelegate extends LatteDelegate {
             mMedicineUseCount.setError(null);
         }
         if(atime.isEmpty()){
-            mMedicineUseTime.setError("请填写服药剂量");
+            mMedicineUseTime.setError("请填写服药时间");
             isPass=false;
         }else{
             mMedicineUseTime.setError(null);
         }
         return isPass;
     }
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private void initDatePicker(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
         String now = sdf.format(new Date());
         customDatePicker = new CustomDatePicker(this.getContext(), new CustomDatePicker.ResultHandler() {
@@ -101,7 +132,11 @@ public class UpdatePlanDelegate extends LatteDelegate {
         }, "2010-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(true); // 显示时和分
         customDatePicker.setIsLoop(true); // 允许循环滚动
-
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initDatePicker();
         final Bundle args = getArguments();
         if (args != null) {
             planString = args.getString(PLAN_DATA);
@@ -131,6 +166,7 @@ public class UpdatePlanDelegate extends LatteDelegate {
             JSONObject jsonObject1=jsonObject.getJSONObject("detail");
              medicineName=jsonObject1.getString("medicineName");
              planId =jsonObject1.getString("planId");
+             boxId=jsonObject1.getString("boxId");
              medicineUsecount=jsonObject1.getString("medicineUseCount");
              atime=jsonObject1.getString("atime");
             mMedicineName.setText(medicineName);

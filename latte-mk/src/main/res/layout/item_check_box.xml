@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical">
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:textSize="15sp"
+            android:layout_height="wrap_content"
+            android:typeface="monospace"
+            android:text="药品名称："/>
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tv_add_plan_by_time_medicine_name"
+                android:layout_height="wrap_content"
+                android:typeface="monospace"
+                android:textSize="15sp"
+                android:text="感冒冲剂"/>
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:typeface="monospace"
+                android:text="服用剂量："/>
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="60dp"
+                android:typeface="monospace"
+                android:id="@+id/et_add_plan_by_time_medicine_usecount"
+                android:layout_height="wrap_content"
+
+                />
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v7.widget.LinearLayoutCompat>
+    　<CheckBox
+        android:id="@+id/cb_add_plan_by_time_checkbox"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        />
+
+</RelativeLayout>

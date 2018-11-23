@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/area_radis_white"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:height="40dp"
+        android:textColor="@color/black"
+        android:text="勾选药品"/>
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/add_plan_by_time_check_rcy"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+   </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:layout_marginBottom="20dp"
+        >
+
+        <Button
+            android:id="@+id/btn_add_plan_by_time_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="确定"
+            android:background="@drawable/area_radis"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

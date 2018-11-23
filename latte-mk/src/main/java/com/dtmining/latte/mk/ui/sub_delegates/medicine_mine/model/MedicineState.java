@@ -10,6 +10,24 @@ public class MedicineState {
     public String medicinePause;
     public String boxId;
     public String tel;
+    private boolean isChecked;
+
+   public String medicineName;
+
+    public String getMedicineName() {
+        return medicineName;
+    }
+
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
+    }
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public String getMedicineId() {
         return medicineId;
