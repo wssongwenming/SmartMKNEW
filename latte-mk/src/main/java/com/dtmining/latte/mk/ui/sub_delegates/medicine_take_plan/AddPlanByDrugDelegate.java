@@ -115,13 +115,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                 pair.setMedicine_time(timeSet.get(i));
                 pair.setMedicine_useCount(useCountSet.get(i));
                 medicinePlan.addPair(pair);
-              /*  MedicinePlan medicinePlan=new MedicinePlan();
-                medicinePlan.setAtime(timeSet.get(i).toString());
-               // medicinePlan.setMedicineUseCount(medicineUseCount);
-                medicinePlan.setMedicineName(medicineModel.getMedicineName());
-                medicinePlan.setMedicineId(medicineModel.getMedicineId());
-                medicinePlan.setInterval(interval);
-                medicinePlans.addMedicinePlan(medicinePlan);*/
             }
             detail.setMedicine_plan(medicinePlan);
             detail.setMedicineId(medicineModel.getMedicineId());
@@ -327,7 +320,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
 
         boolean isPass=true;
 
-
         TextView textView= (TextView) mMedicineListSpinner.getChildAt(0);
         if(textView!=null){
             if(textView.getText().toString().equalsIgnoreCase("请选择药品"))
@@ -339,14 +331,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
 
             }
         }
-   /*     if(mMedicineListSpinner.getChildAt(0)!=null) {
-            if (((TextView) mMedicineListSpinner.getChildAt(0).findViewById(R.id.single_item_tv)).getText().toString().equalsIgnoreCase("请选择药品")) {
-                ((TextView) mMedicineListSpinner.getChildAt(0).findViewById(R.id.single_item_tv)).setError("请选择药箱Id");
-                isPass = false;
-            } else {
-                ((TextView) mMedicineListSpinner.getChildAt(0).findViewById(R.id.single_item_tv)).setError(null);
-            }
-        }*/
+
         if(timeSet.size()==0)
         {
             setTimeButton.setError("请设置服药时间和剂量");
@@ -354,14 +339,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
         }else {
             setTimeButton.setError(null);
         }
-
-/*      if(!alarmSet)
-        {
-            setAlarmButton.setError("设置提醒音乐");
-        }
-        else {
-            setTimeButton.setError(null);
-        }*/
         return isPass;
     }
 }

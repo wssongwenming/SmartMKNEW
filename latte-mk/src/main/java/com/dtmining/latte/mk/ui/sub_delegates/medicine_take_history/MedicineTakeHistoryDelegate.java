@@ -45,7 +45,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         mRefreshHandler=RefreshHandler.create(mSwipeRefreshLayout,mRecyclerView,
-                null,new IndexDataConverter(),this.getParentDelegate(),null);
+                null,new IndexDataConverter(),this,null);
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         boxId= LattePreference.getBoxId();
         if(userProfile==null){

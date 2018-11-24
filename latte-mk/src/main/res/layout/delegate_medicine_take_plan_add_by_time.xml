@@ -70,7 +70,7 @@
             android:layout_height="20dp">
         </com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview>
     </LinearLayout>
-    <LinearLayout
+<!--    <LinearLayout
         android:layout_width="match_parent"
         android:gravity="center_vertical"
         android:layout_height="60dp">
@@ -90,11 +90,11 @@
             android:layout_height="40dp"
             android:id="@+id/tv_set_music"
             />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <Button
         android:layout_marginTop="40dp"
-        android:id="@+id/btn_confirm"
+        android:id="@+id/btn_delegate_medicine_take_plan_add_by_time_confirm"
         android:layout_width="match_parent"
         android:text="确定"
         android:textColor="@color/white"

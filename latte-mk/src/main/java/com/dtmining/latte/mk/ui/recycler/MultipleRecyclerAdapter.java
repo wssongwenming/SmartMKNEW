@@ -20,6 +20,7 @@ import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.DeleteOverDue;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.MedicineInfo;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineReactionDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.banner.BannerCreator;
@@ -266,8 +267,20 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
             case ItemType.MEDICINE_HISTORY://这里是单独的用药历史列表,不同于首页的用药历史
                 medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
                 medicineUseTime=entity.getField(MultipleFields.MEDICINEUSERTIME);
+                final String historyId=entity.getField(MultipleFields.ID);
                 holder.setText(R.id.tv_medicine_history_medicine_time,medicineUseTime);
                 holder.setText(R.id.tv_medicine_history_medicine_name,medicineName);
+                Button button =holder.getView(R.id.btn_medicine_history_medicine_use_reflect);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("fanying", "onClick: ");
+                        MedicineReactionDelegate delegate=MedicineReactionDelegate.newInstance(historyId);
+                        DELEGATE.start(delegate);
+                        //DELEGATE.start(new MedicineTakeHistoryDelegate());
+
+                    }
+                });
                 break;
             case ItemType.TEXT_MORE_FOR_TAKE_MEDICINE_PLAN:
                 View view_more_medicine_plan =holder.getView(R.id.tv_item_medicine_plan_more);

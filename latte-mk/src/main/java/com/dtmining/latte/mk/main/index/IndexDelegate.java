@@ -141,6 +141,7 @@ public class IndexDelegate extends BottomItemDelegate {
         mData.add(new Icon(R.mipmap.icon_mdicine_mine, "我的药品"));
         mData.add(new Icon(R.mipmap.icon_medicine_take_plan, "用药计划"));
         mData.add(new Icon(R.mipmap.icon_medicine_take_plan, "用药记录"));
+        mData.add(new Icon(R.mipmap.main_health, "身体状况"));
         mAdapter = new MyAdapter<Icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, Icon icon) {

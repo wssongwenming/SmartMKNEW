@@ -65,6 +65,7 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private List<MedicineState> medicines=new ArrayList<>();
     private List<MedicineState> checkedMedicine=new ArrayList<>();
     private List<Integer>checkedPosition=new ArrayList<>();
+    private List<String>checkedUseCount=new ArrayList<>();
 
 
 
@@ -96,7 +97,7 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
 
 
     public interface ClickListenerInterface {
-        public void doConfirm(List<MedicineState> input);
+        public void doConfirm(List<MedicineState> input,List<String>useCount);
     }
 
     public CheckMedicinesDialog(Context context , ClickListenerInterface clickListenerInterface) {
@@ -115,7 +116,8 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
             @Override
             public void onClick(View v) {
                 if(checkUseCount()){
-                    mclickListenerInterface.doConfirm(checkedMedicine);
+                    getUseCount();
+                    mclickListenerInterface.doConfirm(checkedMedicine,checkedUseCount);
                 }
             }
         });
@@ -175,6 +177,16 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
         check_rcy.setAdapter(mCheckAdapter);
 
     }
+
+    private void getUseCount(){
+        for (int i = 0; i < checkedPosition.size(); i++) {
+            int positions=checkedPosition.get(i);
+            RelativeLayout layout = (RelativeLayout)  check_rcy.getChildAt(positions);
+            AppCompatEditText et_content = (AppCompatEditText) layout.findViewById(R.id.et_add_plan_by_time_medicine_usecount);
+            checkedUseCount.add(et_content.getText().toString());
+        }
+    }
+
     private boolean checkUseCount(){
         boolean isPass=true;
         for (int i = 0; i < checkedPosition.size(); i++) {

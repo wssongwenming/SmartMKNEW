@@ -11,7 +11,7 @@ public class MedicineState {
     public String boxId;
     public String tel;
     private boolean isChecked;
-
+    private String medicineUseCount;
    public String medicineName;
 
     public String getMedicineName() {
@@ -57,6 +57,13 @@ public class MedicineState {
         return boxId;
     }
 
+    public String getMedicineUseCount() {
+        return medicineUseCount;
+    }
+
+    public void setMedicineUseCount(String medicineUseCount) {
+        this.medicineUseCount = medicineUseCount;
+    }
 
     public void setBoxId(String boxId) {
         this.boxId = boxId;
