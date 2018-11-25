@@ -20,6 +20,7 @@ import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.DeleteOverDue;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.MedicineInfo;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_summary.MedicineSummaryConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineReactionDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
@@ -77,12 +78,17 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
     {
         return new MultipleRecyclerAdapter(((MedicineOverdueDataConverter)converter).getMedicineOverdue(),delegate);
     }
+    public static MultipleRecyclerAdapter getMedicineSummary(DataConverter converter,LatteDelegate delegate)
+    {
+        return new MultipleRecyclerAdapter(((MedicineSummaryConverter)converter).getMedicineSummary(),delegate);
+    }
     public static MultipleRecyclerAdapter getTop(DataConverter converter,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(converter.getTop(),delegate);
     }
     public static MultipleRecyclerAdapter getHistoryMore(DataConverter converter,LatteDelegate delegate){
         return new MultipleRecyclerAdapter(((IndexDataConverter)converter).getMedicineHistoryMore(),delegate);
     }
+
     private void init(){
         //设置不同的item布局
         addItemType(ItemType.TEXT, R.layout.item_mutiple_text);
@@ -96,6 +102,7 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
         addItemType(ItemType.TEXT_TEXT,R.layout.item_mutiple_text_text);
         addItemType(ItemType.MEDICINE_OVER_DUE,R.layout.item_medicine_overdue);
         addItemType(ItemType.MEDICINE_HISTORY,R.layout.item_medicine_history);
+        addItemType(ItemType.MEDICINE_SUMMARY,R.layout.item_medicine_summary);
         //设置宽度监听,只要参数实现了SpanSizeLookup接口
         setSpanSizeLookup(this);
         openLoadAnimation();
@@ -162,6 +169,8 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
         final Integer button_image;
         final String imageUrl;
         final ArrayList<Integer> bannerImages;
+        final long medicineUsertime;
+        final int medicineUserCount;
         switch (holder.getItemViewType())
         {
             case ItemType.TEXT:
@@ -303,6 +312,12 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                     mIsInitBanner=true;
                 }
                 break;
+            case ItemType.MEDICINE_SUMMARY:
+                medicineUserCount=entity.getField(MultipleFields.MEDICINE_USERCOUNT);
+                medicineUsertime=entity.getField(MultipleFields.MEDICINE_USERTIME);
+                medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
+                holder.setText(R.id.tv_item_medicine_summary_medicine_name,medicineName);
+                holder.setText(R.id.tv_item_medicine_summary_medicine_use_time,formatDuring(medicineUsertime)+"服用："+medicineUserCount);
             default:
                 break;
         }
@@ -354,6 +369,17 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
     public void onItemClick(int position) {
 
     }
-
+    /**
+     *
+        * @return 该毫秒数转换为 * days * hours * minutes * seconds 后的格式
+     * @author fy.zhang
+     */
+    public static String formatDuring(long mss) {
+        long days = mss / (1000 * 60 * 60 * 24);
+        long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+        long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+        long seconds = (mss % (1000 * 60)) / 1000;
+        return days + "天 " + hours + "小时 ";
+    }
 }
 

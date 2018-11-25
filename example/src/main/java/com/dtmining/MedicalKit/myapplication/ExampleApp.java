@@ -33,6 +33,7 @@ public class ExampleApp  extends Application{
                 .withInterceptor(new DebugInterceptor("medicine_boxes",R.raw.medicine_boxes))
                 .withInterceptor(new DebugInterceptor("recentmedicine",R.raw.recentmedicine))
                 .withInterceptor(new DebugInterceptor("medicine_overdue",R.raw.medicineoverdue))
+                .withInterceptor(new DebugInterceptor("medicine_summary",R.raw.summary))
                 .withWeChatAppId("wxe89a2c2ec439b1ac")//微信登陆初始化AppId
                 .withWeChatAppSecret("b16238a4df5dd49f1b524c56537762cb")//微信登陆人传入Secret
                 .withQQAppID("1106210336")

@@ -16,6 +16,7 @@ import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicine.AddMedicineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_summary.MedicineSummaryDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.net.RestClient;
@@ -52,7 +53,9 @@ public class ManageDelegate extends BottomItemDelegate {
         getParentDelegate().start(new MedicineOverdueDelegate());
     }
     @OnClick(R2.id.manage_medicine_summary)
-    void medicineSummary(){}
+    void medicineSummary(){
+        getParentDelegate().start(new MedicineSummaryDelegate());
+    }
     @Override
     public Object setLayout() {
         return R.layout.delegate_manage;

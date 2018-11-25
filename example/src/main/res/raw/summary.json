@@ -1,0 +1,15 @@
+{
+  "code": 1,
+  "detail": {
+    "medicines": [
+      {
+        "medicine_userCount": 3,
+        "medicine_userTime": 1541753491000,
+        "id": "14",
+        "medicine_name": "牛黄上清片1"
+      }
+    ],
+    "tel": "15620151475"
+  },
+  "message": "success"
+}

@@ -74,7 +74,7 @@ public class MedicineBoxesMineRefreshHandler implements SwipeRefreshLayout.OnRef
                         /*BEAN.setTotal(object.getInteger("total"))
                                 .setPageSize(object.getInteger("page_size"));*/
                         //设置Adapter
-                        MedicineBoxesMineAdapter mAdapter=MedicineBoxesMineAdapter.create(CONVERTER.setJsonData(response));
+                        MedicineBoxesMineAdapter mAdapter=MedicineBoxesMineAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
                         //mAdapter.setOnLoadMoreListener(MedicineBoxesMineRefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
                         BEAN.addIndex();

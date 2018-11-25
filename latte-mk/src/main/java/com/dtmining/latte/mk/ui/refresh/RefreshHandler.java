@@ -186,7 +186,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                     public void onSuccess(String response) {
 
                         MedicineMineRecyclerAdapter mAdapter= MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response),SETS);
-                        mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
+                        //mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
                         BEAN.addIndex();
                     }

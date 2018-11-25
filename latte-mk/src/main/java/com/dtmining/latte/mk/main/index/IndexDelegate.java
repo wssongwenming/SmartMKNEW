@@ -33,6 +33,7 @@ import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.MyAdapter;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.test.TestDelegate;
 import com.dtmining.latte.mk.tools.Icon;
 import com.dtmining.latte.mk.ui.recycler.CustomGridLayoutManager;
 import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
@@ -168,6 +169,9 @@ public class IndexDelegate extends BottomItemDelegate {
                         break;
                     case 4://点击了“用药记录”
                         getParentDelegate().start(new MedicineTakeHistoryDelegate());
+                        break;
+                    case 5://点击了“用药记录”
+                        getParentDelegate().start(new TestDelegate());
                         break;
                 }
             }

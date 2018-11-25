@@ -1,0 +1,98 @@
+package com.dtmining.latte.alarmclock;
+
+import java.sql.Date;
+
+/**
+ * author:songwenming
+ * Date:2018/11/25
+ * Description:
+ */
+
+public class Alarm {
+    public int _id;
+    public Date starttime;
+    public int hour;
+    public int minute;
+    public long interval;
+    public String message;
+    public String music;
+    public int state;
+
+    public Alarm() {
+
+    }
+
+    public int getId() {
+        return _id;
+    }
+
+    public Alarm(Date starttime, int hour, int minute, long interval, String message, String music, int state) {
+        this.starttime = starttime;
+        this.hour = hour;
+        this.minute = minute;
+        this.interval = interval;
+        this.message = message;
+        this.music = music;
+        this.state = state;
+    }
+
+    public Date getStarttime() {
+        return starttime;
+    }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public long getInterval() {
+        return interval;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getMusic() {
+        return music;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setId(int id) {
+        this._id = id;
+    }
+
+    public void setStarttime(Date starttime) {
+        this.starttime = starttime;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    public void setInterval(long interval) {
+        this.interval = interval;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+}

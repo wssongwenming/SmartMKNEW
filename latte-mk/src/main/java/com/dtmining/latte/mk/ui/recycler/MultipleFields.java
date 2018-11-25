@@ -34,5 +34,9 @@ public enum MultipleFields {
     MEDICINEUSERTIME,
     OVERDUE,
     ONUSE,
-    PAUSE
+    PAUSE,
+    MEDICINE_USERCOUNT,//统计总数
+    MEDICINE_USERTIME//统计时长
+
+
 }
