@@ -24,8 +24,16 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/area_big_redis_white"
-        android:layout_height="35dp" />
-
+        android:layout_height="35dp"/>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_medicine_take_plan_set_alarm"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:text="设置服药闹钟提醒"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/area_big_redis_white"
+        android:layout_height="35dp"/>
     <ExpandableListView
         android:id="@+id/elv_medicine_take_plan_expandableListView"
         android:layout_marginTop="15dp"

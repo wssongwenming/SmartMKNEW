@@ -10,7 +10,9 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.log.LatteLogger;
+import com.dtmining.latte.util.storage.LattePreference;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
@@ -45,6 +49,7 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class HandAddDelegate extends LatteDelegate {
+    private int interval;
     private static final String MEDICINE_CODE = "MEDICINE_CODE";
     //药品名称
     @BindView(R2.id.edit_medicine_hand_add_medicine_name)
@@ -65,8 +70,16 @@ public class HandAddDelegate extends LatteDelegate {
     @BindView(R2.id.btn_medicine_hand_add_please_select_end_remind_time)
     AppCompatButton mBtnEndRemindTimeSelection=null;
     //服药间隔
+    @BindView(R2.id.sp_medicine_hand_add_day_interval)
+    Spinner mTimeSpanSpinner=null;
+    @OnItemSelected(R2.id.sp_medicine_hand_add_day_interval)
+    public void onIntervalSelected(AdapterView<?> parent, View view,int pos, long id)
+    {
+        interval=pos;
+    }
+/*    //服药间隔
     @BindView(R2.id.edit_medicine_hand_add_day_interval)
-    AppCompatEditText mInterval=null;
+    AppCompatEditText mInterval=null;*/
     //每天服药次数
     @BindView(R2.id.edit_medicine_hand_add_times_onday)
     AppCompatEditText mTimesOnDay=null;
@@ -99,26 +112,29 @@ public class HandAddDelegate extends LatteDelegate {
             MedicineModel medicineModel=new MedicineModel();
             MedicineAddModel medicineAddModel=new MedicineAddModel();
             medicineModel.setBoxId(boxId);
-            medicineModel.setDayInterval(mInterval.getText().toString());
+            //medicineModel.setBoxId("111");
+            medicineModel.setDayInterval(interval);
             medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
             medicineModel.setMedicineCode(mMedicineCode.getText().toString());
             medicineModel.setMedicineCount(mMedicineCount.getText().toString());
             medicineModel.setMedicineImage(medicineImage);
             medicineModel.setMedicineName(mMedicinName.getText().toString());
-            medicineModel.setMedicineUseCount(mMedicineUseCount.getText().toString());
+            medicineModel.setMedicineUseCount(Integer.parseInt(mMedicineUseCount.getText().toString()));
             medicineModel.setMedicineValidity(mBtnValidityTimeSelection.getText().toString());
             medicineModel.setStartRemind(mBtnStartRemindTimeSelection.getText().toString());
             medicineModel.setTel(tel);
-            medicineModel.setTimesOnDay(mTimesOnDay.getText().toString());
+            medicineModel.setTimesOnDay(Integer.parseInt(mTimesOnDay.getText().toString()));
             medicineAddModel.setDetail(medicineModel);
             String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
+            Log.d("medicine", medicineAddJson);
             RestClient.builder()
-                    .url("http://39.105.97.128:8080/medicinebox/api/Medicine_add")
+                    .url(UploadConfig.API_HOST+"/api/Medicine_add")
+                    .clearParams()
                     .raw(medicineAddJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            
+                            Toast.makeText(getContext(),"药品添加成功",Toast.LENGTH_LONG).show();
                         }
                     })
                     .build()
@@ -141,7 +157,6 @@ public class HandAddDelegate extends LatteDelegate {
         delegate.setArguments(args);
         return delegate;
     }
-
     private void initData() {
         if(medicineCode!=null) {
             mMedicineCode.setText(medicineCode);
@@ -155,7 +170,6 @@ public class HandAddDelegate extends LatteDelegate {
         final String medicineCount=mMedicineCount.getText().toString();
         final String medicineStartTime=mBtnStartRemindTimeSelection.getText().toString();
         final String medicineEndTime=mBtnEndRemindTimeSelection.getText().toString();
-        final String interval=mInterval.getText().toString();
         final String timesOneDay=mTimesOnDay.getText().toString();
         final String medicineUseCount=mMedicineUseCount.getText().toString();
         boolean isPass=true;
@@ -196,12 +210,12 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
             mBtnEndRemindTimeSelection.setError(null);
         }
-        if(interval.isEmpty()||interval==null){
+/*        if(interval.isEmpty()||interval==null){
             mInterval.setError("请填写服药间隔！");
             isPass=false;
         }else{
             mInterval.setError(null);
-        }
+        }*/
         if(timesOneDay.isEmpty()||timesOneDay==null){
             mTimesOnDay.setError("请填写服药次数/每天！");
             isPass=false;
@@ -218,11 +232,15 @@ public class HandAddDelegate extends LatteDelegate {
         if(textView!=null){
             if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
             {
-                textView.setError("请选择药箱Id");
-                isPass=false;
+                boxId= LattePreference.getBoxId();
+                if(boxId==null) {
+                    textView.setError("请选择药箱Id");
+                    isPass = false;
+                }else{
+                    Toast.makeText(getContext(),"药品添加到默认药箱",Toast.LENGTH_LONG);
+                }
             }else {
                 textView.setError(null);
-
             }
         }
 
@@ -323,6 +341,8 @@ public class HandAddDelegate extends LatteDelegate {
             getBoxIdList();
         }
         initData();
+        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天","间隔8天","间隔9天","间隔10天"});
+        mTimeSpanSpinner.setAdapter(adap);
     }
 
     private void getBoxIdList(){

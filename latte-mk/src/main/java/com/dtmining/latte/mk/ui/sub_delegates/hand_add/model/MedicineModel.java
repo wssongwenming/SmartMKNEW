@@ -13,9 +13,9 @@ public class MedicineModel {
     public String medicineValidity;
     public String startRemind;
     public String endRemind;
-    public String dayInterval;
-    public String timesOnDay;
-    public String medicineUseCount;
+    public int dayInterval;
+    public int timesOnDay;
+    public int medicineUseCount;
     public String medicineImage;
     public String tel;
 
@@ -47,15 +47,15 @@ public class MedicineModel {
         return endRemind;
     }
 
-    public String getDayInterval() {
+    public int getDayInterval() {
         return dayInterval;
     }
 
-    public String getTimesOnDay() {
+    public int getTimesOnDay() {
         return timesOnDay;
     }
 
-    public String getMedicineUseCount() {
+    public int getMedicineUseCount() {
         return medicineUseCount;
     }
 
@@ -95,15 +95,15 @@ public class MedicineModel {
         this.endRemind = endRemind;
     }
 
-    public void setDayInterval(String dayInterval) {
+    public void setDayInterval(int dayInterval) {
         this.dayInterval = dayInterval;
     }
 
-    public void setTimesOnDay(String timesOnDay) {
+    public void setTimesOnDay(int timesOnDay) {
         this.timesOnDay = timesOnDay;
     }
 
-    public void setMedicineUseCount(String medicineUseCount) {
+    public void setMedicineUseCount(int medicineUseCount) {
         this.medicineUseCount = medicineUseCount;
     }
 

@@ -6,6 +6,6 @@ package com.dtmining.latte.mk.main.aboutme.profile;
 
 public class UploadConfig {
 
-    public static final String API_HOST = "你的服务器域名";
+    public static final String API_HOST = "http://39.105.97.128:8080/medicinebox";
     public static final String UPLOAD_IMG = API_HOST + "你的上传地址";
 }

@@ -23,7 +23,6 @@ import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.log.LatteLogger;
 
 /**
- * Created by 傅令杰
  */
 
 public class UserProfileClickListener extends SimpleClickListener {

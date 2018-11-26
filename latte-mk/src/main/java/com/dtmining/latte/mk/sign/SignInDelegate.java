@@ -17,6 +17,7 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.model.SignModel;
 import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
@@ -79,8 +80,8 @@ public class SignInDelegate extends LatteDelegate {
             signModel.setDetail(user);
             String singInJson = JSON.toJSON(signModel).toString();
             RestClient.builder()
+                    //.url(UploadConfig.API_HOST+"/api/UserLogin")
                     .url("http://10.0.2.2:8081/Web01_exec/UserLogin")
-                    //.url("http://127.0.0.1:8081/Web01_exec/UserLogin")
                     .raw(singInJson)
                     .success(new ISuccess() {
                         @Override

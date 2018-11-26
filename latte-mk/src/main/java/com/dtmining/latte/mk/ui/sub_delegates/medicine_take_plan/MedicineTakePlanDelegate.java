@@ -38,6 +38,10 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     void onClickAddPlan(){
         start(new MedicinePlanAddChoiceDelegate());
     }
+    @OnClick(R2.id.btn_medicine_take_plan_set_alarm)
+    void onClickSetAlarm(){
+        start(new MedicinePlanAddChoiceDelegate());
+    }
     private Set<SwipeListLayout> sets = new HashSet();
     @Override
     public Object setLayout() {

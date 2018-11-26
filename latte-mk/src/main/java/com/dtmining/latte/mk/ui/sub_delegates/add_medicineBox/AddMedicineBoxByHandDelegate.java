@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.dtmining.latte.app.ConfigKeys;
@@ -12,6 +13,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.EntryType;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.sign.model.SignModel;
@@ -21,6 +23,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.model.MedicineBoxM
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.regex.RegexTool;
+import com.dtmining.latte.util.storage.LattePreference;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -31,24 +34,29 @@ import butterknife.OnClick;
  * Description:
  */
 public class AddMedicineBoxByHandDelegate extends LatteDelegate {
+    private String boxId=null;
     @BindView(R2.id.et_box_add_by_hand_boxid)
     EditText mBoxId=null;
     @OnClick(R2.id.box_add_by_hand_confirm)
     void onClick() {
         if (checkForm()) {
+            boxId=mBoxId.getText().toString();
             MedicineBox medicineBox=new MedicineBox();
             MedicineBoxModel medicineBoxModel =new MedicineBoxModel();
-            medicineBox.setTel(mBoxId.getText().toString());
+            medicineBox.setTel(tel);
             medicineBox.setBoxId(mBoxId.getText().toString());
             medicineBoxModel.setDetail(medicineBox);
             String medicineBoxJson = JSON.toJSON(medicineBoxModel).toString();
             RestClient.builder()
-                    .url("")
+                    .clearParams()
+                    .url(UploadConfig.API_HOST+"/api/Box_bind")
                     .raw(medicineBoxJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-
+                            LattePreference.setBoxID(boxId);
+                            Toast.makeText(getContext(),"药箱绑定成功",Toast.LENGTH_LONG).show();
+                            pop();
                         }
                     })
                     .build()

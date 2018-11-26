@@ -6,9 +6,9 @@ package com.dtmining.latte.mk.sign;
  * Description:
  */
 public enum EntryType {
-    NORMAL("1"),
-    WECHAT("2"),
-    QQ("3"),
+    NORMAL("0"),
+    WECHAT("1"),
+    QQ("2"),
     BLOG("4");
     private String entryType;
     private EntryType(String entryType){

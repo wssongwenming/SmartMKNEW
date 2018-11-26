@@ -144,7 +144,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                 for (int i = 0; i < size; i++) {
                                                     JSONObject planData = (JSONObject) planLsit.get(i);
                                                     String time = planData.getString("time");
-                                                    JSONArray planPairArray = planData.getJSONArray("plan");
+                                                    JSONArray planArray = planData.getJSONArray("plans");
                                                     HashMap<String, HashMap<String,ArrayList<String>>> map_interval = new HashMap<>();
                                                     map_interval.put("0", null);
                                                     map_interval.put("1", null);
@@ -154,13 +154,14 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                     map_interval.put("5", null);
                                                     map_interval.put("6", null);
                                                     map_interval.put("7", null);
-                                                    int size2 = planPairArray.size();
+                                                    int size2 = planArray.size();
                                                     for (int j = 0; j < size2; j++) {
-                                                        JSONObject planPair = (JSONObject) planPairArray.get(j);
-                                                        String interval = planPair.getString("interval");
-                                                        String starttime = planPair.getString("startTime");
-                                                        String medicineUseCount = planPair.getString("medicine_usecount");
-                                                        String medicineName = planPair.getString("medicine_name");
+                                                        JSONObject plan = (JSONObject) planArray.get(j);
+                                                        String interval = plan.getString("dayInterval");
+                                                        String starttime = String.valueOf(plan.getInteger("startRemind"));
+                                                        String endtime = plan.getString("endRemind");
+                                                        String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
+                                                        String medicineName = plan.getString("medicineName");
                                                         //先以interval判断，如果
                                                         if (map_interval.get(interval) == null) {
                                                             HashMap<String, ArrayList<String>> map_start_time = new HashMap<>();
@@ -216,8 +217,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                             }
 
                                                         }
-
-
                                                     }
                                                 }
                                             }
