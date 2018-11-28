@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dtmining.latte.alarmclock.DBManager;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
@@ -39,6 +40,7 @@ import butterknife.OnClick;
  * Description:
  */
 public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClickListener, CheckMedicinesDialog.ClickListenerInterface{
+    private DBManager dbManager;
     private CheckMedicinesDialog checkMedicinesDialog;
     private String boxId=null;
     private String tel=null;
@@ -116,6 +118,7 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbManager = new DBManager(this.getContext());
         initDatePicker();
     }
 
@@ -156,12 +159,9 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
         customDatePicker.showSpecificTime(true); // 显示时和分
         customDatePicker.setIsLoop(true); // 允许循环滚动
     }
-
     @Override
     public void onClick(View v) {
-
     }
-
     @Override
     public void doConfirm(List<MedicineState> medicineStateList,List<String>useCountList) {
         medicineSet=medicineStateList;
@@ -180,5 +180,10 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
         SimpleHorizontalAdapter horizontalAdapter = new SimpleHorizontalAdapter(the_medicine_tags, getContext());
         mHorizontalListView.setAdapter(horizontalAdapter);
         horizontalAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

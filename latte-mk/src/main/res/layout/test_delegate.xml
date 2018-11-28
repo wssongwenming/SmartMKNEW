@@ -34,6 +34,13 @@
 
     <Button
         android:layout_width="fill_parent"
+        android:id="@+id/test_query_by_group"
+        android:layout_height="wrap_content"
+        android:onClick="query"
+        android:text="querybygroup" />
+
+    <Button
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="queryTheCursor"
         android:text="queryTheCursor" />

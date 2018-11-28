@@ -10,10 +10,11 @@ import java.sql.Date;
 
 public class Alarm {
     public int _id;
+    public String ids;
     public Date starttime;
     public int hour;
     public int minute;
-    public long interval;
+    public int interval;
     public String message;
     public String music;
     public int state;
@@ -26,7 +27,7 @@ public class Alarm {
         return _id;
     }
 
-    public Alarm(Date starttime, int hour, int minute, long interval, String message, String music, int state) {
+    public Alarm(Date starttime, int hour, int minute, int interval, String message, String music, int state) {
         this.starttime = starttime;
         this.hour = hour;
         this.minute = minute;
@@ -48,7 +49,7 @@ public class Alarm {
         return minute;
     }
 
-    public long getInterval() {
+    public int getInterval() {
         return interval;
     }
 
@@ -80,7 +81,7 @@ public class Alarm {
         this.minute = minute;
     }
 
-    public void setInterval(long interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
     }
 
@@ -94,5 +95,14 @@ public class Alarm {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getIds() {
+        return ids;
+
+    }
+
+    public void setIds(String ids) {
+        this.ids = ids;
     }
 }

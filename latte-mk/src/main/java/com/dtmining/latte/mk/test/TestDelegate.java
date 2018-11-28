@@ -5,16 +5,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.dtmining.latte.alarmclock.Alarm;
 import com.dtmining.latte.alarmclock.DBManager;
-import com.dtmining.latte.alarmclock.DatabaseHelper;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +30,10 @@ import butterknife.OnClick;
 public class TestDelegate extends LatteDelegate {
     private DBManager dbManager;
 
+    @OnClick(R2.id.test_query_by_group)
+    void queryAlarmByGroup() {
+        queryByGroup();
+    }
     @OnClick(R2.id.test_add)
     void addAlarm() {
         try {
@@ -86,7 +87,8 @@ public class TestDelegate extends LatteDelegate {
         java.sql.Date date = new java.sql.Date(d.getTime());
         Alarm alarm = new Alarm(date, 12, 23,1231243,"吃药了","aaa.mp3",1);
         alarms.add(alarm);
-        alarms.add(alarm);
+        Alarm alarm1 = new Alarm(date, 12, 68,1231243,"大家好","aaa.mp3",1);
+        alarms.add(alarm1);
         Log.d("before", "addbefore: ");
         dbManager.add(alarms);
     }
@@ -114,6 +116,22 @@ public class TestDelegate extends LatteDelegate {
             map.put("id", String.valueOf(alarm.getId()));
             map.put("starttime", alarm.starttime.toString());
             map.put("info", alarm.minute+"");
+            list.add(map);
+        }
+        Log.d("query", list.toString());
+    }
+    public void queryByGroup(){
+        List<Alarm> alarms = dbManager.queryByGroup();
+        ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        for (Alarm alarm : alarms)
+        {
+            HashMap<String, String> map = new HashMap<String, String>();
+            //map.put("id", String.valueOf(alarm.getId()));
+            map.put("ids",alarm.ids);
+            map.put("minute", String.valueOf(alarm.minute));
+            map.put("hour", String.valueOf(alarm.hour));
+            map.put("starttime", alarm.starttime.toString());
+            map.put("message", alarm.getMessage()+"");
             list.add(map);
         }
         Log.d("query", list.toString());
