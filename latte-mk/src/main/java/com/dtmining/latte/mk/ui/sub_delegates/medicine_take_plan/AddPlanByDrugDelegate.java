@@ -4,14 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,22 +15,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.alarmclock.Alarm;
-import com.dtmining.latte.alarmclock.DBManager;
 import com.dtmining.latte.alarmclock.MyDBOpenHelper;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
-import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
-import com.dtmining.latte.delegates.bottom.BottomTabBean;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.SimpleHorizontalAdapter;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
-import com.dtmining.latte.mk.test.TestDelegate;
-import com.dtmining.latte.mk.ui.recycler.DataConverter;
-import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListAdapter;
-import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.Detail;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlan;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanNetModel;
@@ -53,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -131,14 +119,15 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             String planJson = JSON.toJSON( medicinePlanNetModel).toString();
             Log.d("json", planJson);
             RestClient.builder()
-                    .url("http://10.0.2.2:8081/Web01_exec/UserLogin")//提交计划
+                    .url(UploadConfig.API_HOST+"/api/Medicine_set_time")//提交计划
+                    .clearParams()
                     .raw(planJson)
                     .clearParams()
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
                             RestClient.builder()
-                                    .url("medicine_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
+                                    .url(UploadConfig.API_HOST+"/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
                                     .params("tel",tel)
                                     .params("boxId",boxId)
                                     .success(new ISuccess() {
@@ -244,6 +233,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                     }
                                                 }
                                             }
+                                            pop();
                                         }
                                     })
                                     .build()
@@ -305,7 +295,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
-        UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
+       UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         boxId=LattePreference.getBoxId();
         if(userProfile==null){
             startWithPop(new SignInDelegate());
@@ -324,14 +314,15 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myDBOpenHelper = MyDBOpenHelper.getInstance((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY));
-        myDBOpenHelper.getWritableDatabase();
+        getMedicineList();
+        //myDBOpenHelper.getWritableDatabase();
     }
 
     private void getMedicineList(){
         RestClient.builder()
-                .url("http://10.0.2.2:8081/Web01_exec/get_medicine_of_box")
+                .url(UploadConfig.API_HOST+"/api/get_medicine")
+                .clearParams()
                 .params("tel",tel)
-                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

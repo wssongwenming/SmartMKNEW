@@ -27,13 +27,20 @@ public class MedincineMineDataConverter extends DataConverter {
     @Override
     public ArrayList<MultipleItemEntity> convert() {
         if(getJsonData()!=null) {
+            System.out.print("json="+getJsonData());
             final JSONObject jsonObject = JSON.parseObject(getJsonData());
             String tel = jsonObject.getString("tel");
+            int code=jsonObject.getIntValue("code");
+            System.out.print("code="+code);
             final JSONArray dataArray = jsonObject.getJSONArray("detail");
+
             final int size = dataArray.size();
             for (int i = 0; i < size; i++) {
                 JSONObject data = (JSONObject) dataArray.get(i);
-                final String medicineId = data.getString("medicineId");
+                final String endRemind=data.getString("endRemind");
+                final String medicineCode=data.getString("medicineCode");
+                final String medicineValidity=data.getString("medicineValidity");
+                final String medicineId=data.getString("medicineId");
                 final int medicineCount = data.getInteger("medicineCount");
                 final String medicineName = data.getString("medicineName");
                 final String medicine_img_url = data.getString("medicine_img_url");

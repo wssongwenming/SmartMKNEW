@@ -36,7 +36,9 @@ public enum MultipleFields {
     ONUSE,
     PAUSE,
     MEDICINE_USERCOUNT,//统计总数
-    MEDICINE_USERTIME//统计时长
+    MEDICINE_USERTIME,//统计时长
+    REACTION,
+    MEDICINE_USETIME
 
 
 }

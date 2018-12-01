@@ -20,11 +20,9 @@ public class SignHandler {
         DatabaseManager.getInstance().getDao().deleteAll();
         final JSONObject profileJson= JSON.parseObject(response).getJSONObject("detail");
         final long tel=Long.parseLong(profileJson.getString("tel"));
-        final String username=profileJson.getString("username");
         final String role=profileJson.getString("role");
-        final String pwd=profileJson.getString("pwd");
-        final String entry_way=profileJson.getString("entry_way");
-        final UserProfile localUser=new UserProfile( tel, username, pwd, role,entry_way);
+
+        final UserProfile localUser=new UserProfile( tel, null, null, role,null);
 
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);
@@ -35,14 +33,11 @@ public class SignHandler {
         AccountManager.setSignState(true);
         signListener.onSignInSuccess();
     }
-    public static void onSignUp(String response,ISignListener signListener){
+    public static void onSignUp(String response,ISignListener signListener,String tel,String role){
         DatabaseManager.getInstance().getDao().deleteAll();
-        final JSONObject profileJson= JSON.parseObject(response).getJSONObject("detail");
-        final long tel=Long.parseLong(profileJson.getString("tel"));
-        final String username=profileJson.getString("username");
-        final String role=profileJson.getString("role");
-        final String pwd=profileJson.getString("pwd");
-        final UserProfile localUser=new UserProfile( tel, username, pwd, role,null);
+         final long TEL= Long.parseLong(tel);
+        final String ROLE=role;
+         final UserProfile localUser=new UserProfile( TEL, null, null, ROLE,null);
         Log.d("signup", "onSignUp: ");
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);

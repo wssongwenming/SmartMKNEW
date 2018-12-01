@@ -1,6 +1,11 @@
 package com.dtmining.latte.mk.ui.sub_delegates.hand_add;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -37,6 +42,11 @@ import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.log.LatteLogger;
 import com.dtmining.latte.util.storage.LattePreference;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -112,7 +122,7 @@ public class HandAddDelegate extends LatteDelegate {
             MedicineModel medicineModel=new MedicineModel();
             MedicineAddModel medicineAddModel=new MedicineAddModel();
             medicineModel.setBoxId(boxId);
-            //medicineModel.setBoxId("111");
+            medicineModel.setBoxId("111");
             medicineModel.setDayInterval(interval);
             medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
             medicineModel.setMedicineCode(mMedicineCode.getText().toString());
@@ -229,20 +239,16 @@ public class HandAddDelegate extends LatteDelegate {
             mMedicineUseCount.setError(null);
         }
         TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
-        if(textView!=null){
+        /*if(textView!=null){
             if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
             {
-                boxId= LattePreference.getBoxId();
-                if(boxId==null) {
-                    textView.setError("请选择药箱Id");
-                    isPass = false;
-                }else{
-                    Toast.makeText(getContext(),"药品添加到默认药箱",Toast.LENGTH_LONG);
-                }
+                textView.setError("请选择药箱Id");
+                isPass = false;
+
             }else {
                 textView.setError(null);
             }
-        }
+        }*/
 
         return isPass;
     }
@@ -289,14 +295,19 @@ public class HandAddDelegate extends LatteDelegate {
                 .addCallback(CallbackType.ON_CROP, new IGlobalCallback<Uri>() {
                     @Override
                     public void executeCallback(Uri args) {
-                        LatteLogger.d("ON_CROP", args.getPath());
+                       File  fileDir = Environment.getExternalStorageDirectory();
+                        BitmapFactory.Options opts = new BitmapFactory.Options();
+                        File imageFile = new File(args.getPath());
+                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), opts);
+                        File file=new File(fileDir,new Random()+"99"+"jpeg");
+                        compressImage2FileBySize(bitmap,file,19);
                         Glide.with(getContext())
-                                .load(args)
+                                .load(file)
                                 .into(mMedicineImage);
                         RestClient.builder()
                                 .url(UploadConfig.UPLOAD_IMG)
                                 .loader(getContext())
-                                .file(args.getPath())
+                                .file(file.getPath())
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
@@ -361,5 +372,62 @@ public class HandAddDelegate extends LatteDelegate {
                 .get();
 
     }
+    public void compressImage2FileBySize(Bitmap bmp , File file,int kb)
+    {
+
+        //压缩尺寸倍数 值越大 ，图片的尺寸就越小
+        int ratio = 1 ;
+        Bitmap result = Bitmap.createBitmap(bmp.getWidth() /ratio , bmp.getHeight() / ratio ,Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result) ;
+        Rect rect = new Rect(0,0,bmp.getWidth() / ratio ,bmp.getHeight() / ratio );
+        canvas.drawBitmap(bmp,null,rect,null);
+        int options = 100;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
+        result.compress(Bitmap.CompressFormat.JPEG,100,bos);
+        Log.d("is", "正在压缩: "+bos.toByteArray().length/1024);
+        while (bos.toByteArray().length / 1024 > kb) {
+            Log.d("is", "正在压缩11: "+bos.toByteArray().length/1024);
+            bos.reset();//重置baos即清空baos
+            if (options <= 10) {
+                options -= 3;//每次压缩3%
+            } else {
+                options -= 10;//每次压缩10%
+            }
+            if (options <= 0) break;
+            result.compress(Bitmap.CompressFormat.JPEG, options, bos);//这里压缩options%，把压缩后的数据存放到baos中
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bos.toByteArray());
+            Log.d("aa", "compressImage2FileBySize: ");
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void compressImage2FileBySize(Bitmap bmp , File file)
+    {
+        //压缩尺寸倍数 值越大 ，图片的尺寸就越小
+        int ratio = 4 ;
+        Bitmap result = Bitmap.createBitmap(bmp.getWidth() /ratio , bmp.getHeight() / ratio ,Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result) ;
+        Rect rect = new Rect(0,0,bmp.getWidth() / ratio ,bmp.getHeight() / ratio );
+        canvas.drawBitmap(bmp,null,rect,null);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
+        result.compress(Bitmap.CompressFormat.JPEG,100,bos);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bos.toByteArray());
+
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

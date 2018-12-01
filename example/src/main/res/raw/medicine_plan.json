@@ -1,4 +1,4 @@
-{
+/*{
   "code": 1,
   "detail": {
     "planlist": [
@@ -75,5 +75,5 @@
     ]
   },
   "message": "success"
-}
-
+}*/
+{"code":1,"detail":{"planlist":[{"plans":[{"endRemind":"2019-02-01","atime":"02:00","id":"22c5763ed4f24e7ba09a8a27062d992a","medicineUseCount":0,"dayInterval":2,"startRemind":"2018-02-02","medicineName":"感冒冲剂","boxId":"111"},{"endRemind":"2019-02-01","atime":"02:00","id":"b59ceb5e8fad4907968fc4d5d79b3b66","medicineUseCount":3,"dayInterval":2,"startRemind":"2018-02-02","medicineName":"感冒冲剂","boxId":"111"}],"time":"02:00"},{"plans":[{"endRemind":"2019-02-01","atime":"05:00","id":"6f0a2828e08343468127b0c3b823d05d","medicineUseCount":3,"dayInterval":2,"startRemind":"2018-02-02","medicineName":"感冒冲剂","boxId":"111"}],"time":"05:00"}]},"message":"success"}

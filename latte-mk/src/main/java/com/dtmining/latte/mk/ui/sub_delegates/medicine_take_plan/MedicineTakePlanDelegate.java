@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.dtmining.latte.alarmclock.Alarm;
 import com.dtmining.latte.alarmclock.MyDBOpenHelper;
@@ -16,10 +17,12 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.storage.LattePreference;
 
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +38,8 @@ import butterknife.OnClick;
  * Description:
  */
 public class MedicineTakePlanDelegate extends LatteDelegate{
+    String boxId=null;
+    String tel=null;
     private MyDBOpenHelper myDBOpenHelper;
     public static final String ALARM_ALERT_ACTION = "com.kidcare.alarm_alert";
     @BindView(R2.id.btn_medicine_take_plan_add)
@@ -58,11 +63,14 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
+        boxId= LattePreference.getBoxId();
         if(userProfile==null){
             startWithPop(new SignInDelegate());
         }else {
-            String tel=Long.toString(userProfile.getTel());
-
+            tel=Long.toString(userProfile.getTel());
+            if(boxId==null){
+                Toast.makeText(getContext(),"App未绑定当前药箱",Toast.LENGTH_LONG).show();
+            }
         }
 
 
@@ -89,7 +97,10 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         RestClient.builder()
+                //.url(UploadConfig.API_HOST+"/api/get_plan")
                 .url("medicine_plan")
+                .params("tel",tel)
+                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

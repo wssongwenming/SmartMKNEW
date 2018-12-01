@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.ui.refresh;
 
+import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,8 +10,10 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.MultipleRecyclerAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlanExpandableListViewAdapter;
@@ -24,8 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
-        BaseQuickAdapter.RequestLoadMoreListener{
+public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
     private final SwipeRefreshLayout REFESH_LAYOUT;
     private Set<SwipeListLayout> SETS =null;
     private final PagingBean BEAN;
@@ -67,10 +69,13 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
     }
 
 
-    public void get_medicine_plan(String url,String tel){
+    public void get_medicine_plan(String url,String tel,String boxId){
 
         RestClient.builder()
+                .clearParams()
                 .url(url)
+                .params("tel",tel)
+                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -94,15 +99,12 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
         TOPRECYCLERVIEW.setAdapter(mAdapter);
     }
 */
-    public void firstPage_medicine_history(String url,String tel){
-        //BEAN.setDelayed(1000);
-        BEAN.setPageIndex(0);
-        BEAN.setPageSize(5);
+    public void firstPage_medicine_history(String url,String tel,int pagIndex,int pageSize){
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
-                .params("page",BEAN.getPageIndex())
-                .params("count",BEAN.getPageSize())
+                .params("page",pagIndex)
+                .params("count",pageSize)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -112,40 +114,41 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                                 .setPageSize(object.getInteger("page_size"));*/
                         //设置Adapter
                         mAdapter=MultipleRecyclerAdapter.getMedicineHistory(CONVERTER.setJsonData(response),DELEGATE);
-                        mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
+                        //mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
-
-                        BEAN.addIndex();
                     }
                 })
                 .build()
                 .get();
     }
-    public void get_medicine_history(String url,String tel,String boxId)
+    public void get_medicine_history(String url, final String tel, final int pageIndex, int pageSize)
     {
-        BEAN.setPageIndex(0);
-        BEAN.setPageSize(20);
+        BEAN.setPageIndex(pageIndex);
+        BEAN.setPageSize(pageSize);
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
-                .params("boxId",boxId)
                 .params("page",BEAN.getPageIndex())
                 .params("count",BEAN.getPageSize())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
                         //Toast.makeText(Latte.getApplicationContext(),response,Toast.LENGTH_LONG).show();
-                        // final JSONObject object=JSON.parseObject(response);
-                        /*BEAN.setTotal(object.getInteger("total"))
-                                .setPageSize(object.getInteger("page_size"));*/
+                        final JSONObject object=JSON.parseObject(response);
+                        final JSONObject detail=object.getJSONObject("detail");
+                        final int total=detail.getInteger("total");//现在接口中为count
+                        BEAN.setTotal(total);
                         //设置Adapter
                         mAdapter=MultipleRecyclerAdapter.getMedicineHistoryForDetail(CONVERTER.setJsonData(response),DELEGATE);
+                        //mAdapter.setOnLoadMoreListener(RefreshHandler.this, RECYCLERVIEW);
                         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+                            String tel1=tel;
                             @Override
                             public void onLoadMoreRequested() {
+                                paging(UploadConfig.API_HOST+"/api/get_history",tel);
 
                             }
-                        }, RECYCLERVIEW);
+                        },RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
 
                         BEAN.addIndex();
@@ -177,18 +180,27 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
 
     }*/
 
-    public void firstPage_medicine_mine(String url){
-        BEAN.setDelayed(1000);
+    public void firstPage_medicine_mine(String url,String tel){
+
         RestClient.builder()
                 .url(url)
+                .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
 
-                        MedicineMineRecyclerAdapter mAdapter= MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response),SETS);
-                        //mAdapter.setOnLoadMoreListener(RefreshHandler.this,RECYCLERVIEW);
-                        RECYCLERVIEW.setAdapter(mAdapter);
-                        BEAN.addIndex();
+                        if(response!=null) {
+                            com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1) {
+                                MedicineMineRecyclerAdapter mAdapter = MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response), SETS);
+                                RECYCLERVIEW.setAdapter(mAdapter);
+                            }else if(code==17)
+                            {
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品",Toast.LENGTH_LONG).show();
+                            }
+                        }
+
                     }
                 })
                 .build()
@@ -201,17 +213,15 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
 
     }
 
-    @Override
-    public void onLoadMoreRequested() {
-        paging("refresh.php?index=");
-    }
+   // @Override
+   // public void onLoadMoreRequested() {
+   //     paging(UploadConfig.API_HOST+"/api/get_history");
+   // }
 
-    private void paging(final String url) {
+    private void paging(final String url,final String tel) {
         final int pageSize = BEAN.getPageSize();
         final int currentCount = BEAN.getCurrentCount();
         final int total = BEAN.getTotal();
-        final int index = BEAN.getPageIndex();
-
         if (mAdapter.getData().size() < pageSize || currentCount >= total) {
             mAdapter.loadMoreEnd(true);
         } else {
@@ -219,7 +229,10 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
                 @Override
                 public void run() {
                     RestClient.builder()
-                            .url(url + index)
+                            .url(url)
+                            .params("tel",tel)
+                            .params("page",BEAN.getPageIndex())
+                            .params("count",BEAN.getPageSize())
                             .success(new ISuccess() {
                                 @Override
                                 public void onSuccess(String response) {
@@ -240,4 +253,6 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener,
     private void paging_medicine_history(){
 
     }
+
+
 }

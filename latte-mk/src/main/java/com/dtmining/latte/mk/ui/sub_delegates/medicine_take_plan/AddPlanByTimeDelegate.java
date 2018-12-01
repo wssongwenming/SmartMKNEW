@@ -14,6 +14,8 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.SimpleHorizontalAdapter;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineState;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.TimeCountPair;
 import com.dtmining.latte.mk.ui.sub_delegates.views.CheckMedicinesDialog;
@@ -85,12 +87,13 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
             detail.add("medicine_plan",detail);
             medicinePlanSubModelbyTime.add("detail",detail);
             RestClient.builder()
+                    .url(UploadConfig.API_HOST+"/api/Medicine_set_time")
                     .clearParams()
                     .raw(medicinePlanSubModelbyTime.toString())
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-
+                            pop();
                         }
                     })
                     .build()
@@ -108,17 +111,16 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         boxId= LattePreference.getBoxId();
         if(userProfile==null){
-
+            startWithPop(new SignInDelegate());
         }else {
             tel=Long.toString(userProfile.getTel());
-
         }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbManager = new DBManager(this.getContext());
+
         initDatePicker();
     }
 

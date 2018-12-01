@@ -1,47 +1,33 @@
 package com.dtmining.latte.mk.main.index;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
-import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.MyAdapter;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
-import com.dtmining.latte.mk.test.TestDelegate;
 import com.dtmining.latte.mk.tools.Icon;
-import com.dtmining.latte.mk.ui.recycler.CustomGridLayoutManager;
-import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
+import com.dtmining.latte.mk.ui.sub_delegates.body_situation.BodySituationDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlan;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.MyGridView;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
@@ -65,8 +51,6 @@ import butterknife.OnClick;
  * Description:
  */
 public class IndexDelegate extends BottomItemDelegate {
-
-
     @BindView(R2.id.banner_index)
     ConvenientBanner mConvenientBanner=null;
     @BindView(R2.id.grid_photo_index)
@@ -131,6 +115,23 @@ public class IndexDelegate extends BottomItemDelegate {
 
         mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerViewHistory,
                 mExpandableListView,new IndexDataConverter(),this.getParentDelegate(),null);
+        mExpandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                View firstView = view.getChildAt(firstVisibleItem);
+                if (firstVisibleItem == 0 && (firstView == null || firstView.getTop() == 0)) {
+                    mRefreshLayout.setEnabled(true);
+                } else {
+                    mRefreshLayout.setEnabled(false);
+                }
+            }
+        });
+
         //final MkBottomDelegate mkBottomDelegate=getParentDelegate();
         //单击跳转，显示每个项目的详情
         //mRecyclerView.addOnItemTouchListener(IndexItemClickListener.create(mkBottomDelegate));
@@ -171,7 +172,7 @@ public class IndexDelegate extends BottomItemDelegate {
                         getParentDelegate().start(new MedicineTakeHistoryDelegate());
                         break;
                     case 5://点击了“用药记录”
-                        getParentDelegate().start(new TestDelegate());
+                        getParentDelegate().start(new BodySituationDelegate());
                         break;
                 }
             }
@@ -200,8 +201,8 @@ public class IndexDelegate extends BottomItemDelegate {
         initGridView();
         initRefreshLayout();
         initBanner();
-        mRefreshHandler.firstPage_medicine_history("index",tel);
-        mRefreshHandler.get_medicine_plan("medicine_plan",tel);
+        mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
+        mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
     }
     @Override
     public Object setLayout() {
@@ -211,5 +212,8 @@ public class IndexDelegate extends BottomItemDelegate {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
+        mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
     }
+
 }

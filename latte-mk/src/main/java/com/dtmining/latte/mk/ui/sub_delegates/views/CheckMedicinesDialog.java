@@ -33,6 +33,7 @@ import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.CheckAdapter;
 import com.dtmining.latte.mk.adapter.CheckBoxAdapter;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
@@ -135,7 +136,8 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
 
     private void initDatas(){
         RestClient.builder()
-                .url("medicine_mine")
+                .url(UploadConfig.API_HOST+"/api/get_medicine")
+                .clearParams()
                 .params("tel",tel)
                 .params("boxId",boxId)
                 .success(new ISuccess() {

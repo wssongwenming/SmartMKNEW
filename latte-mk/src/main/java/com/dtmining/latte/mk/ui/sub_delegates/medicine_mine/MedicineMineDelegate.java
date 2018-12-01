@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 
 
 import com.dtmining.latte.app.ConfigKeys;
@@ -14,6 +15,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.recycler.MyDecoration;
@@ -33,7 +35,7 @@ import butterknife.BindView;
  * Date:2018/10/19
  * Description:
  */
-public class MedicineMineDelegate extends LatteDelegate {
+public class MedicineMineDelegate extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener{
     private String tel=null;
  /* @BindView(R2.id.srl_medicine_mine)
     SwipeRefreshLayout mRefreshLayout=null;*/
@@ -82,7 +84,7 @@ public class MedicineMineDelegate extends LatteDelegate {
         super.onLazyInitView(savedInstanceState);
         //initRefreshLayout();
         initRecyclerView();
-        mRefreshHandler.firstPage_medicine_mine("medicine_mine");
+        mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel);
     }
 
     @Override
@@ -141,5 +143,15 @@ public class MedicineMineDelegate extends LatteDelegate {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }

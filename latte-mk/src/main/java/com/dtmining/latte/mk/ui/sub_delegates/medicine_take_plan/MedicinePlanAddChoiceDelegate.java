@@ -20,11 +20,11 @@ import butterknife.OnClick;
 public class MedicinePlanAddChoiceDelegate extends LatteDelegate {
     @OnClick(R2.id.add_plan_by_drugs)
     void addPlanByDrugs(){
-        startWithPop(new AddPlanByDrugDelegate());
+        start(new AddPlanByDrugDelegate());
     }
     @OnClick(R2.id.add_plan_by_time)
     void addPlanByTime(){
-        startWithPop(new AddPlanByTimeDelegate());
+        start(new AddPlanByTimeDelegate());
     }
     @Override
     public Object setLayout() {

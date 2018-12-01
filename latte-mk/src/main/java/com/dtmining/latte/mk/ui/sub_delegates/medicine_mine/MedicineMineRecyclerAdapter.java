@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
+import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
@@ -13,14 +14,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 import com.dtmining.latte.mk.ui.recycler.MultipleViewHolder;
+import com.dtmining.latte.mk.ui.sub_delegates.views.InputDialog;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineState;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineStateModel;
@@ -28,6 +33,7 @@ import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.storage.LattePreference;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.Set;
@@ -38,11 +44,14 @@ import java.util.Set;
  * Description:
  */
 public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleItemEntity,MultipleViewHolder> implements
-         OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener {
+         OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener,InputDialog.ClickListenerInterface {
     AppCompatTextView mMedicineInUse=null;
     private  LatteDelegate DELEGATE;
+    private  String MEDICINEID;
+    private  int MEDICINE_ORIGN_COUNT=0;//补充时需要加上原来的数量
+    private  int POSITION;
     Set<SwipeListLayout> sets=null;
-
+    private InputDialog inputDialog;
 
     //设置图片加载策略
     private static final RequestOptions REQUEST_OPTIONS=
@@ -54,7 +63,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
     protected MedicineMineRecyclerAdapter(List<MultipleItemEntity> data,Set<SwipeListLayout> sets) {
         super(data);
         init();
-
         this.sets=sets;
     }
 
@@ -91,13 +99,12 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         AppCompatTextView  mBtnStart = (AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_start);
         //删除动作
         AppCompatTextView mBtnDelete=(AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_delete);
-        //动作
+        //补充动作
         AppCompatTextView mBtnSupply=(AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_supply);
 
 
         switch (holder.getItemViewType())
         {
-
             case ItemType.MEDICINE_MINE:
                 medicinePause   =item.getField(MultipleFields.MEDICINEPAUSE);
                 medicineCount   =item.getField(MultipleFields.MEDICINECOUNT);
@@ -138,7 +145,18 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     mBtnPause.setVisibility(View.GONE);
                     mBtnStart.setVisibility(View.GONE);
                 }
+                mBtnSupply.setOnClickListener(new View.OnClickListener() {
 
+                    @Override
+                    public void onClick(View view) {
+
+                        inputDialog = new InputDialog((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "输入补充数量" , "确定",MedicineMineRecyclerAdapter.this);
+                        MEDICINEID=medicineId;
+                        POSITION=holder.getAdapterPosition();
+                        MEDICINE_ORIGN_COUNT=medicineCount;
+                        inputDialog.show();
+                    }
+                });
                 mBtnPause.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -152,7 +170,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         String json = JSON.toJSON(medicineStateModel).toString();
                         RestClient.builder()
                                 .clearParams()
-                                .url("http://10.0.2.2:8081/Web01_exec/Medicine_update_state")
+                                .url(UploadConfig.API_HOST+"/api/Medicine_update_state")
                                 .raw(json)
                                 .success(new ISuccess() {
                                     @Override
@@ -181,6 +199,40 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                 mBtnStart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MedicineState medicineState=new MedicineState();
+                        MedicineStateModel medicineStateModel=new MedicineStateModel();
+                        medicineState.setBoxId(LattePreference.getBoxId());
+                        medicineState.setMedicineId(medicineId);
+                        medicineState.setTel(tel);
+                        medicineState.setMedicinePause("0");
+                        medicineStateModel.setDetail(medicineState);
+                        String json = JSON.toJSON(medicineStateModel).toString();
+                        RestClient.builder()
+                                .clearParams()
+                                .url(UploadConfig.API_HOST+"/api/Medicine_update_state")
+                                .raw(json)
+                                .success(new ISuccess() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        final int currentPosition = holder.getAdapterPosition();
+                                           /*
+                                            //还原上一个
+                                            getData().get(mPrePosition).setField(MultipleFields.TAG, false);
+                                            notifyItemChanged(mPrePosition);*/
+                                        //更新选中的item
+                                        item.setField(MultipleFields.MEDICINEPAUSE, 0);
+                                        notifyItemChanged(currentPosition);
+                                    }
+
+                                })
+                                .error(new IError() {
+                                    @Override
+                                    public void onError(int code, String msg) {
+
+                                    }
+                                })
+                                .build()
+                                .post();
 
                     }
                 });
@@ -194,7 +246,8 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineStateModel.setDetail(medicineState);
                         String singInJson = JSON.toJSON(medicineStateModel).toString();
                         RestClient.builder()
-                                .url("http://10.0.2.2:8081/Web01_exec/Medicine_update_state")
+                                .clearParams()
+                                .url(UploadConfig.API_HOST+"/api/Medicine_delete")
                                 .raw(singInJson)
                                 .success(new ISuccess() {
                                     @Override
@@ -251,13 +304,11 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
     }
 
     class onSlipStatusListener implements SwipeListLayout.OnSwipeStatusListener {
-
         private SwipeListLayout slipListLayout;
 
         public onSlipStatusListener(SwipeListLayout slipListLayout) {
             this.slipListLayout = slipListLayout;
         }
-
         @Override
         public void onStatusChanged(SwipeListLayout.Status status) {
             if (status == SwipeListLayout.Status.Open) {
@@ -274,12 +325,9 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     sets.remove(slipListLayout);
             }
         }
-
         @Override
         public void onStartCloseAnimation() {
-
         }
-
         @Override
         public void onStartOpenAnimation() {
 
@@ -293,6 +341,38 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         super.onBindViewHolder(holder, positions);
     }
 
+    @Override
+    public void doConfirm(String input) {
+        System.out.println(input);
+        try {
+            final int supply = Integer.parseInt(input);
+            JsonObject detail=new JsonObject();
+            detail.addProperty("medicineId",MEDICINEID);
+            detail.addProperty("supplynumber",supply+MEDICINE_ORIGN_COUNT);
+            JsonObject subjson=new JsonObject();
+            subjson.add("detail",detail);
+            RestClient.builder()
+                    .clearParams()
+                    .raw(subjson.toString())
+                    .url(UploadConfig.API_HOST+"/api/Medicine_update_supply")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            getItem(POSITION).setField(MultipleFields.MEDICINECOUNT,supply+MEDICINE_ORIGN_COUNT);
+                            notifyDataSetChanged();
+                            inputDialog.dismiss();
 
 
+                        }
+                    })
+                    .build()
+                    .post();
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+
+        inputDialog.dismiss();
+    }
 }

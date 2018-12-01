@@ -48,12 +48,11 @@ public class MedicineListDataConverter {
                             JSONObject planobject = (JSONObject) planArray.get(j);
                             String atime = planobject.getString("atime");
                             String medicineId = planobject.getString("medicineId");
-                            int medicineUseCount=planobject.getInteger("medicineUseCount");
+                            //int medicineUseCount=planobject.getInteger("medicineUseCount");//等待后期加入该返回字段
                             String id=planobject.getString("id");
                             medicinePlan.setId(id);
                             medicinePlan.setAtime(atime);
-                            medicinePlan.setMedicineUseCount(medicineUseCount);
-                            //medicinePlan.setMedicineId(medicineId);
+                            //medicinePlan.setMedicineUseCount(medicineUseCount);//等待后期加入该返回字段
                             medicinePlans.addMedicinePlan(medicinePlan);
                         }
                             Log.d("size", medicinePlans.plans.get(0).getAtime());

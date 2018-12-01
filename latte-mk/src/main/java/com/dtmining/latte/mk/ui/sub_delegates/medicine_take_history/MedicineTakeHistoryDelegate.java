@@ -73,6 +73,6 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
         initRefreshLayout();
-        mRefreshHandler.get_medicine_history("index",tel,boxId);
+        mRefreshHandler.get_medicine_history("index",tel,1,20);
     }
 }

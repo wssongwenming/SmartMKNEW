@@ -34,6 +34,7 @@ import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -79,19 +80,37 @@ public class SignInDelegate extends LatteDelegate {
             user.setEntry_way(EntryType.NORMAL.getEntryType());
             signModel.setDetail(user);
             String singInJson = JSON.toJSON(signModel).toString();
+            System.out.print(singInJson);
             RestClient.builder()
-                    //.url(UploadConfig.API_HOST+"/api/UserLogin")
-                    .url("http://10.0.2.2:8081/Web01_exec/UserLogin")
+                    .url(UploadConfig.API_HOST+"/api/UserLogin")
+                    .clearParams()
+                    //.url("http://10.0.2.2:8081/Web01_exec/UserLogin")
                     .raw(singInJson)
+
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                           SignHandler.onSignIn(response,mISignListener);
+                            com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            switch (code){
+                                case 1:
+                                    SignHandler.onSignIn(response,mISignListener);
+                                    break;
+                                case 3:
+                                    Toast.makeText(getContext(),"用户不存在",Toast.LENGTH_LONG).show();
+                                    startWithPop(new SignUpDelegate());
+                                    break;
+                                case 4:
+                                    Toast.makeText(getContext(),"密码错误",Toast.LENGTH_LONG).show();
+                                    break;
+                            }
+
                         }
                     })
                     .error(new IError() {
                         @Override
                         public void onError(int code, String msg) {
+                            Log.d("code", "code: "+code);
                             mISignListener.onSignInError(msg);
                         }
                     })

@@ -108,6 +108,7 @@ dependencies {
     //GSON
     compile 'com.google.code.gson:gson:2.6.2'
     //图片上传和压缩
-
+    compile 'top.zibin:Luban:1.1.8'
+    compile files('libs/mpandroidchartlibrary-2-1-6.jar')
 
 }

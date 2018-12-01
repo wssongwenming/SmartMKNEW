@@ -20,6 +20,7 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.model.SignModel;
 import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
@@ -86,7 +87,7 @@ public class SignUpDelegate extends LatteDelegate {
             //获取验证码
             String sMSJson = JSON.toJSON(signModel).toString();
             RestClient.builder()
-                    .url("http://10.0.2.2:8081/Web01_exec/SMSCode")
+                    .url(UploadConfig.API_HOST+"/api/SMSCode")
                     .raw(sMSJson)
                     .success(new ISuccess() {
                         @Override
@@ -113,6 +114,8 @@ public class SignUpDelegate extends LatteDelegate {
         if(checkForm()){
             User user=new User();
             SignModel signModel =new SignModel();
+            final String tel=mPhone.getText().toString();
+
             user.setTel(mPhone.getText().toString());
             user.setIdentify_code(mIdentifyingCode.getText().toString());
             user.setPwd(mPassword.getText().toString());
@@ -123,14 +126,29 @@ public class SignUpDelegate extends LatteDelegate {
            //Toast.makeText(this.getContext(),singUpJson,Toast.LENGTH_SHORT).show();
             RestClient.builder()
                     //.url("http://10.0.2.2:8081/Web01_exec/UserRegister")
-                    .url("http://192.168.1.3:8081/Web01_exec/UserRegister")
+                    //.url("http://192.168.1.3:8081/Web01_exec/UserRegister")
+                    .url(UploadConfig.API_HOST+"/api/UserRegister")
                     .raw(singUpJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            Log.d("response", response);
-                            SignHandler.onSignUp(response,mISignListener);
-
+                            com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            switch (code){
+                                case 1:
+                                    SignHandler.onSignUp(response,mISignListener,tel,role);
+                                    break;
+                                case 9:
+                                    Toast.makeText(getContext(),"验证码超时",Toast.LENGTH_LONG).show();
+                                    startWithPop(new SignUpDelegate());
+                                    break;
+                                case 10:
+                                    Toast.makeText(getContext(),"验证码错误",Toast.LENGTH_LONG).show();
+                                    break;
+                                case 11:
+                                    Toast.makeText(getContext(),"注册失败，当前用户已存在",Toast.LENGTH_LONG).show();
+                                    break;
+                            }
                         }
                     })
                     .error(new IError() {
@@ -209,8 +227,8 @@ public class SignUpDelegate extends LatteDelegate {
         myHandler.setOnHandlerListener(new MyHandler.HandlerListener() {
                     @Override
                     public void handleMessage(Message msg) {
-                        System.out.println("MainActivity_msg==== " + msg.what);
-                        mIdentifyingCode.setText("123456");
+                        Toast.makeText(getContext(),msg.toString(),Toast.LENGTH_LONG).show();
+                        mIdentifyingCode.setText("");
                     }
                 }
  );
