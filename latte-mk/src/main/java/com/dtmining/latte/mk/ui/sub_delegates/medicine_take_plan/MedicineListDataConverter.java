@@ -55,7 +55,7 @@ public class MedicineListDataConverter {
                             //medicinePlan.setMedicineUseCount(medicineUseCount);//等待后期加入该返回字段
                             medicinePlans.addMedicinePlan(medicinePlan);
                         }
-                            Log.d("size", medicinePlans.plans.get(0).getAtime());
+
                         medicineModel1.setMedicinePlans(medicinePlans);
                     }
                     MEDICINES.add(medicineModel1);

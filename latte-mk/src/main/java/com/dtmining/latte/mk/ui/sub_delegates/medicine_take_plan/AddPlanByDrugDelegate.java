@@ -33,6 +33,9 @@ import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SetTimesDialog;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
 
 import java.sql.Date;
@@ -55,6 +58,7 @@ import butterknife.OnItemSelected;
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
     private MyDBOpenHelper myDBOpenHelper;
     String tel=null;
+    int origin_time_count_size=0;//已经添加过的的用药计划：服药时间：用量,再添加时，这部分不添加
     String boxId=null;
     String interval=null;
     String medicineId=null;
@@ -107,7 +111,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             MedicinePlan medicinePlan=new MedicinePlan();
             Detail detail=new Detail();
             MedicinePlanNetModel medicinePlanNetModel=new MedicinePlanNetModel();
-            for (int i = 0; i <size ; i++) {
+            for (int i = origin_time_count_size; i <size ; i++) {//添加的时候从新加入的开始
                 TimeCountPair pair=new TimeCountPair();
                 pair.setMedicine_time(timeSet.get(i));
                 pair.setMedicine_useCount(useCountSet.get(i));
@@ -126,103 +130,117 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            RestClient.builder()
-                                    .url(UploadConfig.API_HOST+"/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
-                                    .params("tel",tel)
-                                    .params("boxId",boxId)
-                                    .success(new ISuccess() {
-                                        @Override
-                                        public void onSuccess(String response) {
-                                            Log.d("response1", response);
-                                            if(response!=null) {
-                                                JSONObject jsonData = JSON.parseObject(response);
-                                                JSONObject detail = jsonData.getJSONObject("detail");
-                                                JSONArray planLsit = detail.getJSONArray("planlist");
-                                                HashMap<String, HashMap<String, HashMap<String,ArrayList<String>>>> map_time = new HashMap<>();
-                                                int size = planLsit.size();
-                                                for (int i = 0; i < size; i++) {
-                                                    JSONObject planData = (JSONObject) planLsit.get(i);
-                                                    String time = planData.getString("time");
-                                                    JSONArray planArray = planData.getJSONArray("plans");
-                                                    HashMap<String, HashMap<String,ArrayList<String>>> map_interval = new HashMap<>();
-                                                    map_interval.put("0", null);
-                                                    map_interval.put("1", null);
-                                                    map_interval.put("2", null);
-                                                    map_interval.put("3", null);
-                                                    map_interval.put("4", null);
-                                                    map_interval.put("5", null);
-                                                    map_interval.put("6", null);
-                                                    map_interval.put("7", null);
-                                                    int size2 = planArray.size();
-                                                    for (int j = 0; j < size2; j++) {
-                                                        JSONObject plan = (JSONObject) planArray.get(j);
-                                                        String interval = plan.getString("dayInterval");
-                                                        String starttime = plan.getString("startRemind");
-                                                        String endtime = plan.getString("endRemind");
-                                                        String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
-                                                        String medicineName = plan.getString("medicineName");
-                                                        //先以interval判断，如果
-                                                        if (map_interval.get(interval) == null) {
-                                                            HashMap<String, ArrayList<String>> map_start_time = new HashMap<>();
-                                                            ArrayList<String> infoArray = new ArrayList<>();
-                                                            infoArray.add( medicineName +":服用"+ medicineUseCount);
-                                                            map_start_time.put(starttime, infoArray);
-                                                            map_interval.put(interval, map_start_time);
-                                                        } else {
-                                                            boolean has = false;
-                                                            for (Map.Entry<String, HashMap<String,ArrayList<String>>> item_interval : map_interval.entrySet()) {
-                                                                if (map_interval != null) {
-                                                                    HashMap<String, ArrayList<String>> hashMap = item_interval.getValue();
-                                                                    if (hashMap != null) {
-                                                                        for (Map.Entry<String, ArrayList<String>> item_start_time : hashMap.entrySet()) {
-                                                                            String key_startTime = item_start_time.getKey();
-                                                                            if (key_startTime.equalsIgnoreCase(starttime)) {
-                                                                                has = true;
+                            com.alibaba.fastjson.JSONObject object = JSON.parseObject(response);
+                            int code = object.getIntValue("code");
+                            if (code == 1)
+                            {
+                                final IGlobalCallback<String> callback = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                                if (callback != null) {
+                                    callback.executeCallback("");
+                                }
+                                RestClient.builder()
+                                        .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
+                                        .params("tel", tel)
+                                        .params("boxId", boxId)
+                                        .success(new ISuccess() {
+                                            @Override
+                                            public void onSuccess(String response) {
+                                                   if (response != null) {
+                                                    com.alibaba.fastjson.JSONObject object = JSON.parseObject(response);
+                                                    int code = object.getIntValue("code");
+                                                    if (code == 1) {
+                                                        JSONObject jsonData = JSON.parseObject(response);
+                                                        JSONObject detail = jsonData.getJSONObject("detail");
+                                                        JSONArray planLsit = detail.getJSONArray("planlist");
+                                                        HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> map_time = new HashMap<>();
+                                                        int size = planLsit.size();
+                                                        for (int i = 0; i < size; i++) {
+                                                            JSONObject planData = (JSONObject) planLsit.get(i);
+                                                            String time = planData.getString("time");
+                                                            JSONArray planArray = planData.getJSONArray("plans");
+                                                            HashMap<String, HashMap<String, ArrayList<String>>> map_interval = new HashMap<>();
+                                                            map_interval.put("0", null);
+                                                            map_interval.put("1", null);
+                                                            map_interval.put("2", null);
+                                                            map_interval.put("3", null);
+                                                            map_interval.put("4", null);
+                                                            map_interval.put("5", null);
+                                                            map_interval.put("6", null);
+                                                            map_interval.put("7", null);
+                                                            int size2 = planArray.size();
+                                                            for (int j = 0; j < size2; j++) {
+                                                                JSONObject plan = (JSONObject) planArray.get(j);
+                                                                String interval = plan.getString("dayInterval");
+                                                                String starttime = plan.getString("startRemind");
+                                                                String endtime = plan.getString("endRemind");
+                                                                String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
+                                                                String medicineName = plan.getString("medicineName");
+                                                                //先以interval判断，如果
+                                                                if (map_interval.get(interval) == null) {
+                                                                    HashMap<String, ArrayList<String>> map_start_time = new HashMap<>();
+                                                                    ArrayList<String> infoArray = new ArrayList<>();
+                                                                    infoArray.add(medicineName + ":服用" + medicineUseCount);
+                                                                    map_start_time.put(starttime, infoArray);
+                                                                    map_interval.put(interval, map_start_time);
+                                                                } else {
+                                                                    boolean has = false;
+                                                                    for (Map.Entry<String, HashMap<String, ArrayList<String>>> item_interval : map_interval.entrySet()) {
+                                                                        if (map_interval != null) {
+                                                                            HashMap<String, ArrayList<String>> hashMap = item_interval.getValue();
+                                                                            if (hashMap != null) {
+                                                                                for (Map.Entry<String, ArrayList<String>> item_start_time : hashMap.entrySet()) {
+                                                                                    String key_startTime = item_start_time.getKey();
+                                                                                    if (key_startTime.equalsIgnoreCase(starttime)) {
+                                                                                        has = true;
+                                                                                    }
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
+                                                                    if (has) {
+                                                                        ((ArrayList<String>) map_interval.get(interval).get(starttime)).add(medicineName + ":服用" + medicineUseCount);
+                                                                    } else {
+                                                                        ArrayList<String> infoArray = new ArrayList<>();
+                                                                        infoArray.add(medicineName + ":服用" + medicineUseCount);
+                                                                        map_interval.get(interval).put(starttime, infoArray);
+                                                                    }
                                                                 }
                                                             }
-                                                            if (has) {
-                                                                ((ArrayList<String>) map_interval.get(interval).get(starttime)).add( medicineName +":服用"+ medicineUseCount);
-                                                            } else {
-                                                                ArrayList<String> infoArray = new ArrayList<>();
-                                                                infoArray.add(medicineName+":服用" + medicineUseCount);
-                                                                map_interval.get(interval).put(starttime, infoArray);
-                                                            }
+                                                            map_time.put(time, map_interval);
+                                                            Log.d("map_time", map_time.toString());
                                                         }
-                                                    }
-                                                    map_time.put(time, map_interval);
-                                                    Log.d("map_time", map_time.toString());
-                                                }
-                                                if (map_time != null) {
-                                                    //清空计划表
-                                                    myDBOpenHelper.deleteAlarm();
-                                                    for (Map.Entry<String, HashMap<String,HashMap<String,ArrayList<String>>>> item_time : map_time.entrySet()){
-                                                        String time=null;
-                                                        if(item_time!=null) {
-                                                            time = item_time.getKey();
-                                                            HashMap<String, HashMap<String,ArrayList<String>>> map_interval = item_time.getValue();
-                                                            for (Map.Entry<String, HashMap<String,ArrayList<String>>> item_interval : map_interval.entrySet()){
-                                                                String Interval=null;
-                                                                if(item_interval!=null) {
-                                                                    Interval = item_interval.getKey();
-                                                                    HashMap<String, ArrayList<String>> map_starttime = item_interval.getValue();
-                                                                    if (map_starttime != null) {
-                                                                        for (Map.Entry<String, ArrayList<String>> item_starttime : map_starttime.entrySet()) {
-                                                                            String starttime = null;
-                                                                            String message = null;
-                                                                            if (item_starttime != null) {
-                                                                                starttime = item_starttime.getKey();
-                                                                                message=item_starttime.getValue().toString();
-                                                                                int hour=Integer.parseInt(time.substring(0,time.indexOf(":")));
-                                                                                int minute=Integer.parseInt(time.substring(time.indexOf(":")+1,time.length()));
-                                                                                int interval=Integer.parseInt(Interval);
-                                                                                Alarm alarm = new Alarm(getDate(starttime,interval), hour, minute,interval,message,"aaa.mp3",1);
-                                                                                try {
-                                                                                    add(alarm);
-                                                                                } catch (ParseException e) {
-                                                                                    e.printStackTrace();
+                                                        if (map_time != null) {
+                                                            //清空计划表
+                                                            myDBOpenHelper.deleteAlarm();
+                                                            for (Map.Entry<String, HashMap<String, HashMap<String, ArrayList<String>>>> item_time : map_time.entrySet()) {
+                                                                String time = null;
+                                                                if (item_time != null) {
+                                                                    time = item_time.getKey();
+                                                                    HashMap<String, HashMap<String, ArrayList<String>>> map_interval = item_time.getValue();
+                                                                    for (Map.Entry<String, HashMap<String, ArrayList<String>>> item_interval : map_interval.entrySet()) {
+                                                                        String Interval = null;
+                                                                        if (item_interval != null) {
+                                                                            Interval = item_interval.getKey();
+                                                                            HashMap<String, ArrayList<String>> map_starttime = item_interval.getValue();
+                                                                            if (map_starttime != null) {
+                                                                                for (Map.Entry<String, ArrayList<String>> item_starttime : map_starttime.entrySet()) {
+                                                                                    String starttime = null;
+                                                                                    String message = null;
+                                                                                    if (item_starttime != null) {
+                                                                                        starttime = item_starttime.getKey();
+                                                                                        message = item_starttime.getValue().toString();
+                                                                                        int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
+                                                                                        int minute = Integer.parseInt(time.substring(time.indexOf(":") + 1, time.length()));
+                                                                                        int interval = Integer.parseInt(Interval);
+                                                                                        Alarm alarm = new Alarm(getDate(starttime, interval), hour, minute, interval, message, "aaa.mp3", 1);
+                                                                                        try {
+                                                                                            add(alarm);
+                                                                                        } catch (ParseException e) {
+                                                                                            e.printStackTrace();
+                                                                                        }
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         }
@@ -232,13 +250,13 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                         }
                                                     }
                                                 }
+                                                pop();
                                             }
-                                            pop();
-                                        }
-                                    })
-                                    .build()
-                                    .get();
+                                        })
+                                        .build()
+                                        .get();
                         }
+                    }
                     })
                     .build()
                     .post();
@@ -253,6 +271,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             timeSet=medicineModel.getMedicinePlans().getTime();
             useCountSet= medicineModel.getMedicinePlans().getUseCount();
             int size=timeSet.size();
+            origin_time_count_size=size;//取得原始的数据量
             ArrayList<String> time_count=new ArrayList<>();
             for (int i = 0; i <size ; i++) {
                 time_count.add(timeSet.get(i)+"剂量:"+useCountSet.get(i));
@@ -326,9 +345,13 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        converter=new MedicineListDataConverter();
-                        mAdapter= MedicineListAdapter.create(converter.setJsonData(response),R.layout.simple_single_item_list);
-                        mMedicineListSpinner.setAdapter(mAdapter);
+                        com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            converter = new MedicineListDataConverter();
+                            mAdapter = MedicineListAdapter.create(converter.setJsonData(response), R.layout.simple_single_item_list);
+                            mMedicineListSpinner.setAdapter(mAdapter);
+                        }
                     }
                 })
                 .build()

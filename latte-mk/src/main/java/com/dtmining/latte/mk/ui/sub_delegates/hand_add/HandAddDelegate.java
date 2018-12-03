@@ -111,6 +111,7 @@ public class HandAddDelegate extends LatteDelegate {
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
         //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
         boxId=parent.getItemAtPosition(position).toString();
+
     }
     private String medicineCode=null;
     private BoxListDataConverter converter=null;
@@ -122,7 +123,7 @@ public class HandAddDelegate extends LatteDelegate {
             MedicineModel medicineModel=new MedicineModel();
             MedicineAddModel medicineAddModel=new MedicineAddModel();
             medicineModel.setBoxId(boxId);
-            medicineModel.setBoxId("111");
+            medicineModel.setBoxId("3333");
             medicineModel.setDayInterval(interval);
             medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
             medicineModel.setMedicineCode(mMedicineCode.getText().toString());
@@ -352,7 +353,7 @@ public class HandAddDelegate extends LatteDelegate {
             getBoxIdList();
         }
         initData();
-        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天","间隔8天","间隔9天","间隔10天"});
+        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
         mTimeSpanSpinner.setAdapter(adap);
     }
 

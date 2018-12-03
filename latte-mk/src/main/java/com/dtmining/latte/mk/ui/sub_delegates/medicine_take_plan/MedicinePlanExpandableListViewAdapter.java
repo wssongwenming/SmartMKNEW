@@ -2,12 +2,14 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -38,24 +40,35 @@ import static com.dtmining.latte.ui.camera.LatteCamera.start;
  * Description:
  */
 public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAdapter {
-    private String jsonString;
-    private static Map<String, List<MedicinePlan>> dataset = new HashMap<>();
-    private static ArrayList<String> parentList=new ArrayList<>();
+    private  Map<String, List<MedicinePlan>> dataset;
+    private  ArrayList<String> parentList;
     private Set<SwipeListLayout> sets=null;
     private LatteDelegate DELEGATE=null;
-    public MedicinePlanExpandableListViewAdapter(String reponse, Set<SwipeListLayout> sets, LatteDelegate delegate) {
+/*    public MedicinePlanExpandableListViewAdapter(String reponse,
+                                                 Set<SwipeListLayout> sets, LatteDelegate delegate,Map) {
         jsonString=reponse;
         this.sets=sets;
         this.DELEGATE=delegate;
 
+    }*/
+
+    public MedicinePlanExpandableListViewAdapter(Map<String, List<MedicinePlan>> dataset, ArrayList<String> parentList, Set<SwipeListLayout> sets, LatteDelegate DELEGATE) {
+        this.dataset = dataset;
+        this.parentList = parentList;
+        this.sets = sets;
+        this.DELEGATE = DELEGATE;
     }
-    public static void convert(String jsonString){
+
+    public void convert(String jsonString){
+
         final JSONObject jsonObject= JSON.parseObject(jsonString);
         //String tel=jsonObject.getString("tel");
         final com.alibaba.fastjson.JSONObject data= jsonObject.getJSONObject("detail");
         final JSONArray dataArray=data.getJSONArray("planlist");
         int size=dataArray.size();
+        Log.d("size", size+"");
         for (int i = 0; i <size ; i++) {
+
             JSONObject jsondata= (JSONObject) dataArray.get(i);
             parentList.add(jsondata.getString("time"));
             JSONArray jsonArray=jsondata.getJSONArray("plans");
@@ -68,7 +81,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
                 medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
                 medicinePlanModel.setId(jsonObject1.getString("id"));
                 medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
-                medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                 medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
                 medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
                 medicinePlanModel.setBoxId(jsonObject1.getString("boxId"));
@@ -77,6 +90,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
             }
             dataset.put(parentList.get(i),childrenList);
         }
+        Log.d("datset", dataset.toString());
     }
 
     @Override
@@ -150,6 +164,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         TextView medicineCount= (TextView) convertView.findViewById(R.id.tv_medicine_plan_medicine_count);
         final TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
         TextView change = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_change);
+        ///////////////////////////////////////
         final String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineName();
         final String atime= dataset.get(parentList.get(groupPosition)).get(childPosition).getAtime();
         final String boxId= dataset.get(parentList.get(groupPosition)).get(childPosition).getBoxId();

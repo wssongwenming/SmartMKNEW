@@ -1,16 +1,25 @@
 package com.dtmining.latte.mk.main.index;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
@@ -21,16 +30,25 @@ import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.MyAdapter;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.main.manage.ManageDelegate;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.tools.Icon;
+import com.dtmining.latte.mk.ui.recycler.ItemType;
+import com.dtmining.latte.mk.ui.recycler.MultipleFields;
+import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
+import com.dtmining.latte.mk.ui.recycler.MultipleRecyclerAdapter;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
 import com.dtmining.latte.mk.ui.sub_delegates.body_situation.BodySituationDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlan;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlanExpandableListViewAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.MyGridView;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
+import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.launcher.LauncherHolderCreator;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
@@ -38,8 +56,11 @@ import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -51,6 +72,14 @@ import butterknife.OnClick;
  * Description:
  */
 public class IndexDelegate extends BottomItemDelegate {
+    //显示用药计划
+    private Map<String, List<MedicinePlan>> dataset = new HashMap<>();
+    private  ArrayList<String> parentList=new ArrayList<>();
+    MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter;
+    //显示用药历史
+    ArrayList<MultipleItemEntity> medicineHistoryList=new ArrayList<>();
+    MultipleRecyclerAdapter medicineHistoryRecyclerViewAdapter;
+    //
     @BindView(R2.id.banner_index)
     ConvenientBanner mConvenientBanner=null;
     @BindView(R2.id.grid_photo_index)
@@ -89,11 +118,16 @@ public class IndexDelegate extends BottomItemDelegate {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
-        boxId=LattePreference.getBoxId();
+
         if(userProfile==null){
             startWithPop(new SignInDelegate());
         }else {
             tel=Long.toString(userProfile.getTel());
+            boxId=LattePreference.getBoxId();
+            if(boxId.equalsIgnoreCase("未设置boxId"))
+            {
+                Toast.makeText(getContext(),"请添加药箱，并绑定当前药箱",Toast.LENGTH_LONG).show();
+            }
 
         }
         CallbackManager.getInstance()
@@ -111,16 +145,39 @@ public class IndexDelegate extends BottomItemDelegate {
             public void executeCallback(@Nullable Object args) {
                 Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             }
+        }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN, new IGlobalCallback() {
+            @Override
+            public void executeCallback(@Nullable Object args) {
+                RestClient.builder()
+                        .url(UploadConfig.API_HOST+"/api/get_plan")
+                        //.url("medicine_plan")
+                        .params("tel",tel)
+                        .params("boxId",boxId)
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+                                com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                                int code=object.getIntValue("code");
+                                if(code==1) {
+                                    medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                                    convert_response_to_plan(response);
+                                    Toast.makeText(getContext(),"11",Toast.LENGTH_LONG).show();
+                                    medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        })
+                        .build()
+                        .get();
+            }
         });
 
         mRefreshHandler=RefreshHandler.create(mRefreshLayout,mRecyclerViewHistory,
-                mExpandableListView,new IndexDataConverter(),this.getParentDelegate(),null);
+        mExpandableListView,new IndexDataConverter(),this.getParentDelegate(),null);
         mExpandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
             }
-
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 View firstView = view.getChildAt(firstVisibleItem);
@@ -131,10 +188,6 @@ public class IndexDelegate extends BottomItemDelegate {
                 }
             }
         });
-
-        //final MkBottomDelegate mkBottomDelegate=getParentDelegate();
-        //单击跳转，显示每个项目的详情
-        //mRecyclerView.addOnItemTouchListener(IndexItemClickListener.create(mkBottomDelegate));
     }
     private void initGridView(){
         mData = new LinkedList<>();
@@ -201,19 +254,138 @@ public class IndexDelegate extends BottomItemDelegate {
         initGridView();
         initRefreshLayout();
         initBanner();
-        mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
-        mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
+        getMedicinePlan();
+        getMedicineHistory();
+        //mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
+        //mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
+
     }
     @Override
     public Object setLayout() {
         return R.layout.delegate_index;
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
-        mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
+    private void getMedicinePlan(){
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_plan")
+                //.url("medicine_plan")
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            convert_response_to_plan(response);
+                            medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .build()
+                .get();
     }
+    private void getMedicineHistory()
+    {
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_history")
+                //.url("medicine_plan")
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .params("page",1)
+                .params("count",5)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            convert_response_to_history(response);
+                            medicineHistoryRecyclerViewAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .build()
+                .get();
+    }
+
+    private void convert_response_to_plan(String jsonString){
+        if(jsonString!=null) {
+            dataset.clear();
+            parentList.clear();
+            final JSONObject jsonObject = JSON.parseObject(jsonString);
+            //String tel=jsonObject.getString("tel");
+            final com.alibaba.fastjson.JSONObject data = jsonObject.getJSONObject("detail");
+            final JSONArray dataArray = data.getJSONArray("planlist");
+            int size = dataArray.size();
+            for (int i = 0; i < size; i++) {
+
+                JSONObject jsondata = (JSONObject) dataArray.get(i);
+                parentList.add(jsondata.getString("time"));
+                JSONArray jsonArray = jsondata.getJSONArray("plans");
+                int lenght = jsonArray.size();
+                List<MedicinePlan> childrenList = new ArrayList<>();
+                for (int j = 0; j < lenght; j++) {
+                    JSONObject jsonObject1 = (JSONObject) jsonArray.get(j);
+                    MedicinePlan medicinePlanModel = new MedicinePlan();
+                    medicinePlanModel.setAtime(jsonObject1.getString("atime"));
+                    medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
+                    medicinePlanModel.setId(jsonObject1.getString("id"));
+                    medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                    //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                    medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
+                    medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
+                    medicinePlanModel.setBoxId(jsonObject1.getString("boxId"));
+                    childrenList.add(medicinePlanModel);
+                }
+                dataset.put(parentList.get(i), childrenList);
+            }
+        }
+    }
+    private void convert_response_to_history(String jsonString){
+        if(jsonString!=null) {
+            String medicineId = null;
+            String medicineName = null;
+            String medicineUseTime = null;
+            String tel = null;
+            String boxId = null;
+            String id = null;
+            if (jsonString != null) {
+                JSONObject jsonobject = JSON.parseObject(jsonString);
+                JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
+                JSONArray jsonarray = jsonobject1.getJSONArray("histories");
+                int size = jsonarray.size();
+                for (int i = 0; i < size; i++) {
+                    JSONObject jsonobject2 = jsonarray.getJSONObject(i);
+                    boxId = jsonobject2.getString("boxId");
+                    medicineName = jsonobject2.getString("medicineNames");
+                    medicineUseTime = jsonobject2.getString("medicineUseTime");
+                    tel = jsonobject2.getString("tel");
+                    id = jsonobject2.getString("id");
+
+                    final MultipleItemEntity entity = MultipleItemEntity.builder()
+                            .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
+                            .setField(MultipleFields.SPAN_SIZE, 3)
+                            .setField(MultipleFields.MEDICINE_NAME, medicineName)
+                            .setField(MultipleFields.MEDICINEUSERTIME, medicineUseTime)
+                            .setField(MultipleFields.BOXID, boxId)
+                            .setField(MultipleFields.TEL, tel)
+                            .setField(MultipleFields.ID, id)
+                            .build();
+                    medicineHistoryList.add(entity);
+                }
+            }
+        }
+    }
+     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter( dataset,parentList,sets, IndexDelegate.this);
+        mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+
+        medicineHistoryRecyclerViewAdapter= MultipleRecyclerAdapter.create(medicineHistoryList,this.getParentDelegate());
+        mRecyclerViewHistory.setAdapter(medicineHistoryRecyclerViewAdapter);
+    }
+
 
 }

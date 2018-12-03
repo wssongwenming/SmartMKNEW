@@ -65,7 +65,7 @@ public final class LattePreference {
     }
     public static String getBoxId(){
        return getAppPreference()
-                .getString("boxId","99");
+                .getString("boxId","未设置boxId");
     }
      public static boolean getAppFlag(String key){
          return getAppPreference()

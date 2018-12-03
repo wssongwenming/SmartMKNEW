@@ -6,9 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.alarmclock.Alarm;
 import com.dtmining.latte.alarmclock.MyDBOpenHelper;
 import com.dtmining.latte.app.ConfigKeys;
@@ -18,14 +22,18 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.main.index.IndexDelegate;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.storage.LattePreference;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -38,6 +46,9 @@ import butterknife.OnClick;
  * Description:
  */
 public class MedicineTakePlanDelegate extends LatteDelegate{
+    MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter;
+    private Map<String, List<MedicinePlan>> dataset = new HashMap<>();
+    private ArrayList<String> parentList=new ArrayList<>();
     String boxId=null;
     String tel=null;
     private MyDBOpenHelper myDBOpenHelper;
@@ -79,12 +90,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     public void onDestroy()
     {
         super.onDestroy();
-        myDBOpenHelper.close();// 释放数据库资源
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("ok", "onResume: ");
+        //myDBOpenHelper.close();// 释放数据库资源
     }
 
     @Override
@@ -93,25 +99,62 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
         myDBOpenHelper=MyDBOpenHelper.getInstance((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY));
     }
 
-    @Override
+/*    @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         RestClient.builder()
-                //.url(UploadConfig.API_HOST+"/api/get_plan")
-                .url("medicine_plan")
+                .url(UploadConfig.API_HOST+"/api/get_plan")
+                //.url("medicine_plan")
                 .params("tel",tel)
-                .params("boxId",boxId)
+                .params("boxId",9999)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets,MedicineTakePlanDelegate.this);
-                        MedicinePlanExpandableListViewAdapter.convert(response);
-                        mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            mExpandableListView.setAdapter((ExpandableListAdapter) null);
+                            //MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter(response, sets, MedicineTakePlanDelegate.this);
+                            //medicinePlanExpandableListViewAdapter.convert(response);
+                            //mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+
+                        }
                     }
                 })
                 .build()
-                .post();
+                .get();
+    }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
+        //mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_plan")
+                //.url("medicine_plan")
+                .params("tel",tel)
+                .params("boxId",3333)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            convert(response);
+                            medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                            //MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter(response, sets, IndexDelegate.this);
+                            //medicinePlanExpandableListViewAdapter.convert(response);
+                            //mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+
+
+                        }
+                    }
+                })
+                .build()
+                .get();
     }
+
     private void setalarm(){
         List<Alarm> alarms = myDBOpenHelper.query();
 
@@ -127,74 +170,76 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
             int alarmid=alarmIds[i];
             AlarmOpreation.enableAlert(getContext(),alarmid,alarmIds);
         }
-        //AlarmOpreation.enableAlert(getContext(),3,new int[1]);
+
        }
 
-/*    public void enableAlert(Context context,int Id){
-        Alarm alarm= dbManager.queryById(Id);
-        AlarmManager mAlarmManager = (AlarmManager)
-                context.getSystemService(Context.ALARM_SERVICE);
-        Alarm alarm1=dbManager.queryById(Id);
-        Context CONTEXT=context;
-        int type=Id;
-        Date date=alarm.getStarttime();
-        int hour=alarm.getHour();
-        int minute=alarm.getMinute();
-        int interval= alarm.getInterval();
-        String messsage=alarm.getMessage();
-        Calendar mCalendar = cacluteNextAlarm(date,hour, minute, interval);//选择了一周中的哪几天，比如周一、周三、周四,可以用daydiffer
-        if (mCalendar.getTimeInMillis() < System.currentTimeMillis()) {
-            Toast.makeText(getContext(),"setAlarm FAIL:设置时间不能小于当前系统时间，本次"+mCalendar.getTimeInMillis()+"闹钟无效",Toast.LENGTH_LONG).show();
-            return;
+
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_plan")
+                //.url("medicine_plan")
+                .params("tel",tel)
+                .params("boxId",3333)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            convert(response);
+                            medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                            //MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter(response, sets, MedicineTakePlanDelegate.this);
+                            //medicinePlanExpandableListViewAdapter.convert(response);
+
+                            //mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+                        }
+                    }
+                })
+                .build()
+                .get();
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter( dataset,parentList,sets, MedicineTakePlanDelegate.this);
+        mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+    }
+    private void convert(String jsonString){
+
+        final JSONObject jsonObject= JSON.parseObject(jsonString);
+        //String tel=jsonObject.getString("tel");
+        final com.alibaba.fastjson.JSONObject data= jsonObject.getJSONObject("detail");
+        final JSONArray dataArray=data.getJSONArray("planlist");
+        int size=dataArray.size();
+        Log.d("size", size+"");
+        for (int i = 0; i <size ; i++) {
+
+            JSONObject jsondata= (JSONObject) dataArray.get(i);
+            parentList.add(jsondata.getString("time"));
+            JSONArray jsonArray=jsondata.getJSONArray("plans");
+            int lenght=jsonArray.size();
+            List<MedicinePlan> childrenList = new ArrayList<>();
+            for (int j = 0; j <lenght ; j++) {
+                JSONObject jsonObject1= (JSONObject) jsonArray.get(j);
+                MedicinePlan medicinePlanModel=new MedicinePlan();
+                medicinePlanModel.setAtime(jsonObject1.getString("atime"));
+                medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
+                medicinePlanModel.setId(jsonObject1.getString("id"));
+                medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
+                medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
+                medicinePlanModel.setBoxId(jsonObject1.getString("boxId"));
+
+                childrenList.add(medicinePlanModel);
+            }
+            dataset.put(parentList.get(i),childrenList);
         }
-        Intent intent = new Intent(AlarmsSetting.ALARM_ALERT_ACTION);
-        intent.putExtra("nextalarm",mCalendar.getTimeInMillis());
-        intent.putExtra("type", Id);
-        intent.putExtra("message", messsage);
-        intent.setClass(context, AlarmReceiver.class);
-        PendingIntent pi = PendingIntent.getBroadcast(context, type, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        mAlarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), pi);
-
+        Log.d("datset", dataset.toString());
     }
-
-    public static Calendar cacluteNextAlarm(Date startTime,int hour,int minute,int differDays){//可以用differDay计算下一次铃声
-
-        Calendar mCalendar = Calendar.getInstance();
-        mCalendar.setTime(startTime);
-        mCalendar.set(Calendar.HOUR_OF_DAY,hour);
-        mCalendar.set(Calendar.MINUTE, minute);
-        Log.d("diff", "diffday="+differDays+"");
-        int nextYear = getNextAlarmYear(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.DAY_OF_YEAR), mCalendar.getActualMaximum(Calendar.DAY_OF_YEAR), differDays);
-        int nextMonth = getNextAlarmMonth(mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), mCalendar.getActualMaximum(Calendar.DATE), differDays);
-        int nextDay = getNextAlarmDay(mCalendar.get(Calendar.DAY_OF_MONTH), mCalendar.getActualMaximum(Calendar.DATE), differDays);
-        Log.d("nextday", nextDay+"");
-        mCalendar.set(Calendar.YEAR,nextYear);
-        mCalendar.set(Calendar.MONTH, nextMonth % 12);//月份从0开始
-        mCalendar.set(Calendar.DAY_OF_MONTH, nextDay);
-        mCalendar.set(Calendar.SECOND, 0);
-        mCalendar.set(Calendar.MILLISECOND, 0);
-        Log.e("cal1", " mCalendar" + mCalendar.get(Calendar.DAY_OF_WEEK));
-        return mCalendar;
-    }
-    //考虑年进位的情况
-    private static int getNextAlarmYear(int year,int dayOfYears, int actualMaximum, int differDays) {
-        int temp = actualMaximum-dayOfYears-differDays;
-        return temp >= 0?year:year+1;
-    }
-
-    //考虑月进位的情况
-    private static int getNextAlarmMonth(int month,int dayOfMonth,int actualMaximum, int differDays) {
-        int temp = actualMaximum-dayOfMonth-differDays;
-        return temp >= 0?month:month+1;
-    }
-
-    //获取下次闹钟的day
-    private static int getNextAlarmDay(int thisDayOfMonth, int actualMaximum, int differDays) {
-        int temp = actualMaximum - thisDayOfMonth-differDays;
-        if (temp<0){
-            return thisDayOfMonth + differDays - actualMaximum;
-        }
-        return thisDayOfMonth + differDays;
-    }*/
 }

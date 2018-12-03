@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -75,17 +76,22 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                 .clearParams()
                 .url(url)
                 .params("tel",tel)
-                .params("boxId",boxId)
+                .params("boxId",3333)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter=new MedicinePlanExpandableListViewAdapter(response,sets,DELEGATE);
-                        MedicinePlanExpandableListViewAdapter.convert(response);
-                        PLANEXPANDABLELISTVIEW.setAdapter(medicinePlanExpandableListViewAdapter);
+                        JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            PLANEXPANDABLELISTVIEW.setAdapter((ExpandableListAdapter) null);
+                            //MedicinePlanExpandableListViewAdapter medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter(response, sets, DELEGATE);
+                            //medicinePlanExpandableListViewAdapter.convert(response);
+                            //PLANEXPANDABLELISTVIEW.setAdapter(medicinePlanExpandableListViewAdapter);
+                        }
                     }
                 })
                 .build()
-                .post();
+                .get();
     }
 /*
     public void getHistoryMore(){
@@ -133,16 +139,13 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        //Toast.makeText(Latte.getApplicationContext(),response,Toast.LENGTH_LONG).show();
                         final JSONObject object=JSON.parseObject(response);
                         final JSONObject detail=object.getJSONObject("detail");
                         final int total=detail.getInteger("total");//现在接口中为count
                         BEAN.setTotal(total);
                         //设置Adapter
                         mAdapter=MultipleRecyclerAdapter.getMedicineHistoryForDetail(CONVERTER.setJsonData(response),DELEGATE);
-                        //mAdapter.setOnLoadMoreListener(RefreshHandler.this, RECYCLERVIEW);
                         mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-                            String tel1=tel;
                             @Override
                             public void onLoadMoreRequested() {
                                 paging(UploadConfig.API_HOST+"/api/get_history",tel);
@@ -150,7 +153,6 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                             }
                         },RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
-
                         BEAN.addIndex();
                     }
                 })

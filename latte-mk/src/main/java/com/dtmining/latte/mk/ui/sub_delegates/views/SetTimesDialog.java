@@ -15,8 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.adapter.MedicineSimpleAdapter;
 
@@ -76,6 +79,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         this.cacelButtonText = cacelButtonText;
         this.mclicklistenerinterface=clicklistenerinterface;
         this.time_list=time_list;
+
         this.count_list=count_list;
     }
 
@@ -108,8 +112,14 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
             @Override
             public void handle(String time) { // 回调接口，获得选中的时间
                 Log.d("time", time);
-                time_list.add(time);
-                adapter.notifyDataSetChanged();
+                if(time_list.contains(time))
+                {
+                    Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"该时间段已有服药计划",Toast.LENGTH_LONG).show();
+                }else{
+                    time_list.add(time);
+                    adapter.notifyDataSetChanged();
+                }
+
             }
         }, "2010-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(true); // 显示时和分

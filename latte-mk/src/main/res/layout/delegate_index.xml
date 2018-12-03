@@ -107,7 +107,7 @@
                 android:divider="@color/Gray0"
                 android:dividerHeight="1px"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 />
 
         </LinearLayout>

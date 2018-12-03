@@ -5,5 +5,7 @@ public enum CallbackType {
     TAG_OPEN_PUSH,
     TAG_STOP_PUSH,
     ON_SCAN,
-    ON_BIND_BOXID
+    ON_BIND_BOXID,
+    ON_GET_MEDICINE_PLAN,
+    ON_GET_MEDICINE_HISTORY
 }
