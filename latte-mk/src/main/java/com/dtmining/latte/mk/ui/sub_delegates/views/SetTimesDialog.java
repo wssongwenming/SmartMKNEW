@@ -39,6 +39,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     private String confirmButtonText;
     private String cacelButtonText;
     private ClickListenerInterface clickListenerInterface;
+    private ArrayList<String> original_time_set;
     private CustomDatePicker customDatePicker;
     private ListView lv_set_time;
     private ArrayList<String> time_list;
@@ -72,8 +73,9 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         public void doCancel();
     }
 
-    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface) {
+    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface) {
         super(context, R.style.Theme_MYDialog);
+        this.original_time_set=original_time_set;
         this.context = context;
         this.confirmButtonText = confirmButtonText;
         this.cacelButtonText = cacelButtonText;
@@ -103,7 +105,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         //time_list.add("08:00");
         //time_list.add("12:00");
         //time_list.add("19:00");
-        adapter=new MedicineSimpleAdapter(time_list,count_list,this.context,"1",SetTimesDialog.this);
+        adapter=new MedicineSimpleAdapter(time_list,original_time_set,count_list,this.context,"1",SetTimesDialog.this);
         lv_set_time.setAdapter(adapter);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
@@ -117,6 +119,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
                     Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"该时间段已有服药计划",Toast.LENGTH_LONG).show();
                 }else{
                     time_list.add(time);
+
                     adapter.notifyDataSetChanged();
                 }
 
@@ -180,6 +183,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     }
 
     private void getUseCount(){
+        count_list.clear();
         for (int i = 0; i < lv_set_time.getChildCount(); i++) {
             LinearLayout layout = (LinearLayout)  lv_set_time.getChildAt(i);
             EditText et_content = (EditText) layout.findViewById(R.id.et_medicine_usecount_for_plan_set);
@@ -194,6 +198,8 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
             if (id == R.id.confirm) {
                 if(checkUseCount()) {//剂量没有空格
                     getUseCount();
+                    Log.d("time1", time_list.toString());
+                    Log.d("count", count_list.toString());
                     mclicklistenerinterface.doConfirm(time_list,count_list);
                 }
 

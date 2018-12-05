@@ -27,6 +27,7 @@ import com.dtmining.latte.util.regex.RegexTool;
 import com.dtmining.latte.wechat.LatteWeChat;
 import com.dtmining.latte.wechat.callbacks.IWeChatGetOpenIdCallback;
 import com.dtmining.latte.wechat.callbacks.IWeChatSignInCallback;
+import com.google.gson.JsonObject;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
@@ -54,8 +55,8 @@ public class SignInDelegate extends LatteDelegate {
     private Tencent mTencent;
     private String QQ_uid;//qq_openid
     private UserInfo userInfo;
-    private ISignListener mISignListener=null;
     private BaseUiListener listener = new BaseUiListener();
+    private ISignListener mISignListener=null;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -127,13 +128,43 @@ public class SignInDelegate extends LatteDelegate {
                 .onSignSuccess(new IWeChatSignInCallback() {
                     @Override
                     public void onSignInSuccess(String userInfo) {
-                       // Toast.makeText(getContext(),userInfo,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"8888888"+userInfo,Toast.LENGTH_LONG).show();
                         }
                         })
                 .onGetOpenIdSuccess(new IWeChatGetOpenIdCallback() {
                     @Override
                     public void onGetOpenIdSuccess(String openId) {
-                        Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
+                        JsonObject detail=new JsonObject();
+                        detail.addProperty("entry_way", EntryType.WECHAT.getEntryType());
+                        detail.addProperty("weixinOpenid",openId);
+                        JsonObject jsonObject=new JsonObject();
+                        jsonObject.add("detail",detail);
+                        RestClient.builder()
+                                .clearParams()
+                                .url(UploadConfig.API_HOST+"/api/UserLogin")
+                                .raw(jsonObject.toString())
+                                .success(new ISuccess() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                                        int code=object.getIntValue("code");
+                                         switch (code){
+                                             case 1:
+                                                 SignHandler.onSignIn(response,mISignListener);
+                                                 break;
+                                            case 5:
+                                                Toast.makeText(getContext(),"未能取得微信授权",Toast.LENGTH_LONG).show();
+                                                break;
+                                            case 6:
+                                                start(new BindWeixinForRegistedUserDelegate());
+                                                break;
+                                        }
+                                    }
+                                })
+                                .build()
+                                .post();
+
                     }
                 })
                 .signIn();

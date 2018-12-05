@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.main.aboutme;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.dtmining.latte.mk.main.aboutme.list.ListBean;
 import com.dtmining.latte.mk.main.aboutme.list.ListItemType;
 import com.dtmining.latte.mk.main.aboutme.order.OrderListDelegate;
 import com.dtmining.latte.mk.main.aboutme.profile.UserProfileDelegate;
+import com.dtmining.latte.mk.sign.ISignListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,15 @@ public class AboutMeDelegate extends BottomItemDelegate{
         delegate.setArguments(mArgs);
         getParentDelegate().start(delegate);
     }
-
+    private ISignListener mISignListener=null;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if(activity instanceof ISignListener)
+        {
+            mISignListener=(ISignListener) activity;
+        }
+    }
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         ListBean boxadd=new ListBean.Builder()
@@ -108,7 +118,7 @@ public class AboutMeDelegate extends BottomItemDelegate{
         //设置RecyclerView
         final LinearLayoutManager manager=new LinearLayoutManager(getContext());
         mRvSettings.setLayoutManager(manager);
-        final ListAdapter adapter=new ListAdapter(data,this.getParentDelegate());
+        final ListAdapter adapter=new ListAdapter(data,this.getParentDelegate(),mISignListener);
         mRvSettings.setAdapter(adapter);
     }
 

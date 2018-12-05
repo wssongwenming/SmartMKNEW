@@ -1,6 +1,7 @@
 package com.dtmining.latte.mk.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickListener{
     private ArrayList<String> time_list;
     private ArrayList<String> count_list;
+    private ArrayList<String> original_time_set;
     private Context context;
     private String method;
     private Callback mcallback;
@@ -28,11 +30,11 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
     public interface Callback {
         public void click(View v);
     }
-    public MedicineSimpleAdapter(ArrayList<String> time_list,ArrayList<String> count_list, Context context, String method, Callback callback){
-
+    public MedicineSimpleAdapter(ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, Context context, String method, Callback callback){
         this.time_list=time_list;
         this.count_list=count_list;
         this.method=method;
+        this.original_time_set=original_time_set;
         this.context=context;
         this.mcallback=callback;
     }
@@ -70,6 +72,7 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
             }
 
             holder.time.setText(time_list.get(position));
+
             if(count_list.size()>position) {
                 holder.medicineUseCount.setText(count_list.get(position));
             }
@@ -77,6 +80,16 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
             holder.btn_delete.setTag(position);
             holder.change_time.setOnClickListener(this);
             holder.change_time.setTag(position);
+            Log.d("orgin", original_time_set.toString());
+            Log.d("now", time_list.toString());
+            if(original_time_set.contains(time_list.get(position)))
+            {
+                Log.d("aa", "getView: ");
+                holder.btn_delete.setVisibility(View.INVISIBLE);
+            }else {
+                Log.d("bb", "getView: ");
+                holder.btn_delete.setVisibility(View.VISIBLE);
+            }
         }
 
         return convertView;

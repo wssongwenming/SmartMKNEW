@@ -11,6 +11,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +23,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     private AlarmsSetting alarmsSetting;
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("ids", "000000000000000");
+        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"启动了",Toast.LENGTH_LONG).show();
         alarmsSetting = new AlarmsSetting(context);
         int type = intent.getIntExtra("type",0);
         int id=intent.getIntExtra("id",0);

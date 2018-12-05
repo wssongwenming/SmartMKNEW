@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Green">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="绑定手机号码"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
+    </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="50dp">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="80dp"
+            android:text="手机号"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_add_weixin_phone"
+            android:hint="请输入手机号"
+            android:textColor="@color/Gray"
+            android:background="@null"
+            android:layout_gravity="center_vertical"
+            android:inputType="phone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_add_weixin_send_identifying_code"
+            android:layout_width="90dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@null"
+            android:text="发送验证码"
+            android:textColor="@color/Green"
+            android:layout_height="40dp" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:background="@color/Gray"
+        android:layout_height="1px" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_height="50dp">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="80dp"
+            android:text="验证码"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_add_weixin_identifying_code"
+            android:textColor="@color/Gray"
+            android:hint="请输入验证码"
+            android:inputType="phone"
+            android:background="@null"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:textSize="15sp"
+            android:layout_height="40dp" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/area_bg"
+        android:layout_height="50dp">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="80dp"
+            android:text="用户类型"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_add_weixin_user_role"
+            android:textColor="@color/Gray"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:entries="@array/roles"
+            android:textSize="15sp"
+            android:theme="@style/SpinnerStyle"
+            android:spinnerMode="dropdown"
+            android:overlapAnchor="false"
+            android:layout_height="40dp" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:background="@color/Gray"
+        android:layout_height="1px" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_add_weixin_confirm"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="50dp"
+        android:text="确定"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_bg"
+        android:layout_height="40dp" />
+</android.support.v7.widget.LinearLayoutCompat>

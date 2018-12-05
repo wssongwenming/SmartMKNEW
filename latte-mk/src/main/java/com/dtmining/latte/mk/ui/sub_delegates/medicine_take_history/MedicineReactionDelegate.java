@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
@@ -40,7 +41,7 @@ public class MedicineReactionDelegate extends LatteDelegate {
         JsonObject reactionSubModel=new JsonObject();
         reactionSubModel.add("detail",detail);
         RestClient.builder()
-                .url("")
+                .url(UploadConfig.API_HOST+"/api/reaction")
                 .clearParams()
                 .raw(reactionSubModel.toString())
                 .success(new ISuccess() {
@@ -51,7 +52,6 @@ public class MedicineReactionDelegate extends LatteDelegate {
                 })
                 .build()
                 .post();
-
     }
     @BindView(R2.id.medicine_reaction_radioGroup)
     RadioGroup radioGroup=null;
@@ -81,7 +81,7 @@ public class MedicineReactionDelegate extends LatteDelegate {
         final Bundle args = getArguments();
         if (args != null) {
             medicineUseHistoryId = args.getString(HISTORY_ID);
-            Toast.makeText(getContext(),medicineUseHistoryId+"ok",Toast.LENGTH_LONG).show();
+
         }
 
 

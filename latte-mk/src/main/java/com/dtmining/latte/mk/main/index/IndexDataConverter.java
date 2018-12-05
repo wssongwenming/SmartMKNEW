@@ -132,7 +132,6 @@ public class IndexDataConverter extends DataConverter {
         return ENTITIES;
     }
     public ArrayList<MultipleItemEntity> convertMedicineHistoryDetail(){
-        String medicineId=null;
         String medicineName=null;
         String medicineUseTime=null;
         String tel=null;

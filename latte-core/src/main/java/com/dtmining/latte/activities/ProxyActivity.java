@@ -1,11 +1,15 @@
 package com.dtmining.latte.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ContentFrameLayout;
 
 import com.dtmining.latte.R;
 import com.dtmining.latte.delegates.LatteDelegate;
+import com.dtmining.latte.util.ActivityManager;
+
+import java.lang.ref.WeakReference;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -15,6 +19,7 @@ import me.yokeyword.fragmentation.SupportActivity;
  * Description:该Activity仅仅是作为容器
  */
 public abstract class ProxyActivity extends SupportActivity{
+    private WeakReference<Activity> weakReference = null;
     //用来返回根delegate
     public abstract LatteDelegate setRootDelegate();
 
@@ -22,6 +27,10 @@ public abstract class ProxyActivity extends SupportActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initContainer(savedInstanceState);
+        if (weakReference==null) {
+            weakReference =  new WeakReference<Activity>(this);
+        }
+        ActivityManager.getInstance().addActivity(weakReference.get());
     }
     private void initContainer(@Nullable Bundle savedInstanceState){
         //一般容纳fragment的容器是framlayout
@@ -38,6 +47,7 @@ public abstract class ProxyActivity extends SupportActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ActivityManager.getInstance().removeActivity(weakReference.get());
         System.gc();
         System.runFinalization();
     }

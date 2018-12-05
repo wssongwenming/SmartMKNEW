@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- 发送短信-->
     <uses-permission android:name="android.permission.SEND_SMS" />
     <!-- 阅读消息 -->
@@ -69,6 +69,24 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!--QQ登录配置 end-->
+
+
+        <receiver android:name="com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.AlarmReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name="com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.AlarmAlertActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|navigation"
+            android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""/>
     </application>
 
 </manifest>

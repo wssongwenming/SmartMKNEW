@@ -1,10 +1,8 @@
 {
-  "status":1,
-  "msg":"success",
-  "code":0,
-  "command":"/api/get_history",
-  "detail":{
-    "histories":[
+  "code": 1,
+  "detail": {
+    "count": 14,
+    "histories": [
       {
         "boxId": "102",
         "medicineUseTime": "2018-10-17 16:52:08",
@@ -18,20 +16,64 @@
         "tel": "15620151475",
         "medicineNames": "感冒片",
         "id": "2"
-      },  {
-        "boxId": "102",
-        "medicineUseTime": "2018-10-17 16:52:08",
-        "tel": "15620151475",
-        "medicineNames": "感冒片",
-        "id": "3"
       },
       {
         "boxId": "102",
-        "medicineUseTime": "2018-10-17 12:52:08",
+        "medicineUseTime": "2018-10-17 09:52:08",
         "tel": "15620151475",
         "medicineNames": "感冒片",
-        "id": "2"
+        "id": "1"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-16 18:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "4"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-16 12:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "5"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-16 08:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "6"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-15 12:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "10"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-15 12:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "8"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-15 08:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "11"
+      },
+      {
+        "boxId": "102",
+        "medicineUseTime": "2018-10-15 08:52:08",
+        "tel": "15620151475",
+        "medicineNames": "感冒片",
+        "id": "7"
       }
     ]
-  }
+  },
+  "message": "success"
 }

@@ -92,7 +92,7 @@ public class AlarmOpreation {
         mCalendar.set(Calendar.DAY_OF_MONTH, nextDay);
         mCalendar.set(Calendar.SECOND, 0);
         mCalendar.set(Calendar.MILLISECOND, 0);
-        Log.e("cal1", " mCalendar" + mCalendar.get(Calendar.DAY_OF_WEEK));
+        Log.e("cal1", " mCalendar" + mCalendar);
         return mCalendar;
     }
     //考虑年进位的情况

@@ -3,19 +3,25 @@ package com.dtmining.latte.mk.main.aboutme.list;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.dtmining.latte.app.AccountManager;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.main.aboutme.medicineboxbind.BoxBindDelegate;
 import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineBoxesMineDelegate;
+import com.dtmining.latte.mk.sign.ISignListener;
+import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
+import com.dtmining.latte.util.ActivityManager;
+import com.dtmining.latte.util.DataCleanManager;
 
 import java.util.List;
 
@@ -31,7 +37,7 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
             .dontAnimate()
             .centerCrop();
 
-    public ListAdapter(List<ListBean> data, LatteDelegate delegate) {
+    public ListAdapter(List<ListBean> data, LatteDelegate delegate,ISignListener signListener) {
         super(data);
         this.DELEGATE=delegate;
         addItemType(ListItemType.ITEM_NORMAL, R.layout.arrow_item_layout);
@@ -100,10 +106,12 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
                 DELEGATE.start(new MedicineTakeHistoryDelegate());
                 break;
             case 7://点击了“清除缓冲”
-                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                DataCleanManager.cleanApplicationData(DELEGATE.getContext());
+                Toast.makeText(DELEGATE.getContext(),"缓冲区清除成功",Toast.LENGTH_LONG).show();
                 break;
             case 8://点击了“退出”
-                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                AccountManager.setSignState(false);
+                ActivityManager.getInstance().finishActivitys();
                 break;
         }
     }

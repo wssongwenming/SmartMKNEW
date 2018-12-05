@@ -34,20 +34,21 @@ public class BoxListDataConverter  {
 
         JSONObject jsonobject= JSON.parseObject(getJsonData());
         BOXES.add("请选择药箱Id");
-        //JSONObject jsonobject1=jsonobject.getJSONObject("detail");
         if(jsonobject!=null) {
-            JSONArray jsonarray = jsonobject.getJSONArray("detail");
+            int code = jsonobject.getIntValue("code");
+            if (code == 1) {
+                JSONArray jsonarray = jsonobject.getJSONArray("detail");
+                int size = jsonarray.size();
+                for (int i = 0; i < size; i++) {
+                    JSONObject jsonobject3 = jsonarray.getJSONObject(i);
+                    String boxid = jsonobject3.getString("boxid");
 
-            int size = jsonarray.size();
-            for (int i = 0; i < size; i++) {
-                JSONObject jsonobject3 = jsonarray.getJSONObject(i);
-                String boxid = jsonobject3.getString("boxid");
-
-                BOXES.add(boxid);
+                    BOXES.add(boxid);
+                }
             }
         }
-        Log.d("boxid", BOXES.toString());
-        return BOXES;
+            return BOXES;
+
     }
     public BoxListDataConverter setJsonData(String json){
         this.mJsonData=json;

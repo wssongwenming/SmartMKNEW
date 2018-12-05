@@ -57,6 +57,7 @@ import butterknife.OnItemSelected;
  */
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
     private MyDBOpenHelper myDBOpenHelper;
+    private ArrayList<String>original_time_set=new ArrayList<>();
     String tel=null;
     int origin_time_count_size=0;//已经添加过的的用药计划：服药时间：用量,再添加时，这部分不添加
     String boxId=null;
@@ -98,7 +99,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     void setPlanTime(){
-        setTimesDialog = new SetTimesDialog(getContext() ,timeSet,useCountSet, "确定","取消", this);
+        setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this);
         setTimesDialog.show();
     }
     //确定提交整个表单
@@ -274,6 +275,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             origin_time_count_size=size;//取得原始的数据量
             ArrayList<String> time_count=new ArrayList<>();
             for (int i = 0; i <size ; i++) {
+                original_time_set.add(timeSet.get(i));
                 time_count.add(timeSet.get(i)+"剂量:"+useCountSet.get(i));
             }
             set_time_count_tag(time_count);
@@ -345,13 +347,9 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
-                        int code=object.getIntValue("code");
-                        if(code==1) {
                             converter = new MedicineListDataConverter();
                             mAdapter = MedicineListAdapter.create(converter.setJsonData(response), R.layout.simple_single_item_list);
                             mMedicineListSpinner.setAdapter(mAdapter);
-                        }
                     }
                 })
                 .build()

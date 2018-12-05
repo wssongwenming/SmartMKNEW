@@ -105,7 +105,6 @@ public class SignUpDelegate extends LatteDelegate {
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
         //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
         role=parent.getItemAtPosition(position).toString();
-
     }
     //单击注册按钮
     @OnClick(R2.id.btn_sign_up)

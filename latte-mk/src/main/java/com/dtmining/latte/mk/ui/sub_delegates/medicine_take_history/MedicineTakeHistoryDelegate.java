@@ -68,7 +68,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         mRefreshHandler=RefreshHandler.create(mSwipeRefreshLayout,mRecyclerViewHistory,
                 null,new IndexDataConverter(),this,null);
-        medicineHistoryRecyclerViewAdapter= MultipleRecyclerAdapter.create(medicineHistoryList,this.getParentDelegate());
+        medicineHistoryRecyclerViewAdapter= MultipleRecyclerAdapter.create(medicineHistoryList,this);
         mRecyclerViewHistory.setAdapter(medicineHistoryRecyclerViewAdapter);
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         if(userProfile==null){
@@ -102,6 +102,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         initRefreshLayout();
         //mRefreshHandler.get_medicine_history("index",tel,1,20);
         get_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,20);
+        //get_medicine_history("index",tel,1,20);
     }
 
     @Override
@@ -127,7 +128,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                         if(code==1)
                         {
                             final JSONObject detail=object.getJSONObject("detail");
-                            final int total=detail.getInteger("count");//现在接口中为count
+                            final int total=detail.getInteger("total");//现在接口中为count
                             BEAN.setTotal(total);
                             convert_response_to_history(response);
                             medicineHistoryRecyclerViewAdapter.notifyDataSetChanged();
@@ -146,37 +147,36 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
     }
     private void convert_response_to_history(String jsonString){
         if(jsonString!=null) {
-            String medicineId = null;
-            String medicineName = null;
-            String medicineUseTime = null;
-            String tel = null;
-            String boxId = null;
-            String id = null;
+            String medicineName=null;
+            String medicineUseTime=null;
+            String tel=null;
+            String boxId=null;
+            String id=null;
             JSONObject jsonobject = JSON.parseObject(jsonString);
-            JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
-            JSONArray jsonarray = jsonobject1.getJSONArray("histories");
-            int size = jsonarray.size();
-            for (int i = 0; i < size; i++) {
-                JSONObject jsonobject2 = jsonarray.getJSONObject(i);
-                boxId = jsonobject2.getString("boxId");
-                medicineName = jsonobject2.getString("medicineNames");
-                medicineUseTime = jsonobject2.getString("medicineUseTime");
-                tel = jsonobject2.getString("tel");
-                id = jsonobject2.getString("id");
-                final MultipleItemEntity entity = MultipleItemEntity.builder()
-                        .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
-                        .setField(MultipleFields.SPAN_SIZE, 3)
-                        .setField(MultipleFields.MEDICINE_NAME, medicineName)
-                        .setField(MultipleFields.MEDICINEUSERTIME, medicineUseTime)
-                        .setField(MultipleFields.BOXID, boxId)
-                        .setField(MultipleFields.TEL, tel)
-                        .setField(MultipleFields.ID, id)
-                        .build();
+                JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
+                JSONArray jsonarray = jsonobject1.getJSONArray("histories");
+                int size = jsonarray.size();
+                for (int i = 0; i < size; i++) {
+                    JSONObject jsonobject2 = jsonarray.getJSONObject(i);
+                    boxId=jsonobject2.getString("boxId");
+                    medicineName=jsonobject2.getString("medicineNames");
+                    medicineUseTime=jsonobject2.getString("medicineUseTime");
+                    tel=jsonobject2.getString("tel");
+                    id=jsonobject2.getString("id");
+
+                    final MultipleItemEntity entity = MultipleItemEntity.builder()
+                            .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_HISTORY)
+                            .setField(MultipleFields.MEDICINE_NAME,medicineName)
+                            .setField(MultipleFields.MEDICINEUSERTIME,medicineUseTime)
+                            .setField(MultipleFields.BOXID,boxId)
+                            .setField(MultipleFields.TEL,tel)
+                            .setField(MultipleFields.ID,id)
+                            .build();
                     medicineHistoryList.add(entity);
                 }
-
+            }
         }
-    }
+
 
     private void paging(final String url,final String tel) {
         final int pageSize = BEAN.getPageSize();
