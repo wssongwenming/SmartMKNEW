@@ -17,7 +17,6 @@ import butterknife.BindView;
 
 
 /**
- * Created by 傅令杰
  */
 
 public class AboutDelegate extends LatteDelegate {

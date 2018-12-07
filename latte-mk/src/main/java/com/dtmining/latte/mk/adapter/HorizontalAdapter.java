@@ -69,7 +69,6 @@ public class HorizontalAdapter extends BaseAdapter{
         holder.name.setText(data.get(position).name);
         Glide.with(context)
                 .load(data.get(position).url)
-
                 .apply(REQUEST_OPTIONS)
                 .into(holder.imageView);
          return convertView;

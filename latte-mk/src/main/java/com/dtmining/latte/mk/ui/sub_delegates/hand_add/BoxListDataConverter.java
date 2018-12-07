@@ -41,8 +41,7 @@ public class BoxListDataConverter  {
                 int size = jsonarray.size();
                 for (int i = 0; i < size; i++) {
                     JSONObject jsonobject3 = jsonarray.getJSONObject(i);
-                    String boxid = jsonobject3.getString("boxid");
-
+                    String boxid = jsonobject3.getString("boxId");
                     BOXES.add(boxid);
                 }
             }

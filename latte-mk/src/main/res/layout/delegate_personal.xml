@@ -4,11 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/app_background">
 
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <!--头像部分-->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,8 +25,9 @@
                 android:layout_marginTop="30dp"
                 android:src="@mipmap/avatar" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
+                android:id="@+id/tv_about_me_username"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
@@ -32,14 +35,14 @@
                 android:text="测试用户"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
-
         </RelativeLayout>
 
+        </android.support.v7.widget.LinearLayoutCompat>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_personal_setting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp" />
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
 </ScrollView>

@@ -1,27 +1,41 @@
 package com.dtmining.latte.mk.main.aboutme.list;
 
+import android.app.Activity;
+import android.content.Context;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.dtmining.latte.app.AccountManager;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.main.aboutme.medicineboxbind.BoxBindDelegate;
 import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineBoxesMineDelegate;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.main.aboutme.usermessage.UserMessageDelegate;
 import com.dtmining.latte.mk.sign.ISignListener;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
+import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.ActivityManager;
 import com.dtmining.latte.util.DataCleanManager;
+import com.google.gson.JsonObject;
+import com.hmy.popwindow.PopItemAction;
+import com.hmy.popwindow.PopWindow;
 
 import java.util.List;
 
@@ -31,15 +45,17 @@ import java.util.List;
  * Description:
  */
 public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHolder> {
+    private String tel;
     private final LatteDelegate DELEGATE;
     private static final RequestOptions OPTIONS = new RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .dontAnimate()
             .centerCrop();
 
-    public ListAdapter(List<ListBean> data, LatteDelegate delegate,ISignListener signListener) {
+    public ListAdapter(List<ListBean> data, LatteDelegate delegate,ISignListener signListener,String tel) {
         super(data);
         this.DELEGATE=delegate;
+        this.tel=tel;
         addItemType(ListItemType.ITEM_NORMAL, R.layout.arrow_item_layout);
         addItemType(ListItemType.ITEM_WITH_IMAGE, R.layout.arrow_item_with_image);
         addItemType(ListItemType.ITEM_AVATAR, R.layout.arrow_item_avatar);
@@ -84,8 +100,8 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
     }
 
     private void showContent(int Id){
-        final int id=Id;
-        switch (id)
+
+        switch (Id)
         {
             case 1://点击了“添加药箱”
                 DELEGATE.start(new AddMedicineBoxDelegate());
@@ -100,10 +116,53 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
                 DELEGATE.start(new MedicineTakeHistoryDelegate());
                 break;
             case 5://点击了“用户消息”
-                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                DELEGATE.start(new UserMessageDelegate());
                 break;
             case 6://点击了“反馈”
-                DELEGATE.start(new MedicineTakeHistoryDelegate());
+                final View customView = View.inflate((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), R.layout.delegate_user_feedback_pop, null);
+                PopWindow popWindow = new PopWindow.Builder((Activity) Latte.getConfiguration(ConfigKeys.ACTIVITY))
+                        .setStyle(PopWindow.PopWindowStyle.PopUp)
+                        .setTitle("反馈意见")
+                        .addContentView(customView)
+                        .addItemAction(new PopItemAction("确定", PopItemAction.PopItemStyle.Warning, new PopItemAction.OnClickListener() {
+                            @Override
+                            public void onClick() {
+                                AppCompatEditText mMessage= (AppCompatEditText) customView.findViewById(R.id.et_feedback_message);
+                                String message=mMessage.getText().toString();
+                                if(!message.isEmpty())
+                                {
+                                    JsonObject detail=new JsonObject();
+                                    detail.addProperty("responseinfo",message);
+                                    detail.addProperty("tel",tel);
+                                    JsonObject messageJson=new JsonObject();
+                                    messageJson.add("detail",detail);
+                                    RestClient.builder()
+                                            .clearParams()
+                                            .url(UploadConfig.API_HOST+"/api/response_info")
+                                            .raw(messageJson.toString())
+                                            .success(new ISuccess() {
+                                                @Override
+                                                public void onSuccess(String response) {
+                                                    int code= JSON.parseObject(response).getIntValue("code");
+                                                    if(code==1){
+                                                        Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"信息反馈成功",Toast.LENGTH_LONG).show();
+                                                    }
+                                                }
+                                            })
+                                            .build()
+                                            .post();
+
+                                }
+                                else
+                                {Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"信息反馈未成功",Toast.LENGTH_LONG).show();
+
+                                    mMessage.setError("请输入反馈信息");
+                                }
+                            }
+                        }))
+                        .addItemAction(new PopItemAction("取消", PopItemAction.PopItemStyle.Cancel))
+                        .create();
+                popWindow.show();
                 break;
             case 7://点击了“清除缓冲”
                 DataCleanManager.cleanApplicationData(DELEGATE.getContext());

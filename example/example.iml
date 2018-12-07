@@ -177,6 +177,7 @@
     <orderEntry type="library" name="Gradle: com.github.f0ris.sweetalert:library-1.5.1" level="project" />
     <orderEntry type="module" module-name="latte-core" />
     <orderEntry type="module" module-name="latte-mk" />
+    <orderEntry type="module" module-name="library" />
     <orderEntry type="module" module-name="latte-annotations" />
   </component>
 </module>

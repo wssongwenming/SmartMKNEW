@@ -32,5 +32,8 @@ public class ItemType {
     public static final int MEDICINE_HISTORY=19;
     public static final int MEDICINE_SUMMARY=20;
     public static final int BODY_SITUATION=30;
+    public static final int MEDICINE_USE_MESSAGE=31;
+    public static final int MEDICINE_SUPPLY_MESSAGE=32;
+    public static final int MEDICINE_OVERDUE_MESSAGE=33;
 
 }

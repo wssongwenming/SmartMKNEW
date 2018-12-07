@@ -21,9 +21,7 @@ public class SignHandler {
         final JSONObject profileJson= JSON.parseObject(response).getJSONObject("detail");
         final long tel=Long.parseLong(profileJson.getString("tel"));
         final String role=profileJson.getString("role");
-
         final UserProfile localUser=new UserProfile( tel, null, null, role,null);
-
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);
         Latte.getConfigurations().put(ConfigKeys.LOCAL_USER,localUser);

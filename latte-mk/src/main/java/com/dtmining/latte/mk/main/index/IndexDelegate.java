@@ -118,7 +118,6 @@ public class IndexDelegate extends BottomItemDelegate {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
-
         if(userProfile==null){
             startWithPop(new SignInDelegate());
         }else {
@@ -362,7 +361,6 @@ public class IndexDelegate extends BottomItemDelegate {
                     medicineUseTime = jsonobject2.getString("medicineUseTime");
                     tel = jsonobject2.getString("tel");
                     id = jsonobject2.getString("id");
-
                     final MultipleItemEntity entity = MultipleItemEntity.builder()
                             .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
                             .setField(MultipleFields.SPAN_SIZE, 3)

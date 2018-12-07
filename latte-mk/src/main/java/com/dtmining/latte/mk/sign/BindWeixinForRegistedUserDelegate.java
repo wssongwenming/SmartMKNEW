@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
@@ -61,6 +63,7 @@ public class BindWeixinForRegistedUserDelegate extends LatteDelegate {
             detail.addProperty("weixinOpenid",openId);
             JsonObject submitJson=new JsonObject();
             submitJson.add("detail",detail);
+            Log.d("json", submitJson+"");
             RestClient.builder()
                     .url(UploadConfig.API_HOST+"/api/bindOpenid")
                     .clearParams()
@@ -68,14 +71,17 @@ public class BindWeixinForRegistedUserDelegate extends LatteDelegate {
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                            Log.d("response", response);
+                            JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
+                            Log.d("code", openId+"");
                             switch (code){
                                 case 1:
                                     SignHandler.onSignIn(response,mISignListener);
                                     break;
                                 case 3:
-                                    start(new AddWeixinForUnregistedUserDelegate());
+                                    start(AddWeixinForUnregistedUserDelegate.newInstance(openId));
+
                                     break;
                               }
                         }

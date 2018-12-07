@@ -72,7 +72,7 @@ public class SettingsDelegate extends LatteDelegate {
         //设置RecyclerView
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        final ListAdapter adapter = new ListAdapter(data,this.getParentDelegate(),null);
+        final ListAdapter adapter = new ListAdapter(data,this.getParentDelegate(),null,null);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new SettingsClickListener(this));
     }

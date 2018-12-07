@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
@@ -92,7 +93,17 @@ public class SignUpDelegate extends LatteDelegate {
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            switch (code)
+                            {
+                                case 200:
+                                    Toast.makeText(getContext(),"短信发送失败",Toast.LENGTH_LONG).show();
+                                    break;
+                                case 201:
+                                    Toast.makeText(getContext(),"接口异常，请联系管理员",Toast.LENGTH_LONG).show();
+                                    break;
+                            }
                         }
                     })
                     .build()

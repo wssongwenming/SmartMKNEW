@@ -61,21 +61,19 @@ public class MedicineBoxesMineRefreshHandler implements SwipeRefreshLayout.OnRef
         },2000);
     }
 
-    public void firstPage_medicine_boxes(String url){
+    public void firstPage_medicine_boxes(String url,String tel){
         //BEAN.setDelayed(1000);
 
         RestClient.builder()
                 .url(url)
+                .clearParams()
+                .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        Toast.makeText(Latte.getApplicationContext(),response, Toast.LENGTH_LONG).show();
-                         final JSONObject object= JSON.parseObject(response);
-                        /*BEAN.setTotal(object.getInteger("total"))
-                                .setPageSize(object.getInteger("page_size"));*/
-                        //设置Adapter
+
+                        final JSONObject object= JSON.parseObject(response);
                         MedicineBoxesMineAdapter mAdapter=MedicineBoxesMineAdapter.create(CONVERTER.setJsonData(response),DELEGATE);
-                        //mAdapter.setOnLoadMoreListener(MedicineBoxesMineRefreshHandler.this,RECYCLERVIEW);
                         RECYCLERVIEW.setAdapter(mAdapter);
                         BEAN.addIndex();
                     }

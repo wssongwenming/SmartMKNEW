@@ -312,7 +312,6 @@ public class HandAddDelegate extends LatteDelegate {
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
-
                                         medicineImage = JSON.parseObject(response).getJSONObject("detail")
                                                 .getString("path");
 

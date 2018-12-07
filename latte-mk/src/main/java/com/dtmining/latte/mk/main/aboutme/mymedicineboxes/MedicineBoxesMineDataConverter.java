@@ -1,10 +1,14 @@
 package com.dtmining.latte.mk.main.aboutme.mymedicineboxes;
 
+import android.content.Context;
 import android.provider.ContactsContract;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
@@ -26,30 +30,41 @@ public class MedicineBoxesMineDataConverter extends DataConverter {
     @Override
     public ArrayList<MultipleItemEntity> convert() {
         if(getJsonData()!=null) {
-            final JSONObject jsonObject = JSON.parseObject(getJsonData());
-            String tel = jsonObject.getString("tel");
-            final JSONArray dataArray = jsonObject.getJSONArray("detail");
-            final int size = dataArray.size();
-            for (int i = 0; i <size ; i++) {
-                JSONObject data = (JSONObject) dataArray.get(i);
-                String onUse=data.getString("onUse");
-                String pause=data.getString("pause");
-                String boxId=data.getString("boxId");
-                String overDue=data.getString("overDue");
-                int type = ItemType.MEDICINE_BOX;
-                final MultipleItemEntity entity = MultipleItemEntity.builder()
-                        .setField(MultipleFields.ITEM_TYPE, type)
-                        .setField(MultipleFields.ONUSE,onUse)
-                        .setField(MultipleFields.PAUSE,pause)
-                        .setField(MultipleFields.TEL,tel)
-                        .setField(MultipleFields.BOXID,boxId)
-                        .setField(MultipleFields.OVERDUE,overDue)
-                        .build();
-                ENTITIES.add(entity);
+            JSONObject object = JSON.parseObject(getJsonData());
+            int code = object.getIntValue("code");
+            switch (code) {
+                case 1:
+                    final JSONObject jsonObject = JSON.parseObject(getJsonData());
+                    String tel = jsonObject.getString("tel");
+                    final JSONArray dataArray = jsonObject.getJSONArray("detail");
+                    final int size = dataArray.size();
+                    for (int i = 0; i < size; i++) {
+                        JSONObject data = (JSONObject) dataArray.get(i);
+                        String onUse = data.getString("onUse");
+                        String pause = data.getString("pause");
+                        String boxId = data.getString("boxId");
+                        String overDue = data.getString("overDue");
+                        int type = ItemType.MEDICINE_BOX;
+                        final MultipleItemEntity entity = MultipleItemEntity.builder()
+                                .setField(MultipleFields.ITEM_TYPE, type)
+                                .setField(MultipleFields.ONUSE, onUse)
+                                .setField(MultipleFields.PAUSE, pause)
+                                .setField(MultipleFields.TEL, tel)
+                                .setField(MultipleFields.BOXID, boxId)
+                                .setField(MultipleFields.OVERDUE, overDue)
+                                .build();
+                        ENTITIES.add(entity);
+                    }
+                    break;
+                case 17:
+                    Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品信息",Toast.LENGTH_LONG).show();
+                    break;
+
             }
         }
-        return ENTITIES;
-    }
+            return ENTITIES;
+        }
+
 
     @Override
     public ArrayList<MultipleItemEntity> convertMedicineHistory() {

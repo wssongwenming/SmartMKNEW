@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.dtmining.latte.app.AccountManager;
 import com.dtmining.latte.app.ConfigKeys;
@@ -55,8 +56,10 @@ public class ExampleApp  extends Application{
     }
     private void initLoginState(){
          this.mLocalUser = getModel();
+         Toast.makeText(getApplicationContext(),"qidong",Toast.LENGTH_LONG).show();
          if(mLocalUser!=null) {
              Latte.getConfigurations().put(ConfigKeys.LOCAL_USER, mLocalUser);
+             Toast.makeText(getApplicationContext(),"qidong111111111111",Toast.LENGTH_LONG).show();
              AccountManager.setSignState(true);
          }else{
              AccountManager.setSignState(false);

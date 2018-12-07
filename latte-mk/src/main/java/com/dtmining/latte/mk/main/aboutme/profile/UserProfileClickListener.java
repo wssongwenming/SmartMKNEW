@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.main.aboutme.profile;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,20 +52,18 @@ public class UserProfileClickListener extends SimpleClickListener {
                                 Glide.with(DELEGATE)
                                         .load(args)
                                         .into(avatar);
-
                                 RestClient.builder()
-                                        .url(UploadConfig.UPLOAD_IMG)
+                                        .url(UploadConfig.API_HOST+"/api/fileupload")
                                         .loader(DELEGATE.getContext())
                                         .file(args.getPath())
                                         .success(new ISuccess() {
                                             @Override
                                             public void onSuccess(String response) {
-                                                LatteLogger.d("ON_CROP_UPLOAD", response);
-                                                final String path = JSON.parseObject(response).getJSONObject("result")
-                                                        .getString("path");
-
+                                                LatteLogger.d("UPLOAD", response);
+                                                final String path = JSON.parseObject(response).toString();
+                                                Log.d("path", path);
                                                 //通知服务器更新信息
-                                                RestClient.builder()
+                                 /*               RestClient.builder()
                                                         .url("user_profile.php")
                                                         .params("avatar", path)
                                                         .loader(DELEGATE.getContext())
@@ -76,7 +75,7 @@ public class UserProfileClickListener extends SimpleClickListener {
                                                             }
                                                         })
                                                         .build()
-                                                        .post();
+                                                        .post();*/
                                             }
                                         })
                                         .build()

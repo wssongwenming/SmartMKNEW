@@ -179,6 +179,7 @@
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:annotations:4.0.0-RC0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.f0ris.sweetalert:library-1.5.1" level="project" />
     <orderEntry type="module" module-name="latte-core" />
+    <orderEntry type="module" module-name="library" />
     <orderEntry type="module" module-name="latte-annotations" />
   </component>
 </module>

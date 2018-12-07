@@ -116,7 +116,6 @@ public class IndexDataConverter extends DataConverter {
                 medicineUseTime=jsonobject2.getString("medicineUseTime");
                 tel=jsonobject2.getString("tel");
                 id=jsonobject2.getString("id");
-
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
                         .setField(MultipleFields.SPAN_SIZE, 3)
@@ -148,8 +147,7 @@ public class IndexDataConverter extends DataConverter {
                 medicineName=jsonobject2.getString("medicineNames");
                 medicineUseTime=jsonobject2.getString("medicineUseTime");
                 tel=jsonobject2.getString("tel");
-                id=jsonobject2.getString("id");
-
+                id=jsonobject2.getString ("id");
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_HISTORY)
                         .setField(MultipleFields.MEDICINE_NAME,medicineName)

@@ -34,8 +34,6 @@ public class UserProfileDelegate extends LatteDelegate {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, @NonNull View rootView) {
 
-
-
         final ListBean image = new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_AVATAR)
                 .setId(1)
@@ -69,11 +67,10 @@ public class UserProfileDelegate extends LatteDelegate {
         data.add(name);
         data.add(gender);
         data.add(birth);
-
         //设置RecyclerView
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        final ListAdapter adapter = new ListAdapter(data,this.getParentDelegate(),null);
+        final ListAdapter adapter = new ListAdapter(data,this.getParentDelegate(),null,null);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new UserProfileClickListener(this));
     }

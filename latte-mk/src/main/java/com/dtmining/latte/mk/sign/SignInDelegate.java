@@ -2,6 +2,7 @@ package com.dtmining.latte.mk.sign;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -128,13 +129,13 @@ public class SignInDelegate extends LatteDelegate {
                 .onSignSuccess(new IWeChatSignInCallback() {
                     @Override
                     public void onSignInSuccess(String userInfo) {
-                        Toast.makeText(getContext(),"8888888"+userInfo,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(),"8888888"+userInfo,Toast.LENGTH_LONG).show();
                         }
                         })
                 .onGetOpenIdSuccess(new IWeChatGetOpenIdCallback() {
                     @Override
-                    public void onGetOpenIdSuccess(String openId) {
-                        //Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
+                    public void onGetOpenIdSuccess(final String openId) {
+                        Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
                         JsonObject detail=new JsonObject();
                         detail.addProperty("entry_way", EntryType.WECHAT.getEntryType());
                         detail.addProperty("weixinOpenid",openId);
@@ -157,7 +158,7 @@ public class SignInDelegate extends LatteDelegate {
                                                 Toast.makeText(getContext(),"未能取得微信授权",Toast.LENGTH_LONG).show();
                                                 break;
                                             case 6:
-                                                start(new BindWeixinForRegistedUserDelegate());
+                                                start(BindWeixinForRegistedUserDelegate.newInstance(openId));
                                                 break;
                                         }
                                     }
@@ -179,6 +180,12 @@ public class SignInDelegate extends LatteDelegate {
             mTencent.login((Activity) Latte.getConfiguration(ConfigKeys.ACTIVITY), "all", listener);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Tencent.onActivityResultData(requestCode,resultCode,data,new BaseUiListener());
+    }
+
     //尚未注册
     @OnClick(R2.id.tv_link_sign_up)
     void onClickLink(){
@@ -207,18 +214,14 @@ public class SignInDelegate extends LatteDelegate {
     public Object setLayout() {
         return R.layout.delegate_sign_in;
     }
-
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        String qq_app_id=Latte.getConfiguration(ConfigKeys.QQ_APP_ID).toString();
-        Context applicationContext=(Context)Latte.getConfigurations().get(ConfigKeys.APPLICATION_CONTEXT);
-        mTencent = Tencent.createInstance(qq_app_id,applicationContext);
+
      }
     class BaseUiListener implements IUiListener {
-
         @Override
         public void onComplete(Object o) {
-            Log.d("授权:",o.toString());
+            Log.d("授权",o.toString());
             try {
                 org.json.JSONObject jsonObject = new org.json.JSONObject(o.toString());
                 initOpenidAndToken(jsonObject);
@@ -238,6 +241,15 @@ public class SignInDelegate extends LatteDelegate {
             Log.d("onCancel","cancel");
         }
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        String qq_app_id=Latte.getConfiguration(ConfigKeys.QQ_APP_ID).toString();
+        Context applicationContext=(Context)Latte.getConfigurations().get(ConfigKeys.APPLICATION_CONTEXT);
+        mTencent = Tencent.createInstance(qq_app_id,applicationContext);
+    }
+
     /**
      * 获取登录QQ腾讯平台的权限信息(用于访问QQ用户信息)
      * @param jsonObject
@@ -251,6 +263,7 @@ public class SignInDelegate extends LatteDelegate {
                     && !TextUtils.isEmpty(openId)) {
                 mTencent.setAccessToken(token, expires);
                 mTencent.setOpenId(openId);
+                Log.d("openId", openId+"");
                 QQ_uid = openId;
             }
         } catch(Exception e) {

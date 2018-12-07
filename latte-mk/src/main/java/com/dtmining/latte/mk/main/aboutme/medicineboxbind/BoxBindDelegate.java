@@ -16,6 +16,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListDataConverter;
@@ -96,7 +97,7 @@ public class BoxBindDelegate extends LatteDelegate {
     }
     private void getBoxId(){
         RestClient.builder()
-                .url("http://10.0.2.2:8081/Web01_exec/get_box")
+                .url(UploadConfig.API_HOST+"/api/get_boxes")
                 .params("tel",tel)
                 .success(new ISuccess() {
                     @Override

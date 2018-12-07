@@ -13,6 +13,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.recycler.MyDecoration;
@@ -70,6 +71,6 @@ public class MedicineBoxesMineDelegate extends LatteDelegate {
         super.onLazyInitView(savedInstanceState);
         initRefreshLayout();
         initRecyclerView();
-        mRefreshHandler.firstPage_medicine_boxes("medicine_boxes");
+        mRefreshHandler.firstPage_medicine_boxes(UploadConfig.API_HOST+"/api/get_box",tel);
     }
 }

@@ -87,12 +87,10 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
             case SIGNED:
                 Toast.makeText(this, "启动结束用户已登陆", Toast.LENGTH_SHORT).show();
                 startWithPop(new MkBottomDelegate());
-
                 break;
             case NOT_SIGNED:
                 Toast.makeText(this, "启动结束用户未登陆", Toast.LENGTH_SHORT).show();
                 startWithPop(new SignInDelegate());
-
                 break;
             default:
                 break;
