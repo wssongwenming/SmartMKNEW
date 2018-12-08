@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.SimpleClickListener;
@@ -23,19 +24,24 @@ import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.log.LatteLogger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  */
 
 public class UserProfileClickListener extends SimpleClickListener {
 
     private final UserProfileDelegate DELEGATE;
+    private UserInfo userInfo;
 
     private String[] mGenders = new String[]{"男", "女", "保密"};
-
-    public UserProfileClickListener(UserProfileDelegate DELEGATE) {
+    private String[] roles=new String[]{"病人", "医生", "家属"};
+    public UserProfileClickListener(UserProfileDelegate DELEGATE,UserInfo userInfo ) {
         this.DELEGATE = DELEGATE;
-    }
+        this.userInfo=userInfo;
 
+    }
     @Override
     public void onItemClick(final BaseQuickAdapter adapter, final View view, int position) {
         final ListBean bean = (ListBean) baseQuickAdapter.getData().get(position);
@@ -59,10 +65,12 @@ public class UserProfileClickListener extends SimpleClickListener {
                                         .success(new ISuccess() {
                                             @Override
                                             public void onSuccess(String response) {
-                                                LatteLogger.d("UPLOAD", response);
-                                                final String path = JSON.parseObject(response).toString();
-                                                Log.d("path", path);
-                                                //通知服务器更新信息
+                                                if (response != null) {
+                                                    final JSONObject responseObject = JSON.parseObject(response);
+                                                    int code = responseObject.getIntValue("code");
+                                                    if (code == 1) {
+                                                        String imgUrl=responseObject.getString("url");
+                                                        //通知服务器更新信息
                                  /*               RestClient.builder()
                                                         .url("user_profile.php")
                                                         .params("avatar", path)
@@ -76,6 +84,8 @@ public class UserProfileClickListener extends SimpleClickListener {
                                                         })
                                                         .build()
                                                         .post();*/
+                                                    }
+                                                }
                                             }
                                         })
                                         .build()
@@ -109,6 +119,16 @@ public class UserProfileClickListener extends SimpleClickListener {
                 });
                 dateDialogUtil.showDialog(DELEGATE.getContext());
                 break;
+            case 5:
+                getRoleDialog(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final TextView textView = (TextView) view.findViewById(R.id.tv_arrow_value);
+                        textView.setText(roles[which]);
+                        dialog.cancel();
+                    }
+                });
+                break;
             default:
                 break;
         }
@@ -119,6 +139,12 @@ public class UserProfileClickListener extends SimpleClickListener {
         builder.setSingleChoiceItems(mGenders, 0, listener);
         builder.show();
     }
+    private void getRoleDialog(DialogInterface.OnClickListener listener) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DELEGATE.getContext());
+        builder.setSingleChoiceItems(roles, 0, listener);
+        builder.show();
+    }
+
 
     @Override
     public void onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
@@ -134,4 +160,5 @@ public class UserProfileClickListener extends SimpleClickListener {
     public void onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
 
     }
+
 }

@@ -160,7 +160,6 @@ public class IndexDelegate extends BottomItemDelegate {
                                 if(code==1) {
                                     medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
                                     convert_response_to_plan(response);
-                                    Toast.makeText(getContext(),"11",Toast.LENGTH_LONG).show();
                                     medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
                                 }
                             }
@@ -255,7 +254,7 @@ public class IndexDelegate extends BottomItemDelegate {
         initBanner();
         getMedicinePlan();
         getMedicineHistory();
-        //mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
+        mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
         //mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
 
     }

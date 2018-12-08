@@ -32,6 +32,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePla
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -103,6 +104,9 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
         addItemType(ItemType.MEDICINE_OVER_DUE,R.layout.item_medicine_overdue);
         addItemType(ItemType.MEDICINE_HISTORY,R.layout.item_medicine_history);
         addItemType(ItemType.MEDICINE_SUMMARY,R.layout.item_medicine_summary);
+        addItemType(ItemType.MEDICINE_USE_MESSAGE,R.layout.item_user_message);
+        addItemType(ItemType.MEDICINE_OVERDUE_MESSAGE,R.layout.item_user_message);
+        addItemType(ItemType.MEDICINE_SUPPLY_MESSAGE,R.layout.item_user_message);
         //设置宽度监听,只要参数实现了SpanSizeLookup接口
         setSpanSizeLookup(this);
         openLoadAnimation();
@@ -311,6 +315,31 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
 
                     mIsInitBanner=true;
                 }
+                break;
+            case ItemType.MEDICINE_USE_MESSAGE:
+                String title=entity.getField(MultipleFields.MEDICINE_USE_MESSAGE_TITLE);
+                String time=entity.getField(MultipleFields.MEDICINE_USE_MESSAGE_TIME);
+                String content=entity.getField(MultipleFields.MEDICINE_USE_MESSAGE_CONTENT);
+                Log.d("use", title+":"+time+":"+content);
+                holder.setText(R.id.tv_message_title,title);
+                holder.setText(R.id.tv_message_time,time.toString());
+                holder.setText(R.id.tv_message_content,content);
+                break;
+            case ItemType.MEDICINE_OVERDUE_MESSAGE:
+                String title1=entity.getField(MultipleFields.MEDICINE_OVERDUE_MESSAGE_TITLE);
+                String time1=entity.getField(MultipleFields.MEDICINE_OVERDUE_MESSAGE_TIME);
+                String content1=entity.getField(MultipleFields.MEDICINE_OVERDUE_MESSAGE_CONTENT);
+                holder.setText(R.id.tv_message_title,title1);
+                holder.setText(R.id.tv_message_time, time1.toString());
+                holder.setText(R.id.tv_message_content,content1);
+                break;
+            case ItemType.MEDICINE_SUPPLY_MESSAGE:
+                String title2=entity.getField(MultipleFields.MEDICINE_SUPPLY_MESSAGE_TITLE);
+                String time2=entity.getField(MultipleFields.MEDICINE_SUPPLY_MESSAGE_TIME);
+                String content2=entity.getField(MultipleFields.MEDICINE_SUPPLY_MESSAGE_CONTENT);
+                holder.setText(R.id.tv_message_title,title2);
+                holder.setText(R.id.tv_message_time, time2.toString());
+                holder.setText(R.id.tv_message_content,content2);
                 break;
             case ItemType.MEDICINE_SUMMARY:
                 medicineUserCount=entity.getField(MultipleFields.MEDICINE_USERCOUNT);

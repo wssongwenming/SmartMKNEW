@@ -19,9 +19,22 @@ public class ListBean implements MultiItemEntity {
     private LatteDelegate mDelegate = null;
     private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = null;
 
-    public ListBean(int mItemType,int mImage, String mImageUrl, String mText, String mValue, int mId, LatteDelegate mDelegate, CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener) {
+    public void setImageUrl(String mImageUrl) {
+        this.mImageUrl = mImageUrl;
+    }
+
+    public void setValue(String mValue) {
+        this.mValue = mValue;
+    }
+
+    public void setImage(int mImage) {
+        this.mImage = mImage;
+    }
+
+    public ListBean(int mItemType, int mImage, String mImageUrl, String mText, String mValue, int mId, LatteDelegate mDelegate, CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener) {
         this.mItemType = mItemType;
         this.mImageUrl = mImageUrl;
+
         this.mText = mText;
         this.mValue = mValue;
         this.mId = mId;

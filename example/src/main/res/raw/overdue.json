@@ -1,0 +1,11 @@
+{
+  "code": 1,
+  "detail": [
+    {
+      "medicineId": "7164491c3ca647229a724b6c43e425e5",
+      "medicineName": "感冒冲剂",
+      "boxId": "3333"
+    }
+  ],
+  "message": "success"
+}

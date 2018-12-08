@@ -123,7 +123,6 @@ public class HandAddDelegate extends LatteDelegate {
             MedicineModel medicineModel=new MedicineModel();
             MedicineAddModel medicineAddModel=new MedicineAddModel();
             medicineModel.setBoxId(boxId);
-            medicineModel.setBoxId("3333");
             medicineModel.setDayInterval(interval);
             medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
             medicineModel.setMedicineCode(mMedicineCode.getText().toString());
@@ -240,7 +239,7 @@ public class HandAddDelegate extends LatteDelegate {
             mMedicineUseCount.setError(null);
         }
         TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
-        /*if(textView!=null){
+        if(textView!=null){
             if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
             {
                 textView.setError("请选择药箱Id");
@@ -249,7 +248,7 @@ public class HandAddDelegate extends LatteDelegate {
             }else {
                 textView.setError(null);
             }
-        }*/
+        }
 
         return isPass;
     }
@@ -300,13 +299,13 @@ public class HandAddDelegate extends LatteDelegate {
                         BitmapFactory.Options opts = new BitmapFactory.Options();
                         File imageFile = new File(args.getPath());
                         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), opts);
-                        File file=new File(fileDir,new Random()+"99"+"jpeg");
+                        File file=new File(fileDir,new Random()+"jpeg");
                         compressImage2FileBySize(bitmap,file,19);
                         Glide.with(getContext())
                                 .load(file)
                                 .into(mMedicineImage);
                         RestClient.builder()
-                                .url(UploadConfig.UPLOAD_IMG)
+                                .url(UploadConfig.API_HOST+"/api/fileupload")
                                 .loader(getContext())
                                 .file(file.getPath())
                                 .success(new ISuccess() {
@@ -358,20 +357,22 @@ public class HandAddDelegate extends LatteDelegate {
 
     private void getBoxIdList(){
         RestClient.builder()
-                .url("http://10.0.2.2:8081/Web01_exec/get_box")
+                .url(UploadConfig.API_HOST+"/api/get_boxes")
                 .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                      converter=new BoxListDataConverter();
-                      mAdapter= BoxListAdapter.create(converter.setJsonData(response),R.layout.simple_single_item_list);
-                      mBoxidSpinner.setAdapter(mAdapter);
+                        converter=new BoxListDataConverter();
+                        mAdapter= BoxListAdapter.create(converter.setJsonData(response),R.layout.simple_single_item_list);
+                        mBoxidSpinner.setAdapter(mAdapter);
                     }
                 })
                 .build()
                 .get();
 
     }
+
+
     public void compressImage2FileBySize(Bitmap bmp , File file,int kb)
     {
 

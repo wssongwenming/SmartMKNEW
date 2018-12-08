@@ -16,7 +16,6 @@
         android:background="@drawable/bg_edittext_selector"
         android:hint="请输入反馈意见"
         android:padding="5dip"
-        android:singleLine="true"
         android:textColorHint="#AAAAAA"
         android:textSize="15dip" />
 </android.support.v7.widget.LinearLayoutCompat>
