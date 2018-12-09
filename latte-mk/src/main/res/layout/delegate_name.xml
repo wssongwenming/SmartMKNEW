@@ -28,6 +28,7 @@
 
         <android.support.v7.widget.AppCompatEditText
             android:layout_width="0dp"
+            android:id="@+id/et_userprofile_name"
             android:layout_height="match_parent"
             android:layout_weight="6"
             android:background="@null"
@@ -49,5 +50,16 @@
         android:text="提交"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
-
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_name_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/holo_orange_dark"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
 </android.support.v7.widget.LinearLayoutCompat>

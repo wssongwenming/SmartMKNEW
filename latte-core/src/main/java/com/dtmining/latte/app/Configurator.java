@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 
 import com.blankj.utilcode.util.Utils;
+import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.util.handler.MyHandler;
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;
@@ -126,6 +127,11 @@ public class Configurator {
     public final Configurator withActivity(Activity activity)
     {
         LATTE_CONFIGS.put(ConfigKeys.ACTIVITY,activity);
+        return this;
+    }
+    public final Configurator withDelegate(LatteDelegate delegate)
+    {
+        LATTE_CONFIGS.put(ConfigKeys.ABOUNTMEDELEGATE,delegate);
         return this;
     }
     public final <T> Configurator withLocalUser(T userProfile ){

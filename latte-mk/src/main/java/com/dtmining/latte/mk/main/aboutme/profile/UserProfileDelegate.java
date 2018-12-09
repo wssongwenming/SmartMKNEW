@@ -23,6 +23,7 @@ import com.dtmining.latte.mk.main.aboutme.list.ListBean;
 import com.dtmining.latte.mk.main.aboutme.list.ListItemType;
 import com.dtmining.latte.mk.main.aboutme.settings.NameDelegate;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineReactionDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 
@@ -32,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 
 
-public class UserProfileDelegate extends LatteDelegate {
+public class UserProfileDelegate  extends LatteDelegate implements NameDelegate.RefreshListener  {
     String tel=null;
     final List<ListBean> data = new ArrayList<>();
     UserInfo userInfo=new UserInfo();
@@ -87,6 +88,7 @@ public class UserProfileDelegate extends LatteDelegate {
                 .build();
         final ListBean TEL=new ListBean.Builder()
                 .setItemType(ListItemType.TEL)
+                .setValue(tel)
                 .setId(6)
                 .build();
         data.add(image);
@@ -94,7 +96,7 @@ public class UserProfileDelegate extends LatteDelegate {
         data.add(gender);
         data.add(birth);
         data.add(role);
-        data.add(TEL);
+
         userInfo.setBirthday("未设置生日");
         userInfo.setGender("未设置性别");
         userInfo.setRole("未设置角色");
@@ -126,6 +128,7 @@ public class UserProfileDelegate extends LatteDelegate {
                             JSONObject object= JSON.parseObject(response);
                             int code=object.getIntValue("code");
                             if(code==1){
+                                Log.d("res1", object.toJSONString());
                                 JSONObject detail=object.getJSONObject("detail");
                                 String birthday=detail.getString("birthday");
                                 String role=detail.getString("role");
@@ -152,12 +155,11 @@ public class UserProfileDelegate extends LatteDelegate {
                                     userInfo.setRole(role);
                                 }
 
-                                if(!userImageUrl.equalsIgnoreCase("/images/default.png"))
+                                if(!userImageUrl.contains("/images/default.png"))
                                 {
-                                    ((ListBean)data.get(0)).setImageUrl(UploadConfig.API_HOST+userImageUrl);
-                                    userInfo.setUser_image("/images/default.png");
+                                    ((ListBean)data.get(0)).setImageUrl(UploadConfig.UPLOAD_IMG+userImageUrl);
+                                    userInfo.setUser_image(userImageUrl);
                                 }
-                                //Log.d("userinfo", birthday+":"+role+":"+userName+":"+gender+":"+userImageUrl);
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -165,5 +167,10 @@ public class UserProfileDelegate extends LatteDelegate {
                 })
                 .build()
                 .get();
+    }
+
+    @Override
+    public void onRefresh() {
+        getUserInfo();
     }
 }

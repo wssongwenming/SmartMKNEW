@@ -237,7 +237,7 @@ public class SignUpDelegate extends LatteDelegate {
         myHandler.setOnHandlerListener(new MyHandler.HandlerListener() {
                     @Override
                     public void handleMessage(Message msg) {
-                        Toast.makeText(getContext(),msg.toString(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(),msg.toString(),Toast.LENGTH_LONG).show();
                         mIdentifyingCode.setText("");
                     }
                 }

@@ -23,5 +23,6 @@ public enum ConfigKeys {
     JAVASCRIPT_INTERFACE,
     WEB_HOST,
     LOCAL_USER,
-    QQ_APP_ID
+    QQ_APP_ID,
+    ABOUNTMEDELEGATE
 }

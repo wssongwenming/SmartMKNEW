@@ -135,7 +135,7 @@ public class SignInDelegate extends LatteDelegate {
                 .onGetOpenIdSuccess(new IWeChatGetOpenIdCallback() {
                     @Override
                     public void onGetOpenIdSuccess(final String openId) {
-                        Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
                         JsonObject detail=new JsonObject();
                         detail.addProperty("entry_way", EntryType.WECHAT.getEntryType());
                         detail.addProperty("weixinOpenid",openId);

@@ -154,7 +154,7 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
 
                                 }
                                 else
-                                {Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"信息反馈未成功",Toast.LENGTH_LONG).show();
+                                {Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"信息反馈成功",Toast.LENGTH_LONG).show();
 
                                     mMessage.setError("请输入反馈信息");
                                 }
@@ -171,7 +171,11 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
             case 8://点击了“退出”
                 AccountManager.setSignState(false);
                 ActivityManager.getInstance().finishActivitys();
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(0);
                 break;
+
+
         }
     }
 }

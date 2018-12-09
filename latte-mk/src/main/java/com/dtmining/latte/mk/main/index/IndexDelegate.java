@@ -117,6 +117,14 @@ public class IndexDelegate extends BottomItemDelegate {
     }
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+        if(mRefreshLayout!=null) {
+            mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refresh();
+                }
+            });
+        }
         UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         if(userProfile==null){
             startWithPop(new SignInDelegate());
@@ -246,7 +254,6 @@ public class IndexDelegate extends BottomItemDelegate {
     }
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        Toast.makeText(getContext(),mExpandableListView.toString(),Toast.LENGTH_LONG).show();
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
         initGridView();
@@ -254,7 +261,7 @@ public class IndexDelegate extends BottomItemDelegate {
         initBanner();
         getMedicinePlan();
         getMedicineHistory();
-        mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
+        //mRefreshHandler.firstPage_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,5);
         //mRefreshHandler.get_medicine_plan(UploadConfig.API_HOST+"/api/get_plan",tel,boxId);
 
     }
@@ -383,6 +390,18 @@ public class IndexDelegate extends BottomItemDelegate {
         medicineHistoryRecyclerViewAdapter= MultipleRecyclerAdapter.create(medicineHistoryList,this.getParentDelegate());
         mRecyclerViewHistory.setAdapter(medicineHistoryRecyclerViewAdapter);
     }
-
+    private void refresh(){
+        if(mRefreshLayout!=null)
+            mRefreshLayout.setRefreshing(true);
+        Latte.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getMedicinePlan();
+                getMedicineHistory();
+                //可以进行网络请求，REFESH_LAYOUT.setRefreshing(false);可以放入网络请求的success回调
+                mRefreshLayout.setRefreshing(false);
+            }
+        },2000);
+    }
 
 }

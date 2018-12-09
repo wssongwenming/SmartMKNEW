@@ -63,22 +63,22 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
 
     @Override
     public void onSignInError(String msg) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSignUpError(String msg) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSignInFailure(String msg) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onSignUpFailure(String msg) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override

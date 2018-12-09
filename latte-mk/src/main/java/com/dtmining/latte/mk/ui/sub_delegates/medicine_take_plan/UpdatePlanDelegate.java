@@ -88,7 +88,7 @@ public class UpdatePlanDelegate extends LatteDelegate {
                     .build()
                     .post();
 
-            Toast.makeText(getContext(),updateJson.toString(),Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(),updateJson.toString(),Toast.LENGTH_LONG).show();
 
         }
     }

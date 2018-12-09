@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
+import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
@@ -27,6 +28,7 @@ import com.dtmining.latte.mk.main.aboutme.list.ListBean;
 import com.dtmining.latte.mk.main.aboutme.list.ListItemType;
 import com.dtmining.latte.mk.main.aboutme.order.OrderListDelegate;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.main.aboutme.profile.UserProfileClickListener;
 import com.dtmining.latte.mk.main.aboutme.profile.UserProfileDelegate;
 import com.dtmining.latte.mk.sign.ISignListener;
 import com.dtmining.latte.mk.sign.SignInDelegate;
@@ -45,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Date:2018/10/10
  * Description:
  */
-public class AboutMeDelegate extends BottomItemDelegate{
+public class AboutMeDelegate extends BottomItemDelegate implements  UserProfileClickListener.RefreshListener{
     private String tel;
     @BindView(R2.id.tv_about_me_username)
     AppCompatTextView mUserName=null;
@@ -61,13 +63,11 @@ public class AboutMeDelegate extends BottomItemDelegate{
     }
     @OnClick(R2.id.img_user_avatar)
     void onClickAvatar(){
-        getParentDelegate().start(new UserProfileDelegate());
+        UserProfileDelegate userProfileDelegate=new UserProfileDelegate();
+        getParentDelegate().start(userProfileDelegate);
+        Latte.getConfigurator().withDelegate(AboutMeDelegate.this);
     }
-    private void startOrderListByType(){
-        final OrderListDelegate delegate=new OrderListDelegate();
-        delegate.setArguments(mArgs);
-        getParentDelegate().start(delegate);
-    }
+
     private ISignListener mISignListener=null;
     @Override
     public void onAttach(Activity activity) {
@@ -186,8 +186,9 @@ public class AboutMeDelegate extends BottomItemDelegate{
                                    mUserName.setText("用户："+tel);
 
                                }
-                               String userImgUrl= UploadConfig.API_HOST+detail.getString("userImage");
-                               if(!userImgUrl.equalsIgnoreCase(UploadConfig.API_HOST+"/images/default.png")) {
+                               String userImgUrl= UploadConfig.UPLOAD_IMG+detail.getString("userImage");
+                               if(!userImgUrl.contains("default.png")) {
+                                   Log.d("img", userImgUrl);
                                    Glide.with(getContext())
                                            .load(userImgUrl)
                                            .apply(REQUEST_OPTIONS)
@@ -200,5 +201,9 @@ public class AboutMeDelegate extends BottomItemDelegate{
                 })
                 .build()
                 .get();
+    }
+    @Override
+    public void onRefresh() {
+        getUserInfo();
     }
 }

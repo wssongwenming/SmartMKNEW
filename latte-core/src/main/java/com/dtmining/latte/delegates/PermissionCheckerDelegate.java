@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
-
 import com.dtmining.latte.ui.camera.CameraImageBean;
 import com.dtmining.latte.ui.camera.LatteCamera;
 import com.dtmining.latte.ui.camera.RequestCodes;

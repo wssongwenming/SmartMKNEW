@@ -375,7 +375,6 @@ public class HandAddDelegate extends LatteDelegate {
 
     public void compressImage2FileBySize(Bitmap bmp , File file,int kb)
     {
-
         //压缩尺寸倍数 值越大 ，图片的尺寸就越小
         int ratio = 1 ;
         Bitmap result = Bitmap.createBitmap(bmp.getWidth() /ratio , bmp.getHeight() / ratio ,Bitmap.Config.ARGB_8888);

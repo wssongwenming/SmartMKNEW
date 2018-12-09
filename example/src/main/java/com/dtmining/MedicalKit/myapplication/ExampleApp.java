@@ -59,10 +59,10 @@ public class ExampleApp  extends Application{
     }
     private void initLoginState(){
          this.mLocalUser = getModel();
-         Toast.makeText(getApplicationContext(),"qidong",Toast.LENGTH_LONG).show();
+         //Toast.makeText(getApplicationContext(),"qidong="+mLocalUser,Toast.LENGTH_LONG).show();
          if(mLocalUser!=null) {
              Latte.getConfigurations().put(ConfigKeys.LOCAL_USER, mLocalUser);
-             Toast.makeText(getApplicationContext(),"qidong111111111111",Toast.LENGTH_LONG).show();
+             //Toast.makeText(getApplicationContext(),"qidong111111111111",Toast.LENGTH_LONG).show();
              AccountManager.setSignState(true);
          }else{
              AccountManager.setSignState(false);
