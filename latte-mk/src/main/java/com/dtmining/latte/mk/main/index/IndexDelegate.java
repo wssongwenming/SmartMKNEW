@@ -152,7 +152,7 @@ public class IndexDelegate extends BottomItemDelegate {
             public void executeCallback(@Nullable Object args) {
                 Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             }
-        }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN, new IGlobalCallback() {
+        }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
                 RestClient.builder()
@@ -166,7 +166,6 @@ public class IndexDelegate extends BottomItemDelegate {
                                 com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
                                 int code=object.getIntValue("code");
                                 if(code==1) {
-                                    medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
                                     convert_response_to_plan(response);
                                     medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
                                 }

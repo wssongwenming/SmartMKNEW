@@ -20,6 +20,7 @@ import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
+import com.dtmining.latte.mk.main.aboutme.boxdelete.BoxDeleteDelegate;
 import com.dtmining.latte.mk.main.aboutme.medicineboxbind.BoxBindDelegate;
 import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineBoxesMineDelegate;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
@@ -112,13 +113,16 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
             case 3://点击了“绑定当前药箱”
                 DELEGATE.start(new BoxBindDelegate());
                 break;
-            case 4://点击了“用药记录”
+            case 4://点击了“删除药箱”
+                DELEGATE.start(new BoxDeleteDelegate());
+                break;
+            case 5://点击了“用药记录”
                 DELEGATE.start(new MedicineTakeHistoryDelegate());
                 break;
-            case 5://点击了“用户消息”
+            case 6://点击了“用户消息”
                 DELEGATE.start(new UserMessageDelegate());
                 break;
-            case 6://点击了“反馈”
+            case 7://点击了“反馈”
                 final View customView = View.inflate((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), R.layout.delegate_user_feedback_pop, null);
                 PopWindow popWindow = new PopWindow.Builder((Activity) Latte.getConfiguration(ConfigKeys.ACTIVITY))
                         .setStyle(PopWindow.PopWindowStyle.PopUp)
@@ -164,11 +168,11 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
                         .create();
                 popWindow.show();
                 break;
-            case 7://点击了“清除缓冲”
+            case 8://点击了“清除缓冲”
                 DataCleanManager.cleanApplicationData(DELEGATE.getContext());
                 Toast.makeText(DELEGATE.getContext(),"缓冲区清除成功",Toast.LENGTH_LONG).show();
                 break;
-            case 8://点击了“退出”
+            case 9://点击了“退出”
                 AccountManager.setSignState(false);
                 ActivityManager.getInstance().finishActivitys();
                 android.os.Process.killProcess(android.os.Process.myPid());

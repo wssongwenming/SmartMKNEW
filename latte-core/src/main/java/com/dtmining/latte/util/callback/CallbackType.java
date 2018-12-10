@@ -6,6 +6,7 @@ public enum CallbackType {
     TAG_STOP_PUSH,
     ON_SCAN,
     ON_BIND_BOXID,
+    ON_GET_MEDICINE_PLAN_INDEX,
     ON_GET_MEDICINE_PLAN,
     ON_GET_MEDICINE_HISTORY
 }

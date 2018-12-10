@@ -27,6 +27,9 @@ import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
 
 import java.util.ArrayList;
@@ -83,7 +86,31 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 Toast.makeText(getContext(),"App未绑定当前药箱",Toast.LENGTH_LONG).show();
             }
         }
-
+        CallbackManager.getInstance()
+                .addCallback(CallbackType.ON_GET_MEDICINE_PLAN, new IGlobalCallback() {
+                    @Override
+                    public void executeCallback(@Nullable Object args) {
+                        RestClient.builder()
+                                .url(UploadConfig.API_HOST+"/api/get_plan")
+                                //.url("medicine_plan")
+                                .params("tel",tel)
+                                .params("boxId",boxId)
+                                .success(new ISuccess() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                                        int code=object.getIntValue("code");
+                                        if(code==1) {
+                                            medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                                            convert_response_to_plan(response);
+                                            medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                })
+                                .build()
+                                .get();
+                    }
+                });
 
     }
     @Override
@@ -134,7 +161,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 .url(UploadConfig.API_HOST+"/api/get_plan")
                 //.url("medicine_plan")
                 .params("tel",tel)
-                .params("boxId",3333)
+                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -184,7 +211,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 .url(UploadConfig.API_HOST+"/api/get_plan")
                 //.url("medicine_plan")
                 .params("tel",tel)
-                .params("boxId",3333)
+                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -231,7 +258,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
                 medicinePlanModel.setId(jsonObject1.getString("id"));
                 medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
-                //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                 medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
                 medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
                 medicinePlanModel.setBoxId(jsonObject1.getString("boxId"));
@@ -241,5 +268,38 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
             dataset.put(parentList.get(i),childrenList);
         }
         Log.d("datset", dataset.toString());
+    }
+    private void convert_response_to_plan(String jsonString){
+        if(jsonString!=null) {
+            dataset.clear();
+            parentList.clear();
+            final JSONObject jsonObject = JSON.parseObject(jsonString);
+            //String tel=jsonObject.getString("tel");
+            final com.alibaba.fastjson.JSONObject data = jsonObject.getJSONObject("detail");
+            final JSONArray dataArray = data.getJSONArray("planlist");
+            int size = dataArray.size();
+            for (int i = 0; i < size; i++) {
+
+                JSONObject jsondata = (JSONObject) dataArray.get(i);
+                parentList.add(jsondata.getString("time"));
+                JSONArray jsonArray = jsondata.getJSONArray("plans");
+                int lenght = jsonArray.size();
+                List<MedicinePlan> childrenList = new ArrayList<>();
+                for (int j = 0; j < lenght; j++) {
+                    JSONObject jsonObject1 = (JSONObject) jsonArray.get(j);
+                    MedicinePlan medicinePlanModel = new MedicinePlan();
+                    medicinePlanModel.setAtime(jsonObject1.getString("atime"));
+                    medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
+                    medicinePlanModel.setId(jsonObject1.getString("id"));
+                    medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                    //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                    medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
+                    medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
+                    medicinePlanModel.setBoxId(jsonObject1.getString("boxId"));
+                    childrenList.add(medicinePlanModel);
+                }
+                dataset.put(parentList.get(i), childrenList);
+            }
+        }
     }
 }

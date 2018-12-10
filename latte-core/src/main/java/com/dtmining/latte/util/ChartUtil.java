@@ -151,7 +151,7 @@ public class ChartUtil {
         // 显示颜色
         lineDataSet.setColor(Color.GREEN);
         // 圆形的颜色
-        lineDataSet.setCircleColor(Color.GREEN);
+        lineDataSet.setCircleColor(Color.BLUE);
         // 高亮的线的颜色
         lineDataSet.setHighLightColor(Color.BLACK);
         // 设置坐标点的颜色

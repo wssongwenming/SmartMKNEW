@@ -13,6 +13,7 @@ import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.model.SignModel;
 import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
@@ -59,7 +60,8 @@ public class ForgetPassword extends LatteDelegate{
             signModel.setDetail(user);
             //获取验证码
             String sMSJson = JSON.toJSON(signModel).toString();
-            RestClient.builder().url("http://10.0.2.2:8081/Web01_exec/SMSCode")
+            RestClient.builder().
+                    url(UploadConfig.API_HOST+"/api/SMSCode")
                     .raw(sMSJson)
                     .success(new ISuccess() {
                         @Override
@@ -76,17 +78,19 @@ public class ForgetPassword extends LatteDelegate{
         if(checkForm()){
             User user=new User();
             SignModel signModel =new SignModel();
-            user.setTel(mPhone.getText().toString());
+            final String tel=mPhone.getText().toString();
+            user.setTel(tel);
             user.setIdentify_code(mIdentifyingCode.getText().toString());
             signModel.setDetail(user);
             String forgetPwdJson = JSON.toJSON(signModel).toString();
             RestClient.builder()
-                    .url("")
+                    .url(UploadConfig.API_HOST+"/api/verifyCheck")
                     .raw(forgetPwdJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
                             //携带tel跳到ResetPassword
+                            start(ResetPassword.newInstance(tel));
 
                         }
                     })

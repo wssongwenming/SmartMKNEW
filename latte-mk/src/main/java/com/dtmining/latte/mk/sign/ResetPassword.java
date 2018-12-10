@@ -1,17 +1,25 @@
 package com.dtmining.latte.mk.sign;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
+import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.model.SignModel;
 import com.dtmining.latte.mk.sign.model.User;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.regex.RegexTool;
@@ -25,6 +33,8 @@ import butterknife.OnClick;
  * Description:
  */
 public class ResetPassword extends LatteDelegate {
+    private static final String TEL = "TEL";
+    private String tel=null;
     @BindView(R2.id.edit_reset_password_password)
     EditText mPassword=null;
     @BindView(R2.id.edit_reset_password_repassword)
@@ -35,14 +45,26 @@ public class ResetPassword extends LatteDelegate {
             User user=new User();
             SignModel signModel =new SignModel();
             user.setPwd(mPassword.getText().toString());
+            user.setTel(tel);
             signModel.setDetail(user);
-            String   resetPasswordJson= JSON.toJSON(signModel).toString();
+            String  resetPasswordJson= JSON.toJSON(signModel).toString();
+            Log.d("res1", resetPasswordJson);
             RestClient.builder()
-                    .url("http://10.0.2.2:8081/Web01_exec/ResetPassword")
+                    .url(UploadConfig.API_HOST+"/api/ResetPassword")
                     .raw(resetPasswordJson)
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
+                            Log.d("res", response);
+                            if(response!=null){
+
+                                Log.d("res", response);
+                                JSONObject object=JSON.parseObject(response);
+                                int code=object.getIntValue("code");
+                                if(code==1){
+                                    SignHandler.onSignIn(response,mISignListener);
+                                }
+                            }
 
                         }
                     })
@@ -51,7 +73,15 @@ public class ResetPassword extends LatteDelegate {
 
         }
     }
-
+    private ISignListener mISignListener=null;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if(activity instanceof ISignListener)
+        {
+            mISignListener=(ISignListener) activity;
+        }
+    }
     //表单验证
     private boolean checkForm(){
         final String password=mPassword.getText().toString();
@@ -83,5 +113,20 @@ public class ResetPassword extends LatteDelegate {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        final Bundle args = getArguments();
+        if (args != null) {
+            tel = args.getString(TEL);
+        }
+    }
+    public static ResetPassword newInstance(String medicineCode){
+        final Bundle args = new Bundle();
+        args.putString(TEL,medicineCode);
+        final ResetPassword delegate = new ResetPassword();
+        delegate.setArguments(args);
+        return delegate;
     }
 }

@@ -122,19 +122,19 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             detail.setMedicineId(medicineModel.getMedicineId());
             medicinePlanNetModel.setDetail(detail);
             String planJson = JSON.toJSON( medicinePlanNetModel).toString();
-            Log.d("json", planJson);
+            Log.d("addbydrug", planJson);
             RestClient.builder()
                     .url(UploadConfig.API_HOST+"/api/Medicine_set_time")//提交计划
                     .clearParams()
                     .raw(planJson)
-                    .clearParams()
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            com.alibaba.fastjson.JSONObject object = JSON.parseObject(response);
+                            JSONObject object = JSON.parseObject(response);
                             int code = object.getIntValue("code");
                             if (code == 1)
                             {
+                                Log.d("success", "onSuccess: ");
                                 final IGlobalCallback<String> callback = CallbackManager
                                         .getInstance()
                                         .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
@@ -149,7 +149,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                             @Override
                                             public void onSuccess(String response) {
                                                    if (response != null) {
-                                                    com.alibaba.fastjson.JSONObject object = JSON.parseObject(response);
+                                                    JSONObject object = JSON.parseObject(response);
                                                     int code = object.getIntValue("code");
                                                     if (code == 1) {
                                                         JSONObject jsonData = JSON.parseObject(response);

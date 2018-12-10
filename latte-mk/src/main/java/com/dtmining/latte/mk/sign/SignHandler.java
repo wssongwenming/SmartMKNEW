@@ -20,8 +20,8 @@ public class SignHandler {
         DatabaseManager.getInstance().getDao().deleteAll();
         final JSONObject profileJson= JSON.parseObject(response).getJSONObject("detail");
         final long tel=Long.parseLong(profileJson.getString("tel"));
-        final String role=profileJson.getString("role");
-        final UserProfile localUser=new UserProfile( tel, null, null, role,null);
+        //final String role=profileJson.getString("role");
+        final UserProfile localUser=new UserProfile( tel, null, null, null,null);
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);
         Latte.getConfigurations().put(ConfigKeys.LOCAL_USER,localUser);
@@ -34,8 +34,8 @@ public class SignHandler {
     public static void onSignUp(String response,ISignListener signListener,String tel,String role){
         DatabaseManager.getInstance().getDao().deleteAll();
          final long TEL= Long.parseLong(tel);
-        final String ROLE=role;
-         final UserProfile localUser=new UserProfile( TEL, null, null, ROLE,null);
+        //final String ROLE=role;
+         final UserProfile localUser=new UserProfile( TEL, null, null, null,null);
         Log.d("signup", "onSignUp: ");
         //在内存中保留登陆数据
         Latte.getConfigurations().remove(ConfigKeys.LOCAL_USER);

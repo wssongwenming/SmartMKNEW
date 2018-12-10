@@ -7,7 +7,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.hand_add.model;
  */
 public class MedicineModel {
     public String boxId;
-    public String medicineCount;
+    public int medicineCount;
     public String medicineName;
     public String medicineCode;
     public String medicineValidity;
@@ -23,7 +23,7 @@ public class MedicineModel {
         return boxId;
     }
 
-    public String getMedicineCount() {
+    public int getMedicineCount() {
         return medicineCount;
     }
 
@@ -71,7 +71,7 @@ public class MedicineModel {
         this.boxId = boxId;
     }
 
-    public void setMedicineCount(String medicineCount) {
+    public void setMedicineCount(int medicineCount) {
         this.medicineCount = medicineCount;
     }
 

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
@@ -29,6 +30,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.AboutMeDelegate;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxByScanDelegate;
@@ -42,6 +44,7 @@ import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.log.LatteLogger;
 import com.dtmining.latte.util.storage.LattePreference;
+import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -126,7 +129,7 @@ public class HandAddDelegate extends LatteDelegate {
             medicineModel.setDayInterval(interval);
             medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
             medicineModel.setMedicineCode(mMedicineCode.getText().toString());
-            medicineModel.setMedicineCount(mMedicineCount.getText().toString());
+            medicineModel.setMedicineCount(Integer.parseInt(mMedicineCount.getText().toString()));
             medicineModel.setMedicineImage(medicineImage);
             medicineModel.setMedicineName(mMedicinName.getText().toString());
             medicineModel.setMedicineUseCount(Integer.parseInt(mMedicineUseCount.getText().toString()));
@@ -135,8 +138,8 @@ public class HandAddDelegate extends LatteDelegate {
             medicineModel.setTel(tel);
             medicineModel.setTimesOnDay(Integer.parseInt(mTimesOnDay.getText().toString()));
             medicineAddModel.setDetail(medicineModel);
-            String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
-            Log.d("medicine", medicineAddJson);
+            final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
+            Log.d("drugadd", medicineAddJson);
             RestClient.builder()
                     .url(UploadConfig.API_HOST+"/api/Medicine_add")
                     .clearParams()
@@ -144,6 +147,7 @@ public class HandAddDelegate extends LatteDelegate {
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
+                            Log.d("aa", medicineAddJson);
                             Toast.makeText(getContext(),"药品添加成功",Toast.LENGTH_LONG).show();
                         }
                     })
@@ -295,39 +299,32 @@ public class HandAddDelegate extends LatteDelegate {
                 .addCallback(CallbackType.ON_CROP, new IGlobalCallback<Uri>() {
                     @Override
                     public void executeCallback(Uri args) {
-                       File  fileDir = Environment.getExternalStorageDirectory();
-                        BitmapFactory.Options opts = new BitmapFactory.Options();
-                        File imageFile = new File(args.getPath());
-                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), opts);
-                        File file=new File(fileDir,new Random()+"jpeg");
-                        compressImage2FileBySize(bitmap,file,19);
+                       //File  fileDir = Environment.getExternalStorageDirectory();
+                        //BitmapFactory.Options opts = new BitmapFactory.Options();
+                        //File imageFile = new File(args.getPath());
+                        //Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), opts);
+                       // File file=new File(fileDir,new Random()+"jpeg");
+                        //compressImage2FileBySize(bitmap,file,19);
                         Glide.with(getContext())
-                                .load(file)
+                                .load(args)
                                 .into(mMedicineImage);
                         RestClient.builder()
                                 .url(UploadConfig.API_HOST+"/api/fileupload")
                                 .loader(getContext())
-                                .file(file.getPath())
+                                .file(args.getPath())
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
-                                        medicineImage = JSON.parseObject(response).getJSONObject("detail")
-                                                .getString("path");
-
-/*                                        //通知服务器更新信息
-                                        RestClient.builder()
-                                                .url("user_profile.php")
-                                                .params("avatar", path)
-                                                .loader(getContext())
-                                                .success(new ISuccess() {
-                                                    @Override
-                                                    public void onSuccess(String response) {
-                                                        //获取更新后的用户信息，然后更新本地数据库
-                                                        //没有本地数据的APP，每次打开APP都请求API，获取信息
-                                                    }
-                                                })
-                                                .build()
-                                                .post();*/
+                                        if (response != null) {
+                                            final JSONObject responseObject = JSON.parseObject(response);
+                                            Log.d("imgurl", responseObject.toJSONString());
+                                            int code = responseObject.getIntValue("code");
+                                            if (code == 1) {
+                                                //获得图片保存路径
+                                                medicineImage=responseObject.getString("url");
+                                                //Toast.makeText(getContext(),medicineImage,Toast.LENGTH_LONG).show();
+                                            }
+                                        }
                                     }
                                 })
                                 .build()

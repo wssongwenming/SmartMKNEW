@@ -18,6 +18,7 @@ import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
@@ -164,7 +165,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         TextView medicineCount= (TextView) convertView.findViewById(R.id.tv_medicine_plan_medicine_count);
         final TextView delete = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_delete);
         TextView change = (TextView) convertView.findViewById(R.id.tv_btn_item_child_medicine_plan_change);
-        ///////////////////////////////////////
+
         final String medicinename=dataset.get(parentList.get(groupPosition)).get(childPosition).getMedicineName();
         final String atime= dataset.get(parentList.get(groupPosition)).get(childPosition).getAtime();
         final String boxId= dataset.get(parentList.get(groupPosition)).get(childPosition).getBoxId();
@@ -182,7 +183,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
                 jsonForDelete.add("detail",detail);
 
                 RestClient.builder()
-                        .url("http://10.0.2.2:8081/Web01_exec/Delete_plan")
+                        .url(UploadConfig.API_HOST+"/api/delete_plan")
                         .clearParams()
                         .raw(jsonForDelete.toString())//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
                         .success(new ISuccess() {

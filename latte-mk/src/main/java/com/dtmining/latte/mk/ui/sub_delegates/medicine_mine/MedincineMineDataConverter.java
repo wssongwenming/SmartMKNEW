@@ -43,7 +43,7 @@ public class MedincineMineDataConverter extends DataConverter {
                 final String medicineId=data.getString("medicineId");
                 final int medicineCount = data.getInteger("medicineCount");
                 final String medicineName = data.getString("medicineName");
-                final String medicine_img_url = data.getString("medicine_img_url");
+                final String medicine_img_url = data.getString("medicineUrl");
                 final String boxId = data.getString("boxId");
                 final int medicinePause = data.getInteger("medicinePause");
                 int type = ItemType.MEDICINE_MINE;

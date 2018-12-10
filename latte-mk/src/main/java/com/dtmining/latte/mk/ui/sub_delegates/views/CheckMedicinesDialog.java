@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -77,25 +78,13 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private Button button=null;
 
     @Override
-    public void itemChecked(MedicineState checkMedicine,int position,boolean isChecked) {
+    public void itemChecked(List<Integer> seletor,List<MedicineState> seletorString) {
         //处理Item点击选中回调事件
-        if (isChecked) {
-            //选中处理
-            if (!checkedMedicine.contains(checkMedicine)) {
-                checkedMedicine.add(checkMedicine);
-                checkedPosition.add(position);
-            }
-        } else {
-            //未选中处理
-            if (checkedMedicine.contains(checkMedicine)) {
-                checkedMedicine.remove(checkMedicine);
-                checkedPosition.remove(position);
-            }
-        }
+        checkedPosition=seletor;
+
+        checkedMedicine=seletorString;
+        Toast.makeText(getContext(), checkedPosition+"",Toast.LENGTH_LONG).show();
     }
-
-
-
 
     public interface ClickListenerInterface {
         public void doConfirm(List<MedicineState> input,List<String>useCount);
@@ -183,7 +172,7 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private void getUseCount(){
         for (int i = 0; i < checkedPosition.size(); i++) {
             int positions=checkedPosition.get(i);
-            RelativeLayout layout = (RelativeLayout)  check_rcy.getChildAt(positions);
+            LinearLayoutCompat layout = (LinearLayoutCompat)  check_rcy.getChildAt(positions);
             AppCompatEditText et_content = (AppCompatEditText) layout.findViewById(R.id.et_add_plan_by_time_medicine_usecount);
             checkedUseCount.add(et_content.getText().toString());
         }
@@ -192,8 +181,8 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private boolean checkUseCount(){
         boolean isPass=true;
         for (int i = 0; i < checkedPosition.size(); i++) {
-            int positions=checkedPosition.get(i);
-            RelativeLayout layout = (RelativeLayout)  check_rcy.getChildAt(positions);
+            int position=checkedPosition.get(i);
+            LinearLayoutCompat layout = (LinearLayoutCompat)  check_rcy.getChildAt(position);
             AppCompatEditText et_content = (AppCompatEditText) layout.findViewById(R.id.et_add_plan_by_time_medicine_usecount);
             if(et_content.getText().toString().isEmpty())
             {

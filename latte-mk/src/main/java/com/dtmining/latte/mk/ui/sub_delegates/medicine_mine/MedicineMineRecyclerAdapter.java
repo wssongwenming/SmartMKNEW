@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -114,7 +115,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                 boxId           =item.getField(MultipleFields.BOXID);
                 tel=            item.getField(MultipleFields.TEL);
                 Glide.with(mContext)
-                        .load(medicineImageUrl)
+                        .load(UploadConfig.UPLOAD_IMG+medicineImageUrl)
                         .apply(REQUEST_OPTIONS)
                         .into((ImageView) (view.findViewById(R.id.iv_item_medicine_mine)));
                         holder.setText(R.id.tv_item_medicine_mine_medicine_name,medicineName);
@@ -168,6 +169,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineState.setMedicinePause("1");
                         medicineStateModel.setDetail(medicineState);
                         String json = JSON.toJSON(medicineStateModel).toString();
+
                         RestClient.builder()
                                 .clearParams()
                                 .url(UploadConfig.API_HOST+"/api/Medicine_update_state")
@@ -244,11 +246,16 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineState.setBoxId(LattePreference.getBoxId());
                         medicineState.setMedicineId(medicineId);
                         medicineStateModel.setDetail(medicineState);
-                        String singInJson = JSON.toJSON(medicineStateModel).toString();
+                        JsonObject detail=new JsonObject();
+                        detail.addProperty("medicineId",medicineId);
+                        JsonObject deleteJson=new JsonObject();
+                        deleteJson.add("detail",detail);
+                        String delete = deleteJson.toString();
+                        Log.d("delete", delete);
                         RestClient.builder()
                                 .clearParams()
                                 .url(UploadConfig.API_HOST+"/api/Medicine_delete")
-                                .raw(singInJson)
+                                .raw(delete)
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {

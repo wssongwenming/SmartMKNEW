@@ -9,7 +9,7 @@
         android:id="@+id/tb_name"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/holo_orange_dark" />
+        android:background="@color/Green" />
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/holo_orange_dark"
+        android:background="@color/Green"
         android:gravity="center"
         android:text="提交"
         android:textColor="@android:color/white"
@@ -57,7 +57,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/holo_orange_dark"
+        android:background="@color/Green"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/white"

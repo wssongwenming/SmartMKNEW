@@ -16,6 +16,7 @@ public class MedicinePlan implements Serializable {
     private String medicineName=null;
     private String endRemind=null;
     private String startRemind=null;
+    private String medicineId=null;
     private String boxId=null;
 
     public String getId() {
@@ -40,6 +41,14 @@ public class MedicinePlan implements Serializable {
 
     public String getEndRemind() {
         return endRemind;
+    }
+
+    public String getMedicineId() {
+        return medicineId;
+    }
+
+    public void setMedicineId(String medicineId) {
+        this.medicineId = medicineId;
     }
 
     public String getStartRemind() {

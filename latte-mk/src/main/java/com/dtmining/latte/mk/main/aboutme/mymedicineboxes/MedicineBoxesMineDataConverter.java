@@ -40,10 +40,10 @@ public class MedicineBoxesMineDataConverter extends DataConverter {
                     final int size = dataArray.size();
                     for (int i = 0; i < size; i++) {
                         JSONObject data = (JSONObject) dataArray.get(i);
-                        String onUse = data.getString("onUse");
+                        String onUse = data.getString("onuse");
                         String pause = data.getString("pause");
                         String boxId = data.getString("boxId");
-                        String overDue = data.getString("overDue");
+                        String overDue = data.getString("overdue");
                         int type = ItemType.MEDICINE_BOX;
                         final MultipleItemEntity entity = MultipleItemEntity.builder()
                                 .setField(MultipleFields.ITEM_TYPE, type)

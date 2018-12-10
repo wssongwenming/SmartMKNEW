@@ -4,14 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <android.support.v7.widget.AppCompatTextView
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:text="我的药箱"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="18sp"
-        android:gravity="center_vertical"
-        android:layout_height="40dp" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Green">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="我的药箱"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </android.support.v7.widget.Toolbar>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_delegate_medicine_boxes_mine"
         android:layout_width="match_parent"
