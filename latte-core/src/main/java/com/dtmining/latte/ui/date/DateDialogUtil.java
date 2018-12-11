@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class DateDialogUtil {
@@ -32,8 +33,8 @@ public class DateDialogUtil {
                         ViewGroup.LayoutParams.MATCH_PARENT);
 
         picker.setLayoutParams(lp);
-
-        picker.init(2016, 1, 1, new DatePicker.OnDateChangedListener() {
+        Calendar now = Calendar.getInstance();
+        picker.init(now.get(Calendar.YEAR), (now.get(Calendar.MONTH)), now.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 final Calendar calendar = Calendar.getInstance();

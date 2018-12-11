@@ -129,7 +129,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+        return getCombinedChildId(groupPosition,childPosition);
     }
 
     @Override
@@ -189,6 +189,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
+                                Log.d("pos", groupPosition+";"+childPosition);
                                 dataset.get(parentList.get(groupPosition)).remove(childPosition);
                                 if(dataset.get(parentList.get(groupPosition)).size()==0)
                                 {
@@ -237,18 +238,20 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
 
         @Override
         public void onStatusChanged(SwipeListLayout.Status status) {
-            if (status == SwipeListLayout.Status.Open) {
-                //若有其他的item的状态为Open，则Close，然后移除
-                if (sets.size() > 0) {
-                    for (SwipeListLayout s : sets) {
-                        s.setStatus(SwipeListLayout.Status.Close, true);
-                        sets.remove(s);
+            if (sets != null) {
+                if (status == SwipeListLayout.Status.Open) {
+                    //若有其他的item的状态为Open，则Close，然后移除
+                    if (sets.size() > 0) {
+                        for (SwipeListLayout s : sets) {
+                            s.setStatus(SwipeListLayout.Status.Close, true);
+                            sets.remove(s);
+                        }
                     }
+                    sets.add(slipListLayout);
+                } else {
+                    if (sets.contains(slipListLayout))
+                        sets.remove(slipListLayout);
                 }
-                sets.add(slipListLayout);
-            } else {
-                if (sets.contains(slipListLayout))
-                    sets.remove(slipListLayout);
             }
         }
 
@@ -261,6 +264,6 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
         public void onStartOpenAnimation() {
 
         }
-
     }
+
 }

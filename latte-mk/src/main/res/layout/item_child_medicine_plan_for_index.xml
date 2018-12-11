@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/item_child_medicine_plan_sll"
+        android:background="@color/Gray0"
+
+        android:layout_gravity="center_vertical"
+        android:layout_height="40dp">
+        <android.support.v7.widget.LinearLayoutCompat
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_btn_item_child_medicine_plan_change"
+                android:layout_width="80dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:background="@color/Assertive"
+                android:gravity="center"
+                android:text="修改" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_btn_item_child_medicine_plan_delete"
+                android:layout_width="80dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:background="@color/Assertive"
+                android:gravity="center"
+                android:text="删除" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/item_medicine_mine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="20dp"
+            android:orientation="horizontal" >
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_medicine_plan_medicine_name"
+                android:text="感冒胶囊"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:text="单次服用"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_medicine_plan_medicine_count"
+                android:text="2"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout>
+
+</android.support.v7.widget.LinearLayoutCompat>

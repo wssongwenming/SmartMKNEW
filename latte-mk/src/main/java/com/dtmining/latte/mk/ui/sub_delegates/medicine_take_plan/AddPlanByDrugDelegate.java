@@ -134,12 +134,18 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             int code = object.getIntValue("code");
                             if (code == 1)
                             {
-                                Log.d("success", "onSuccess: ");
-                                final IGlobalCallback<String> callback = CallbackManager
+                                final IGlobalCallback<String> callback_medicine_plan = CallbackManager
                                         .getInstance()
                                         .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
-                                if (callback != null) {
-                                    callback.executeCallback("");
+                                if (callback_medicine_plan != null) {
+                                    callback_medicine_plan.executeCallback("");
+                                }
+
+                                final IGlobalCallback<String> callback_medicine_plan_for_index = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
+                                if (callback_medicine_plan_for_index != null) {
+                                    callback_medicine_plan_for_index.executeCallback("");
                                 }
                                 RestClient.builder()
                                         .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟

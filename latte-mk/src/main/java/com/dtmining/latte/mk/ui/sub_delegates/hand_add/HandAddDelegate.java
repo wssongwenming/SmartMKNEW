@@ -147,8 +147,27 @@ public class HandAddDelegate extends LatteDelegate {
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            Log.d("aa", medicineAddJson);
-                            Toast.makeText(getContext(),"药品添加成功",Toast.LENGTH_LONG).show();
+                            if(response!=null) {
+                                JSONObject object=JSON.parseObject(response);
+                                int code=object.getIntValue("code");
+                                if(code==1)
+                                {
+                                    Toast.makeText(getContext(), "药品添加成功", Toast.LENGTH_LONG).show();
+                                    mMedicinName.setText(null);
+                                    mMedicineCode.setText(null);
+                                    mBtnValidityTimeSelection.setText("请选择有效期");
+                                    mMedicineCount.setText(null);
+                                    mBtnStartRemindTimeSelection.setText("请选择开始提醒时间");
+                                    mBtnEndRemindTimeSelection.setText("请选择结束提醒时间");
+                                    mMedicineUseCount.setText(null);
+                                    mTimesOnDay.setText(null);
+                                    Glide.with(getContext())
+                                            .load(null)
+                                            .into(mMedicineImage);
+
+
+                                }
+                            }
                         }
                     })
                     .build()

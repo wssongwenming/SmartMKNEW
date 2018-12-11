@@ -1,6 +1,7 @@
 package com.dtmining.latte.mk.main.index;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -45,6 +46,9 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTake
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlan;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlanExpandableListViewAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MyElvAdapter;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.OnClickDeleteListenter;
 import com.dtmining.latte.mk.ui.sub_delegates.views.MyGridView;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
@@ -54,6 +58,7 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +77,9 @@ import butterknife.OnClick;
  * Description:
  */
 public class IndexDelegate extends BottomItemDelegate {
+    private List<MedicinePlanInfo> list =new ArrayList<>();
+    private MyElvAdapterForIndex myAdapter;
+    private Context context;
     //显示用药计划
     private Map<String, List<MedicinePlan>> dataset = new HashMap<>();
     private  ArrayList<String> parentList=new ArrayList<>();
@@ -103,7 +111,7 @@ public class IndexDelegate extends BottomItemDelegate {
     private LinkedList<Icon> mData;
     private MyAdapter<Icon> mAdapter;
     private RefreshHandler mRefreshHandler=null;
-    private Set<SwipeListLayout> sets = new HashSet();
+    //private Set<SwipeListLayout> sets = new HashSet();
     //private ConvenientBanner<Integer> mConvenientBanner=null;
     private static final ArrayList<Integer> INTEGERS=new ArrayList<>();
 
@@ -166,8 +174,8 @@ public class IndexDelegate extends BottomItemDelegate {
                                 com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
                                 int code=object.getIntValue("code");
                                 if(code==1) {
-                                    convert_response_to_plan(response);
-                                    medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                                    initData(response);
+                                    myAdapter.notifyDataSetChanged();
                                 }
                             }
                         })
@@ -281,8 +289,8 @@ public class IndexDelegate extends BottomItemDelegate {
                         com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
                         int code=object.getIntValue("code");
                         if(code==1) {
-                            convert_response_to_plan(response);
-                            medicinePlanExpandableListViewAdapter.notifyDataSetChanged();
+                            initData(response);
+                            myAdapter.notifyDataSetChanged();
                         }
                     }
                 })
@@ -383,9 +391,9 @@ public class IndexDelegate extends BottomItemDelegate {
      @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter( dataset,parentList,sets, IndexDelegate.this);
-        mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
-
+        //medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter( dataset,parentList,null, IndexDelegate.this);
+        //mExpandableListView.setAdapter(medicinePlanExpandableListViewAdapter);
+         initView();
         medicineHistoryRecyclerViewAdapter= MultipleRecyclerAdapter.create(medicineHistoryList,this.getParentDelegate());
         mRecyclerViewHistory.setAdapter(medicineHistoryRecyclerViewAdapter);
     }
@@ -403,4 +411,43 @@ public class IndexDelegate extends BottomItemDelegate {
         },2000);
     }
 
+
+    public void initView() {
+        myAdapter = new MyElvAdapterForIndex(context, mExpandableListView,list);
+        mExpandableListView.setAdapter(myAdapter);
+        mExpandableListView.setGroupIndicator(null);
+    }
+    private void initData(String responseJsonString) {
+        list.clear();
+        final JSONObject jsonObject = JSON.parseObject(responseJsonString);
+        final JSONObject data = jsonObject.getJSONObject("detail");
+        final JSONArray dataArray = data.getJSONArray("planlist");
+        int size = dataArray.size();
+        for (int i = 0; i < size; i++) {
+            MedicinePlanInfo medicinePlanInfo=new MedicinePlanInfo();
+            JSONObject jsondata = (JSONObject) dataArray.get(i);
+            String medicineUseTime=jsondata.getString("time");
+            medicinePlanInfo.setTimeString(medicineUseTime);
+            JSONArray jsonArray = jsondata.getJSONArray("plans");
+            int lenght = jsonArray.size();
+            List<MedicinePlan> childrenList = new ArrayList<>();
+            for (int j = 0; j < lenght; j++) {
+                JSONObject jsonObject1 = (JSONObject) jsonArray.get(j);
+                MedicinePlan medicinePlan = new MedicinePlan();
+                medicinePlan.setAtime(jsonObject1.getString("atime"));
+                medicinePlan.setEndRemind(jsonObject1.getString("endRemind"));
+                medicinePlan.setId(jsonObject1.getString("id"));
+                medicinePlan.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                medicinePlan.setStartRemind(jsonObject1.getString("startRemind"));
+                medicinePlan.setMedicineName(jsonObject1.getString("medicineName"));
+                medicinePlan.setBoxId(jsonObject1.getString("boxId"));
+                childrenList.add(medicinePlan);
+            }
+            medicinePlanInfo.setDatas(childrenList);
+            list.add(medicinePlanInfo);
+
+        }
+
+    }
 }

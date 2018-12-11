@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,24 +8,39 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineBoxesMineDataConverter;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.main.index.IndexDelegate;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
+import com.dtmining.latte.mk.ui.recycler.ItemType;
+import com.dtmining.latte.mk.ui.recycler.MultipleFields;
+import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
+import com.dtmining.latte.mk.ui.recycler.MultipleRecyclerAdapter;
 import com.dtmining.latte.mk.ui.recycler.MyDecoration;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxByScanDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlanExpandableListViewAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
+import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.ISuccess;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -37,6 +53,8 @@ import butterknife.BindView;
  */
 public class MedicineMineDelegate extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener{
     private String tel=null;
+    private MedicineMineRecyclerAdapter medicineMineRecyclerAdapter;
+    List<MultipleItemEntity> mDatas=new ArrayList<>();
  /* @BindView(R2.id.srl_medicine_mine)
     SwipeRefreshLayout mRefreshLayout=null;*/
     @BindView(R2.id.rv_medicine_mine)
@@ -84,9 +102,37 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         super.onLazyInitView(savedInstanceState);
         //initRefreshLayout();
         initRecyclerView();
+        //getMedicineMine(UploadConfig.API_HOST+"/api/get_medicine");
         mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel);
     }
+    private void getMedicineMine(String url){
+        RestClient.builder()
+                .url(url)
+                .params("tel",tel)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
 
+                        if(response!=null) {
+                            com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1) {
+                                convert_response_to_medicine_mine(response);
+                                //medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets);
+                                medicineMineRecyclerAdapter.notifyDataSetChanged();
+                                //mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
+                            }else if(code==17)
+                            {
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品",Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                    }
+                })
+                .build()
+                .get();
+
+    }
     @Override
     public Object setLayout() {
         return R.layout.delegate_medicine_mine;
@@ -154,4 +200,49 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        medicineMineRecyclerAdapter = new MedicineMineRecyclerAdapter( mDatas,sets );
+        mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
+    }
+
+    public void convert_response_to_medicine_mine(String reponseJsonString) {
+        if(reponseJsonString!=null) {
+            final JSONObject jsonObject = JSON.parseObject(reponseJsonString);
+            String tel = jsonObject.getString("tel");
+            int code=jsonObject.getIntValue("code");
+            System.out.print("code="+code);
+            final JSONArray dataArray = jsonObject.getJSONArray("detail");
+
+            final int size = dataArray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject data = (JSONObject) dataArray.get(i);
+                final String endRemind=data.getString("endRemind");
+                final String medicineCode=data.getString("medicineCode");
+                final String medicineValidity=data.getString("medicineValidity");
+                final String medicineId=data.getString("medicineId");
+                final int medicineCount = data.getInteger("medicineCount");
+                final String medicineName = data.getString("medicineName");
+                final String medicine_img_url = data.getString("medicineUrl");
+                final String boxId = data.getString("boxId");
+                final int medicinePause = data.getInteger("medicinePause");
+                int type = ItemType.MEDICINE_MINE;
+                final MultipleItemEntity entity = MultipleItemEntity.builder()
+                        .setField(MultipleFields.ITEM_TYPE, type)
+                        .setField(MultipleFields.TEL, tel)
+                        .setField(MultipleFields.MEDICINEID, medicineId)
+                        .setField(MultipleFields.MEDICINECOUNT, medicineCount)
+                        .setField(MultipleFields.MEDICINENAME, medicineName)
+                        .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.BOXID, boxId)
+                        .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
+                        .build();
+                mDatas.add(entity);
+
+            }
+        }
+        //return mDatas;
+    }
+
 }

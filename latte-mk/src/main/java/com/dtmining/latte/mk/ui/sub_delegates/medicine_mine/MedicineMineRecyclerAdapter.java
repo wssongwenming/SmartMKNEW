@@ -260,14 +260,9 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                                     @Override
                                     public void onSuccess(String response) {
                                         final int currentPosition = holder.getAdapterPosition();
-                                           /*
-                                            //还原上一个
-                                            getData().get(mPrePosition).setField(MultipleFields.TAG, false);
-                                            notifyItemChanged(mPrePosition);*/
-                                        //更新选中的item
-                                        getData().remove(holder.getAdapterPosition());
-                                        notifyItemChanged(currentPosition);
-                                    }
+                                        mData.remove(holder.getAdapterPosition());
+                                        notifyDataSetChanged();
+                                     }
 
                                 })
                                 .error(new IError() {
@@ -358,6 +353,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
             detail.addProperty("supplynumber",supply+MEDICINE_ORIGN_COUNT);
             JsonObject subjson=new JsonObject();
             subjson.add("detail",detail);
+            Log.d("sup",  subjson.toString());
             RestClient.builder()
                     .clearParams()
                     .raw(subjson.toString())
@@ -365,6 +361,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
+                            Log.d("res11", response);
                             getItem(POSITION).setField(MultipleFields.MEDICINECOUNT,supply+MEDICINE_ORIGN_COUNT);
                             notifyDataSetChanged();
                             inputDialog.dismiss();
