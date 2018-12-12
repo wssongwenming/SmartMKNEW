@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.R;
 import com.dtmining.latte.delegates.LatteDelegate;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.model.DeleteOverDue;
@@ -259,7 +260,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                         deleteOverDue.setDetail(medicineInfo);
                         String deleteString =  JSON.toJSON(deleteOverDue).toString();
                         RestClient.builder().clearParams()
-                                .url("http://10.0.2.2:8081/Web01_exec/UserLogin")//
+                                .url(UploadConfig.API_HOST+"/api/Medicine_delete ")//
                                 .raw(deleteString)
                                 .success(new ISuccess() {
                                     @Override

@@ -59,11 +59,19 @@
             android:layout_margin="20dp"
             android:text="提交"
             android:textColor="@color/white"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/area_radis"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
-
-
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_binded_boxId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="15sp"
+        android:text="当前绑定药箱"/>
     </android.support.v7.widget.LinearLayoutCompat>
 
 

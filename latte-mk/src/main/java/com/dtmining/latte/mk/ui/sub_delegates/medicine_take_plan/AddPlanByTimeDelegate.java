@@ -29,6 +29,9 @@ import com.dtmining.latte.mk.ui.sub_delegates.views.CustomDatePicker;
 import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -112,6 +115,20 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
                             int code = object.getIntValue("code");
                             if (code == 1)
                             {
+                                //刷新回调
+                                final IGlobalCallback<String> callback_medicine_plan = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                                if (callback_medicine_plan != null) {
+                                    callback_medicine_plan.executeCallback("");
+                                }
+
+                                final IGlobalCallback<String> callback_medicine_plan_for_index = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
+                                if (callback_medicine_plan_for_index != null) {
+                                    callback_medicine_plan_for_index.executeCallback("");
+                                }
                                 RestClient.builder()
                                         .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
                                         .params("tel", tel)

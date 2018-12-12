@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue;
 import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.dtmining.latte.app.Latte;
@@ -48,15 +49,15 @@ public class MedicineOverdueRefreshHandler implements SwipeRefreshLayout.OnRefre
             }
         },2000);
     }
-    public void getMedicineOverdue(String url,String tel,String boxId){
+    public void getMedicineOverdue(String url,String tel){
         //BEAN.setDelayed(1000);
-
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
+                        Log.d("overdue", response);
                         mAdapter=MultipleRecyclerAdapter.getMedicineOverdue(CONVERTER.setJsonData(response),DELEGATE);
                         RECYCLERVIEW.setAdapter(mAdapter);
 

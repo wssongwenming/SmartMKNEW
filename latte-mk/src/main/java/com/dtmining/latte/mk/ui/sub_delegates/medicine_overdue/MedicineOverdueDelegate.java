@@ -14,6 +14,7 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
@@ -69,6 +70,6 @@ public class MedicineOverdueDelegate extends LatteDelegate {
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
         initRefreshLayout();
-        mRefreshHandler.getMedicineOverdue("medicine_overdue",tel,boxId);
+        mRefreshHandler.getMedicineOverdue(UploadConfig.API_HOST+"/api/get_medicine_overdue",tel);
     }
 }

@@ -101,7 +101,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         initRecyclerView();
         initRefreshLayout();
         //mRefreshHandler.get_medicine_history("index",tel,1,20);
-        get_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,1,20);
+        get_medicine_history(UploadConfig.API_HOST+"/api/get_history",tel,0,6);
         //get_medicine_history("index",tel,1,20);
     }
 
@@ -114,8 +114,10 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
     {
         BEAN.setPageIndex(pageIndex);
         BEAN.setPageSize(pageSize);
+        Log.d("pag", BEAN.getPageIndex()+":"+BEAN.getPageSize());
         RestClient.builder()
-                .url(url)
+                .url(UploadConfig.API_HOST+"/api/get_history")
+                .params("tel",tel)
                 .params("tel",tel)
                 .params("page",BEAN.getPageIndex())
                 .params("count",BEAN.getPageSize())
@@ -131,7 +133,9 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                             final int total=detail.getInteger("total");//现在接口中为count
                             BEAN.setTotal(total);
                             convert_response_to_history(response);
+
                             medicineHistoryRecyclerViewAdapter.notifyDataSetChanged();
+                            BEAN.addIndex();
                             medicineHistoryRecyclerViewAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
                                 @Override
                                 public void onLoadMoreRequested() {
@@ -173,18 +177,22 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                             .setField(MultipleFields.ID,id)
                             .build();
                     medicineHistoryList.add(entity);
+                    Log.d("medicineHistoryList1", "medicineHistoryList="+medicineHistoryList);
                 }
             }
         }
-
-
     private void paging(final String url,final String tel) {
+        //medicineHistoryList.clear();
         final int pageSize = BEAN.getPageSize();
         final int currentCount = BEAN.getCurrentCount();
         final int total = BEAN.getTotal();
+        final int pageIndex=BEAN.getPageIndex();
+        Log.d("getdatasize=", medicineHistoryRecyclerViewAdapter.getData().size()+"::pagesize="+pageSize+"currentCount="+currentCount+"total=="+total);
         if (medicineHistoryRecyclerViewAdapter.getData().size() < pageSize || currentCount >= total) {
+            Log.d("response_1","ppppppppp000pppppppppp");
             medicineHistoryRecyclerViewAdapter.loadMoreEnd(true);
         } else {
+            Log.d("response_1","ppppppppppppppppppppppppppp");;
             Latte.getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -196,11 +204,13 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                             .success(new ISuccess() {
                                 @Override
                                 public void onSuccess(String response) {
-                                    com.alibaba.fastjson.JSONObject object = JSON.parseObject(response);
+                                    Log.d("aaaa", response);
+                                    JSONObject object = JSON.parseObject(response);
                                     int code = object.getIntValue("code");
                                     if (code == 1) {
-                                        medicineHistoryList.clear();
+
                                         convert_response_to_history(response);
+                                        Log.d("medicineHistoryList", "medicineHistoryList="+medicineHistoryList);
                                         medicineHistoryRecyclerViewAdapter.addData(medicineHistoryList);
                                         //累加数量
                                         BEAN.setCurrentCount(medicineHistoryRecyclerViewAdapter.getData().size());

@@ -18,6 +18,7 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueRefreshHandler;
@@ -103,6 +104,6 @@ public class MedicineSummaryDelegate extends LatteDelegate{
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
-        mRefreshHandler.getMedicineSummary("medicine_summary",tel,null,null);
+        mRefreshHandler.getMedicineSummary(UploadConfig.API_HOST+"/api/medicine_collection",tel,begin_time,end_time);
     }
 }

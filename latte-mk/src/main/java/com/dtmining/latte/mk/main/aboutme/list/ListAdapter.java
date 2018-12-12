@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,15 +19,12 @@ import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.mk.main.aboutme.boxdelete.BoxDeleteDelegate;
 import com.dtmining.latte.mk.main.aboutme.medicineboxbind.BoxBindDelegate;
 import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineBoxesMineDelegate;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.main.aboutme.usermessage.UserMessageDelegate;
 import com.dtmining.latte.mk.sign.ISignListener;
-import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxDelegate;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_history.MedicineTakeHistoryDelegate;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
@@ -114,7 +110,7 @@ public class ListAdapter extends BaseMultiItemQuickAdapter<ListBean,BaseViewHold
                 DELEGATE.start(new BoxBindDelegate());
                 break;
             case 4://点击了“删除药箱”
-                DELEGATE.start(new BoxDeleteDelegate());
+                //DELEGATE.start(new BoxDeleteDelegate());
                 break;
             case 5://点击了“用药记录”
                 DELEGATE.start(new MedicineTakeHistoryDelegate());

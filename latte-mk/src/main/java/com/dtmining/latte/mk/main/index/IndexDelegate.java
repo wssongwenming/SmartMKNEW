@@ -304,7 +304,7 @@ public class IndexDelegate extends BottomItemDelegate {
                 //.url("medicine_plan")
                 .params("tel",tel)
                 .params("boxId",boxId)
-                .params("page",1)
+                .params("page",0)
                 .params("count",5)
                 .success(new ISuccess() {
                     @Override

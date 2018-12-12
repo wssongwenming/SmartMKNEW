@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
@@ -348,6 +349,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         System.out.println(input);
         try {
             final int supply = Integer.parseInt(input);
+            Log.d("input", supply+"");
             JsonObject detail=new JsonObject();
             detail.addProperty("medicineId",MEDICINEID);
             detail.addProperty("supplynumber",supply+MEDICINE_ORIGN_COUNT);
@@ -356,17 +358,16 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
             Log.d("sup",  subjson.toString());
             RestClient.builder()
                     .clearParams()
-                    .raw(subjson.toString())
                     .url(UploadConfig.API_HOST+"/api/Medicine_update_supply")
+                    .raw(subjson.toString())
+
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            Log.d("res11", response);
+                            Log.d("res1122", response);
                             getItem(POSITION).setField(MultipleFields.MEDICINECOUNT,supply+MEDICINE_ORIGN_COUNT);
                             notifyDataSetChanged();
                             inputDialog.dismiss();
-
-
                         }
                     })
                     .build()

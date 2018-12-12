@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
@@ -12,6 +13,7 @@ import com.dtmining.latte.delegates.bottom.BottomItemDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.HorizontalAdapter;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicine.AddMedicineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
@@ -22,6 +24,8 @@ import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.storage.LattePreference;
+
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -78,15 +82,18 @@ public class ManageDelegate extends BottomItemDelegate {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         RestClient.builder()
-                .url("recentmedicine")
+                .url(UploadConfig.API_HOST+"/api/get_recently_use")
                 .params("tel",tel)
                 .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        ManagerDataConverter managerDataConverter=new ManagerDataConverter(response);
-                        HorizontalAdapter horizontalAdapter = new HorizontalAdapter(managerDataConverter.convert(), getContext());
-                        horizontalListview.setAdapter(horizontalAdapter);
+                        com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+
+                        //ManagerDataConverter managerDataConverter=new ManagerDataConverter(response);
+                        //HorizontalAdapter horizontalAdapter = new HorizontalAdapter(managerDataConverter.convert(), getContext());
+                        //horizontalListview.setAdapter(horizontalAdapter);
                     }
                 })
                 .build()

@@ -40,6 +40,8 @@ import butterknife.OnItemSelected;
 public class BoxBindDelegate extends LatteDelegate {
     @BindView(R2.id.spinner_medicine_box_bind_boxid)
     AppCompatSpinner mBoxidSpinner=null;
+    @BindView(R2.id.tv_binded_boxId)
+    AppCompatTextView mBoxIdTextView=null;
     @OnItemSelected(R2.id.spinner_medicine_box_bind_boxid)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
         //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
@@ -50,6 +52,7 @@ public class BoxBindDelegate extends LatteDelegate {
     void onSubmit(){
         if(checkForm()){
             LattePreference.setBoxID(boxId);
+            mBoxIdTextView.setText("当前绑定药箱："+boxId);
             Toast.makeText(getContext(),"成功绑定当前药箱ID:"+LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             final IGlobalCallback<String> callback = CallbackManager
                     .getInstance()

@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="15dp"
     android:background="@color/white"
-    android:paddingRight="15dp"
+
     >
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -24,6 +23,8 @@
     <LinearLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:gravity="center_vertical"
         android:layout_height="60dp">
         <TextView
@@ -44,6 +45,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:layout_height="60dp">
         <TextView
             android:layout_width="90dp"
@@ -62,6 +65,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
+
         android:paddingLeft="90dp">
         <com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview
             android:id="@+id/take_plan_add_by_drug_horizontallistview"
@@ -113,6 +117,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:layout_height="60dp">
         <TextView
             android:layout_width="90dp"
@@ -132,6 +138,8 @@
 
     <Button
         android:layout_marginTop="40dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:id="@+id/btn_delegate_medicine_take_plan_add_by_drug_confirm"
         android:layout_width="match_parent"
         android:text="确定"

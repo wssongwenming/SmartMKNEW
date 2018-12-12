@@ -198,6 +198,12 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                     list.remove(groupPosition);
                                 }
                                 myAdapter.notifyDataSetChanged();
+                                final IGlobalCallback<String> callback_medicine_plan_for_index = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
+                                if (callback_medicine_plan_for_index != null) {
+                                    callback_medicine_plan_for_index.executeCallback("");
+                                }
                             }
                         })
                         .build()

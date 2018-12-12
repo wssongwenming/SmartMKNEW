@@ -3,6 +3,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.ui.recycler.DataConverter;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
@@ -43,7 +44,7 @@ public class MedicineOverdueDataConverter extends DataConverter {
                 String tel=jsonObject.getString("tel");
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE,ItemType.MEDICINE_OVER_DUE)
-                        .setField(MultipleFields.MEDICINEIMGURL,medicineImg)
+                        .setField(MultipleFields.MEDICINEIMGURL, UploadConfig.UPLOAD_IMG+medicineImg)
                         .setField(MultipleFields.MEDICINENAME,medicineName)
                         .setField(MultipleFields.MEDICINEVALIDITY,validity)
                         .setField(MultipleFields.MEDICINECOUNT,medicineCount)

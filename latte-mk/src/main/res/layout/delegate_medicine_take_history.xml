@@ -18,7 +18,7 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_medicine_history"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
         <!--显示图标按钮-->
         <LinearLayout
             android:orientation="vertical"
@@ -28,7 +28,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_medicine_history"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"/>
 
        </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
