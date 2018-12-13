@@ -16,13 +16,18 @@ import com.dtmining.latte.net.callback.ISuccess;
  * Date:2018/11/25
  * Description:
  */
-public class MedicineSummaryRefreshHandler {
+public class MedicineSummaryRefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
+    private final SwipeRefreshLayout REFESH_LAYOUT;
     private final RecyclerView RECYCLERVIEW;
     private MultipleRecyclerAdapter mAdapter=null;
     private final DataConverter CONVERTER;
-     public MedicineSummaryRefreshHandler(SwipeRefreshLayout REFESH_LAYOUT,RecyclerView RECYCLERVIEW, DataConverter CONVERTER) {
+     public MedicineSummaryRefreshHandler(SwipeRefreshLayout swipeRefreshLayout,RecyclerView RECYCLERVIEW, DataConverter CONVERTER) {
         this.RECYCLERVIEW = RECYCLERVIEW;
         this.CONVERTER = CONVERTER;
+         this.REFESH_LAYOUT=swipeRefreshLayout;
+         if(REFESH_LAYOUT!=null) {
+             REFESH_LAYOUT.setOnRefreshListener(this);
+         }
 
     }
     public static MedicineSummaryRefreshHandler create(SwipeRefreshLayout swipeRefreshLayout, RecyclerView recyclerView,
@@ -49,5 +54,20 @@ public class MedicineSummaryRefreshHandler {
                 .build()
                 .get();
     }
+    @Override
+    public void onRefresh() {
+        refresh();
+    }
 
+    private void refresh(){
+        if(REFESH_LAYOUT!=null)
+            REFESH_LAYOUT.setRefreshing(true);
+        Latte.getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //可以进行网络请求，REFESH_LAYOUT.setRefreshing(false);可以放入网络请求的success回调
+                REFESH_LAYOUT.setRefreshing(false);
+            }
+        },2000);
+    }
 }

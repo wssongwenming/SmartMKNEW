@@ -207,7 +207,32 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                 })
                 .build()
                 .get();
+    }
+    public void firstPage_medicine_mine_with_boxId(String url,String tel,String boxId){
+        RestClient.builder()
+                .url(url)
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("box", response);
+                        if(response!=null) {
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1) {
+                                MedicineMineRecyclerAdapter mAdapter = MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response), SETS);
+                                RECYCLERVIEW.setAdapter(mAdapter);
+                            }else if(code==17)
+                            {
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品",Toast.LENGTH_LONG).show();
+                            }
+                        }
 
+                    }
+                })
+                .build()
+                .get();
     }
     @Override
     public void onRefresh() {

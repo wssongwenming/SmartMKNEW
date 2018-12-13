@@ -148,7 +148,7 @@ public class AboutMeDelegate extends BottomItemDelegate implements  UserProfileC
         data.add(boxadd);
         data.add(minebox);
         data.add(currentbox);
-        data.add(deletebox);
+        //data.add(deletebox);
         data.add(medhistory);
         data.add(message);
         data.add(feedback);

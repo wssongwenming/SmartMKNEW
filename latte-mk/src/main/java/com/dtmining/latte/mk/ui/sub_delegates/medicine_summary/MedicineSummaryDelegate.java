@@ -39,8 +39,8 @@ import static com.dtmining.latte.util.tool.translate;
  */
 public class MedicineSummaryDelegate extends LatteDelegate{
     private MedicineSummaryRefreshHandler mRefreshHandler=null;
-    private String begin_time=null;
-    private String end_time=null;
+    private String begin_time="2018-12-12";
+    private String end_time="2100-12-12";
     private int _year;
     private int _month;
     private int _day;
@@ -78,7 +78,7 @@ public class MedicineSummaryDelegate extends LatteDelegate{
       }
     @OnClick(R2.id.btn_summary_confirm)
     void summaryByTimeSpan(){
-        mRefreshHandler.getMedicineSummary("medicine_summary",tel,begin_time,end_time);
+        mRefreshHandler.getMedicineSummary(UploadConfig.API_HOST+"/api/medicine_collection",tel,begin_time,end_time);
     }
     @Override
     public Object setLayout() {

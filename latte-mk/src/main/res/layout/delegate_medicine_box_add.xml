@@ -34,4 +34,13 @@
         android:background="@drawable/bind_scan"
         android:layout_height="60dp"
         />
+    <Button
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/btn_delete_box"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:background="@drawable/delete_handler"
+        android:layout_height="60dp"
+        />
 </LinearLayout>

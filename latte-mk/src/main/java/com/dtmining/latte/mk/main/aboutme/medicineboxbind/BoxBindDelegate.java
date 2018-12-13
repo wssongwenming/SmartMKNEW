@@ -118,6 +118,6 @@ public class BoxBindDelegate extends LatteDelegate {
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
-        mBoxIdTextView.setText("当前绑定药箱:"+  LattePreference.getBoxId());
+        mBoxIdTextView.setText("当前默认药箱:"+  LattePreference.getBoxId());
     }
 }

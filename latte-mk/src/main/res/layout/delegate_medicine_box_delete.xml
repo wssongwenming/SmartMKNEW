@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -10,14 +11,53 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="删除药箱"
+            android:text="药箱删除"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_box_delete_box_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:paddingTop="10dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:id="@+id/tv_medicine_box"
+            android:text="药箱"
+            android:textSize="15sp"
+            android:gravity="center_vertical"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_medicine_box_delete_boxid"
+            android:layout_width="match_parent"
+            android:layout_marginTop="0dp"
+            android:layout_alignRight="@+id/tv_medicine_box"
+            android:layout_marginLeft="50dp"
+            android:entries="@array/boxId"
+            android:theme="@style/SpinnerStyle"
+            android:spinnerMode="dropdown"
+            android:layout_marginRight="40dp"
+            android:layout_height="40dp">
+
+        </android.support.v7.widget.AppCompatSpinner>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_medicine_box_delete_submit"
+        android:layout_margin="10dp"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/area_radis"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+</android.support.v7.widget.LinearLayoutCompat>
+
+

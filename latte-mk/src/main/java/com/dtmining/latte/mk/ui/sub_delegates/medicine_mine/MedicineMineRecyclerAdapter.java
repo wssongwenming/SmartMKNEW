@@ -62,7 +62,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .dontAnimate();
 
-    protected MedicineMineRecyclerAdapter(List<MultipleItemEntity> data,Set<SwipeListLayout> sets) {
+    public MedicineMineRecyclerAdapter(List<MultipleItemEntity> data, Set<SwipeListLayout> sets) {
         super(data);
         init();
         this.sets=sets;

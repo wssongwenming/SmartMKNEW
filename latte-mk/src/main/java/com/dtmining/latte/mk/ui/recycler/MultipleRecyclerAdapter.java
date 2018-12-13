@@ -108,6 +108,7 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
         addItemType(ItemType.MEDICINE_USE_MESSAGE,R.layout.item_user_message);
         addItemType(ItemType.MEDICINE_OVERDUE_MESSAGE,R.layout.item_user_message);
         addItemType(ItemType.MEDICINE_SUPPLY_MESSAGE,R.layout.item_user_message);
+        addItemType(ItemType.BOXLIST,R.layout.item_my_boxid);
         //设置宽度监听,只要参数实现了SpanSizeLookup接口
         setSpanSizeLookup(this);
         openLoadAnimation();
@@ -348,6 +349,12 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                 medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
                 holder.setText(R.id.tv_item_medicine_summary_medicine_name,medicineName);
                 holder.setText(R.id.tv_item_medicine_summary_medicine_use_time,formatDuring(medicineUsertime)+"服用："+medicineUserCount);
+                break;
+            case ItemType.BOXLIST:
+                boxId=entity.getField(MultipleFields.BOXID);
+                holder.setText(R.id.tv_my_box,boxId);
+
+                break;
             default:
                 break;
         }

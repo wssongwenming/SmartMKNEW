@@ -84,13 +84,12 @@ public class MedicineBoxesMineAdapter extends BaseMultiItemQuickAdapter<Multiple
                 holder.setText(R.id.tv_medicine_boxes_mine_onuse,"在服："+onUse);
                 holder.setText(R.id.tv_medicine_boxes_mine_pause,"暂停："+pause);
                 holder.setText(R.id.tv_medicine_boxes_mine_overdue,"过期："+overDue);
-
-                AppCompatButton moreButton =holder.getView(R.id.btn_medicine_boxes_mine_more);
+                 AppCompatButton moreButton =holder.getView(R.id.btn_medicine_boxes_mine_more);
                 moreButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("fanying", "onClick: ");
-                        MedicineMineDelegate delegate= MedicineMineDelegate.newInstance(boxId);
+                        Log.d("fanying", boxId);
+                        MedicineMineDelegateForBox delegate= MedicineMineDelegateForBox.newInstance(boxId);
                         DELEGATE.start(delegate);
                         //DELEGATE.start(new MedicineTakeHistoryDelegate());
 

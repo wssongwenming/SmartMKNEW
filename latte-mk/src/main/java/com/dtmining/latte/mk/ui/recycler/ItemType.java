@@ -35,5 +35,6 @@ public class ItemType {
     public static final int MEDICINE_USE_MESSAGE=31;
     public static final int MEDICINE_SUPPLY_MESSAGE=32;
     public static final int MEDICINE_OVERDUE_MESSAGE=33;
+    public static final int BOXLIST=34;
 
 }

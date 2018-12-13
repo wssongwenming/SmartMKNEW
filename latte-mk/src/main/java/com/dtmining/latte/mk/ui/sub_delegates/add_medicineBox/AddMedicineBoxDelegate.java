@@ -9,6 +9,8 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListAdapter;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListDataConverter;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -30,11 +32,15 @@ public class AddMedicineBoxDelegate extends LatteDelegate {
     void AddBoxByScan(){
         startScanWithCheck(this);
     }
+    @OnClick(R2.id.btn_delete_box)
+    void DeleteBox(){start(new DeleteBoxByHandDelegate());}
     @Override
     public Object setLayout() {
         return R.layout.delegate_medicine_box_add;
     }
-
+    private BoxListDataConverter converter=null;
+    private BoxListAdapter mAdapter=null;
+    private String tel=null;
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         CallbackManager.getInstance()
