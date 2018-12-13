@@ -132,8 +132,8 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                             final JSONObject detail=object.getJSONObject("detail");
                             final int total=detail.getInteger("total");//现在接口中为count
                             BEAN.setTotal(total);
-                            convert_response_to_history(response);
-
+                            //medicineHistoryList.addAll(convert_response_to_history(response));
+                            medicineHistoryRecyclerViewAdapter.addData(convert_response_to_history(response));
                             medicineHistoryRecyclerViewAdapter.notifyDataSetChanged();
                             BEAN.addIndex();
                             medicineHistoryRecyclerViewAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
@@ -149,7 +149,8 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                 .build()
                 .get();
     }
-    private void convert_response_to_history(String jsonString){
+    private ArrayList<MultipleItemEntity> convert_response_to_history(String jsonString){
+        ArrayList<MultipleItemEntity> mDatas=new ArrayList<>();
         if(jsonString!=null) {
             String medicineName=null;
             String medicineUseTime=null;
@@ -160,7 +161,9 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                 JSONObject jsonobject1 = jsonobject.getJSONObject("detail");
                 JSONArray jsonarray = jsonobject1.getJSONArray("histories");
                 int size = jsonarray.size();
+            Log.d("jsonsize", size+"");
                 for (int i = 0; i < size; i++) {
+
                     JSONObject jsonobject2 = jsonarray.getJSONObject(i);
                     boxId=jsonobject2.getString("boxId");
                     medicineName=jsonobject2.getString("medicineNames");
@@ -176,10 +179,11 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                             .setField(MultipleFields.TEL,tel)
                             .setField(MultipleFields.ID,id)
                             .build();
-                    medicineHistoryList.add(entity);
-                    Log.d("medicineHistoryList1", "medicineHistoryList="+medicineHistoryList);
+                    mDatas.add(entity);
+
                 }
             }
+            return mDatas;
         }
     private void paging(final String url,final String tel) {
         //medicineHistoryList.clear();
@@ -187,12 +191,11 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         final int currentCount = BEAN.getCurrentCount();
         final int total = BEAN.getTotal();
         final int pageIndex=BEAN.getPageIndex();
-        Log.d("getdatasize=", medicineHistoryRecyclerViewAdapter.getData().size()+"::pagesize="+pageSize+"currentCount="+currentCount+"total=="+total);
+
         if (medicineHistoryRecyclerViewAdapter.getData().size() < pageSize || currentCount >= total) {
-            Log.d("response_1","ppppppppp000pppppppppp");
+
             medicineHistoryRecyclerViewAdapter.loadMoreEnd(true);
         } else {
-            Log.d("response_1","ppppppppppppppppppppppppppp");;
             Latte.getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -208,14 +211,21 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                                     JSONObject object = JSON.parseObject(response);
                                     int code = object.getIntValue("code");
                                     if (code == 1) {
+                                        //medicineHistoryList.clear();
+                                        Log.d("last", response);
+                                        //medicineHistoryList.addAll(convert_response_to_history(response));
+                                        //Log.d("medicineHistoryList", "medicineHistoryList="+medicineHistoryList);
+                                        Log.d("pageindex", BEAN.getPageIndex()+"");
+                                        Log.d("paging", "pagingsize="+medicineHistoryRecyclerViewAdapter.getData().size()+"");
+                                        //Log.d("sizerest","size="+convert_response_to_history(response).size());
 
-                                        convert_response_to_history(response);
-                                        Log.d("medicineHistoryList", "medicineHistoryList="+medicineHistoryList);
-                                        medicineHistoryRecyclerViewAdapter.addData(medicineHistoryList);
+                                        medicineHistoryRecyclerViewAdapter.addData(convert_response_to_history(response));
                                         //累加数量
                                         BEAN.setCurrentCount(medicineHistoryRecyclerViewAdapter.getData().size());
                                         medicineHistoryRecyclerViewAdapter.loadMoreComplete();
                                         BEAN.addIndex();
+                                        Log.d("getdatasize", "getdatasize="+medicineHistoryRecyclerViewAdapter.getData().size()+"::pagesize="+pageSize+"currentCount="+currentCount+"total=="+total);
+
                                     }
                                 }
                             })

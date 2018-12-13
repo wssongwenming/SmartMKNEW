@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.View;
 
 import com.dtmining.latte.app.ConfigKeys;
@@ -12,6 +13,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
@@ -35,8 +37,8 @@ import butterknife.OnClick;
  * Description:
  */
 public class BodySituationDelegate extends LatteDelegate {
-    private String begin_time=null;
-    private String end_time=null;
+    private String begin_time="2012-12-12";
+    private String end_time="2100-12-12";
     @OnClick(R2.id.btn_body_situation_confirm)
     void submitConfirm(){
         getBodySituation( tel, begin_time,end_time);
@@ -98,12 +100,11 @@ public class BodySituationDelegate extends LatteDelegate {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         RestClient.builder()
-                .url("body_situation")
+                .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-
                         ArrayList<MultipleItemEntity> multipleItemEntities=getBodySituations(response);
                         List<String> xDataList = new ArrayList<>();// x轴数据源
                         List<Entry> yDataList = new ArrayList<>();// y轴数据数据源
@@ -114,28 +115,34 @@ public class BodySituationDelegate extends LatteDelegate {
                             xDataList.add((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME)+":"+(String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                             //y轴生成float类型的随机数
                             String reaction=multipleItemEntities.get(i).getField(MultipleFields.REACTION);
+                            int reactionint=3;
+                            if(reaction!=null) {
+                                reactionint = reaction.equalsIgnoreCase("优") ? 3 : (reaction.equalsIgnoreCase("良") ? 2 : (reaction.equalsIgnoreCase("中") ? 1 : 0));
+
+                            }
+                            //Log.d("reaction", reactionint+"");
                             Reaction reactionData=new Reaction();
                             int reaction_int=3;
-                            switch (reaction) {
-                                case "优":
+                            switch (reactionint) {
+                                case 3:
                                 reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                 reactionData.setMedicineReaction("优");
                                 reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
                                 reaction_int = 3;
                                 break;
-                                case "良":
+                                case 2:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("良");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
                                     reaction_int =2;
                                     break;
-                                case "中":
+                                case 1:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("中");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
                                     reaction_int =1;
                                     break;
-                                case "差":
+                                case 0:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("差");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
@@ -155,8 +162,10 @@ public class BodySituationDelegate extends LatteDelegate {
         //getBodySituation(tel,begin_time,end_time);
     }
     private void getBodySituation(String tel,String begin_time,String end_time){
+        Log.d("body", "tel: "+tel+"begin="+begin_time+"end:"+end_time);
         RestClient.builder()
-                .url("body_situation")
+                .clearParams()
+                .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
                 .params("begin_time",begin_time)
                 .params("end_time",end_time)
@@ -174,28 +183,99 @@ public class BodySituationDelegate extends LatteDelegate {
                             xDataList.add((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME)+":"+(String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                             //y轴生成float类型的随机数
                             String reaction=multipleItemEntities.get(i).getField(MultipleFields.REACTION);
+                            int reactionint=3;
+                            if(reaction!=null) {
+                                reactionint = reaction.equalsIgnoreCase("优") ? 3 : (reaction.equalsIgnoreCase("良") ? 2 : (reaction.equalsIgnoreCase("中") ? 1 : 0));
+
+                            }
+                            //Log.d("reaction", reactionint+"");
                             Reaction reactionData=new Reaction();
                             int reaction_int=3;
-                            switch (reaction) {
-                                case "优":
+                            switch (reactionint) {
+                                case 3:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("优");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
                                     reaction_int = 3;
                                     break;
-                                case "良":
+                                case 2:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("良");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
                                     reaction_int =2;
                                     break;
-                                case "中":
+                                case 1:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("中");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
                                     reaction_int =1;
                                     break;
-                                case "差":
+                                case 0:
+                                    reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
+                                    reactionData.setMedicineReaction("差");
+                                    reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
+                                    reaction_int = 0;
+                                    break;
+                            }
+                            float value = (float) (reaction_int);
+                            yDataList.add(new Entry(value, i,reactionData));
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            ChartUtil.showChart(getContext(), lineChart, xDataList, yDataList, "0:差 1：中 2：良 3：优", "用药反应/用药时间","kw/h");
+                        }
+                    }
+                })
+                .build()
+                .get();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/body_stuation")
+                .params("tel",tel)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        ArrayList<MultipleItemEntity> multipleItemEntities=getBodySituations(response);
+                        List<String> xDataList = new ArrayList<>();// x轴数据源
+                        List<Entry> yDataList = new ArrayList<>();// y轴数据数据源
+                        int size=multipleItemEntities.size();
+
+                        for (int i=0;i<size;i++){
+                            // x轴显示的数据
+                            xDataList.add((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME)+":"+(String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
+                            //y轴生成float类型的随机数
+                            String reaction=multipleItemEntities.get(i).getField(MultipleFields.REACTION);
+                            int reactionint=3;
+                            if(reaction!=null) {
+                                reactionint = reaction.equalsIgnoreCase("优") ? 3 : (reaction.equalsIgnoreCase("良") ? 2 : (reaction.equalsIgnoreCase("中") ? 1 : 0));
+
+                            }
+                            //Log.d("reaction", reactionint+"");
+                            Reaction reactionData=new Reaction();
+                            int reaction_int=3;
+                            switch (reactionint) {
+                                case 3:
+                                    reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
+                                    reactionData.setMedicineReaction("优");
+                                    reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
+                                    reaction_int = 3;
+                                    break;
+                                case 2:
+                                    reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
+                                    reactionData.setMedicineReaction("良");
+                                    reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
+                                    reaction_int =2;
+                                    break;
+                                case 1:
+                                    reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
+                                    reactionData.setMedicineReaction("中");
+                                    reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));
+                                    reaction_int =1;
+                                    break;
+                                case 0:
                                     reactionData.setMedicineName((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_NAME));
                                     reactionData.setMedicineReaction("差");
                                     reactionData.setMedicineUsetime((String) multipleItemEntities.get(i).getField(MultipleFields.MEDICINE_USETIME));

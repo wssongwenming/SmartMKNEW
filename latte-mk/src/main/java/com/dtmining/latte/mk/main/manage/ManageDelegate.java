@@ -90,10 +90,9 @@ public class ManageDelegate extends BottomItemDelegate {
                     public void onSuccess(String response) {
                         com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
                         int code=object.getIntValue("code");
-
-                        //ManagerDataConverter managerDataConverter=new ManagerDataConverter(response);
-                        //HorizontalAdapter horizontalAdapter = new HorizontalAdapter(managerDataConverter.convert(), getContext());
-                        //horizontalListview.setAdapter(horizontalAdapter);
+                        ManagerDataConverter managerDataConverter=new ManagerDataConverter(response);
+                        HorizontalAdapter horizontalAdapter = new HorizontalAdapter(managerDataConverter.convert(), getContext());
+                        horizontalListview.setAdapter(horizontalAdapter);
                     }
                 })
                 .build()
