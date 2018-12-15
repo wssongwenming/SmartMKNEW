@@ -1,12 +1,15 @@
 package com.dtmining.latte.mk.ui.sub_delegates.hand_add.model;
 
+import java.io.Serializable;
+
 /**
  * author:songwenming
  * Date:2018/11/18
  * Description:
  */
-public class MedicineModel {
+public class MedicineModel implements Serializable {
     public String boxId;
+    public String medicineId;
     public int medicineCount;
     public String medicineName;
     public String medicineCode;
@@ -113,5 +116,13 @@ public class MedicineModel {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getMedicineId() {
+        return medicineId;
+    }
+
+    public void setMedicineId(String medicineId) {
+        this.medicineId = medicineId;
     }
 }

@@ -27,6 +27,7 @@ import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 import com.dtmining.latte.mk.ui.recycler.MultipleViewHolder;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModel;
 import com.dtmining.latte.mk.ui.sub_delegates.views.InputDialog;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineState;
@@ -62,32 +63,41 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .dontAnimate();
 
-    public MedicineMineRecyclerAdapter(List<MultipleItemEntity> data, Set<SwipeListLayout> sets) {
+    public MedicineMineRecyclerAdapter(List<MultipleItemEntity> data, Set<SwipeListLayout> sets,LatteDelegate delegate) {
         super(data);
+        this.DELEGATE=delegate;
         init();
         this.sets=sets;
     }
 
-    public static MedicineMineRecyclerAdapter create(List<MultipleItemEntity>data,Set<SwipeListLayout> sets){
-        return new MedicineMineRecyclerAdapter(data,sets);
+    public static MedicineMineRecyclerAdapter create(List<MultipleItemEntity>data,Set<SwipeListLayout> sets,LatteDelegate latteDelegate){
+        return new MedicineMineRecyclerAdapter(data,sets,latteDelegate);
     }
 
-    public static MedicineMineRecyclerAdapter create(DataConverter converter,Set<SwipeListLayout> sets){
-        return new MedicineMineRecyclerAdapter(converter.convert(),sets);
+    public static MedicineMineRecyclerAdapter create(DataConverter converter,Set<SwipeListLayout> sets,LatteDelegate latteDelegate){
+        return new MedicineMineRecyclerAdapter(converter.convert(),sets,latteDelegate);
     }
     @Override
     protected void convert(final MultipleViewHolder holder, final MultipleItemEntity item) {
-        final String tel;
-        final int medicinePause;
-        final int medicineCount;
-        final String medicineId;
-        final String medicineName;
-        final String medicineImageUrl;
         final String boxId;
+        final int interval;
+        final String endRemindTime;
+        final String medicineCode;
+        final int medicineCount;
+        final String medicineImage;
+        final String medicineName;
+        final int medicineUseCount;
+        final String medicineValidity;
+        final String startRemindTime;
+        final String tel;
+        final int timesOnDay;
+        final int medicinePause;
+        final String medicineId;
+        final String medicineImageUrl;
+
         LinearLayoutCompat view = (LinearLayoutCompat) holder.itemView;
         SwipeListLayout swipeListLayout=((SwipeListLayout)view.findViewById(R.id.itemview_swipe));
         swipeListLayout.setOnSwipeStatusListener(new onSlipStatusListener(swipeListLayout));
-
         //在服状态
         AppCompatTextView mMedicineInUse= (AppCompatTextView) view.findViewById(R.id.tv_item_medicine_mine_in_use);
         //过期状态
@@ -103,17 +113,25 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         AppCompatTextView mBtnDelete=(AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_delete);
         //补充动作
         AppCompatTextView mBtnSupply=(AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_supply);
-
+        //动作
+        AppCompatTextView mBtnEdit=(AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_edit);
 
         switch (holder.getItemViewType())
         {
             case ItemType.MEDICINE_MINE:
-                medicinePause   =item.getField(MultipleFields.MEDICINEPAUSE);
-                medicineCount   =item.getField(MultipleFields.MEDICINECOUNT);
+                endRemindTime   =item.getField(MultipleFields.MEDICINEENDREMIND);
+                medicineCode    =item.getField(MultipleFields.MEDICINECODE);
+                medicineValidity=item.getField(MultipleFields.MEDICINEVALIDITY);
                 medicineId      =item.getField(MultipleFields.MEDICINEID);
+                medicineCount   =item.getField(MultipleFields.MEDICINECOUNT);
+                timesOnDay      =item.getField(MultipleFields.MEDICINETIMESONDAY);
+                interval        =item.getField(MultipleFields.MEDICINEINTERVAL);
+                startRemindTime =item.getField(MultipleFields.MEDICINESTARTREMIND);
                 medicineName    =item.getField(MultipleFields.MEDICINENAME);
                 medicineImageUrl=item.getField(MultipleFields.MEDICINEIMGURL);
                 boxId           =item.getField(MultipleFields.BOXID);
+                medicineUseCount=item.getField(MultipleFields.MEDICINEUSECOUNT);
+                medicinePause   =item.getField(MultipleFields.MEDICINEPAUSE);
                 tel=            item.getField(MultipleFields.TEL);
                 Glide.with(mContext)
                         .load(UploadConfig.UPLOAD_IMG+medicineImageUrl)
@@ -276,7 +294,28 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                                 .post();
                     }
                 });
+                mBtnEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
+                        MedicineModel medicineModel=new MedicineModel();
+                        medicineModel.setBoxId(boxId);
+                        medicineModel.setMedicineName(medicineName);
+                        medicineModel.setMedicineCode(medicineCode);
+                        medicineModel.setMedicineValidity(medicineValidity);
+                        medicineModel.setStartRemind(startRemindTime);
+                        medicineModel.setEndRemind(endRemindTime);
+                        medicineModel.setDayInterval(interval);
+                        medicineModel.setMedicineCount(medicineCount);
+                        medicineModel.setTimesOnDay(timesOnDay);
+                        medicineModel.setMedicineId(medicineId);
+                        medicineModel.setMedicineUseCount(medicineUseCount);
+                        medicineModel.setMedicineImage(medicineImageUrl);
+                        medicineModel.setTel(tel);
+                        DELEGATE.start(MedicineMineEditDelegate.newInstance(medicineModel));
+
+                    }
+                });
                 break;
             case ItemType.TYPE_FOOT:
                 break;

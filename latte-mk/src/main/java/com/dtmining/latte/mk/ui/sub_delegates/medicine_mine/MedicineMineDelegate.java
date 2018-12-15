@@ -3,9 +3,12 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -44,6 +47,7 @@ import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -59,13 +63,21 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
     SwipeRefreshLayout mRefreshLayout=null;*/
     @BindView(R2.id.rv_medicine_mine)
     RecyclerView mRecyclerView=null;
-/*    @BindView(R2.id.ed_search_medicine)
+    @OnClick(R2.id.tb_medicine_mine)
+    void searchMedicine(){
+        String medicineName=mEditText_Medicine_Name.getText().toString();
+        if(!(medicineName.isEmpty()||medicineName==null))
+        {
+            getMedicineMine(UploadConfig.API_HOST+"/api/get_medicine_by_prename",tel,medicineName);
+        }
+    }
+   @BindView(R2.id.et_search_medicine)
     AppCompatEditText mEditText_Medicine_Name=null;
-    @BindView(R2.id.btn_search_medicine)
-    AppCompatButton mBtn_Search_Medicine=null;
-    @BindView(R2.id.btn_scan_medicine)
-    AppCompatButton mBtn_Scan_Medicine=null;
-    @BindView(R2.id.tb_medicine_mine)*/
+    @OnClick(R2.id.btn_scan_medicine)
+    void searchMedicineByscan(){
+
+    }
+    @BindView(R2.id.tb_medicine_mine)
     Toolbar mToolbar=null;
     private RefreshHandler mRefreshHandler=null;
     private static final String BOX_ID = "BOX_ID";
@@ -103,24 +115,27 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         //initRefreshLayout();
         initRecyclerView();
         //getMedicineMine(UploadConfig.API_HOST+"/api/get_medicine");
-        mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel);
+        mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel,MedicineMineDelegate.this);
     }
-    private void getMedicineMine(String url){
-        RestClient.builder()
+    private void getMedicineMine(String url,String tel,String medicineName){
+         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
+                .params("word",medicineName)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
 
                         if(response!=null) {
-                            com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                            JSONObject object= JSON.parseObject(response);
                             int code=object.getIntValue("code");
                             if(code==1) {
+                                Log.d("search", response);
+                                mDatas.clear();
                                 convert_response_to_medicine_mine(response);
                                 //medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets);
-                                medicineMineRecyclerAdapter.notifyDataSetChanged();
-                                //mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
+                                medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets,MedicineMineDelegate.this);
+                                mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
                             }else if(code==17)
                             {
                                 Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品",Toast.LENGTH_LONG).show();
@@ -147,43 +162,13 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         }else {
             tel=Long.toString(userProfile.getTel());
         }
-/*      RestClient.builder()
-                .url("medicine_mine")
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        final MedincineMineDataConverter converter=new MedincineMineDataConverter();
-                        converter.setJsonData(response);
-                        ArrayList<MultipleItemEntity> list=converter.convert();
-                        list.get(0).getField("medicineName");
-                        Toast.makeText(getContext(),list.get(0).getField(MedicineMineFields.MEDICINENAME).toString(),Toast.LENGTH_LONG).show();
-                    }
-                })
-                .build()
-                .get();*/
+
     }
     private void initRecyclerView(){
         final LinearLayoutManager manager=new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration(new MyDecoration(getContext(), DividerItemDecoration.VERTICAL));
-/*        mRecylerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                switch (newState) {
-                    //当listview开始滑动时，若有item的状态为Open，则Close，然后移除
-                    case SCROLL_STATE_IDLE:
-                        if (sets.size() > 0) {
-                            for (SwipeListLayout s : sets) {
-                                s.setStatus(SwipeListLayout.Status.Close, true);
-                                sets.remove(s);
-                            }
-                        }
-                        break;
 
-                }
-            }
-        });*/
     }
 
     @Override
@@ -203,7 +188,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        medicineMineRecyclerAdapter = new MedicineMineRecyclerAdapter( mDatas,sets );
+        medicineMineRecyclerAdapter = new MedicineMineRecyclerAdapter( mDatas,sets,MedicineMineDelegate.this );
         mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
     }
 
@@ -218,23 +203,23 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
             final int size = dataArray.size();
             for (int i = 0; i < size; i++) {
                 JSONObject data = (JSONObject) dataArray.get(i);
-                final String endRemind=data.getString("endRemind");
-                final String medicineCode=data.getString("medicineCode");
-                final String medicineValidity=data.getString("medicineValidity");
-                final String medicineId=data.getString("medicineId");
-                final int medicineCount = data.getInteger("medicineCount");
-                final String medicineName = data.getString("medicineName");
-                final String medicine_img_url = data.getString("medicineUrl");
-                final String boxId = data.getString("boxId");
-                final int medicinePause = data.getInteger("medicinePause");
+                //final String endRemind=data.getString("endRemind");
+                //final String medicineCode=data.getString("medicineCode");
+                final String medicineValidity=data.getString("medicine_validity");
+                final String medicineId=data.getString("medicine_id");
+                final int medicineCount = data.getInteger("medicine_count");
+                final String medicineName = data.getString("medicine_name");
+                final String boxId = data.getString("box_id");
+                //final String medicine_img_url = data.getString("medicineUrl");
+                final int medicinePause = data.getInteger("medicine_pause");
                 int type = ItemType.MEDICINE_MINE;
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, type)
                         .setField(MultipleFields.TEL, tel)
                         .setField(MultipleFields.MEDICINEID, medicineId)
                         .setField(MultipleFields.MEDICINECOUNT, medicineCount)
+                        //.setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
                         .setField(MultipleFields.MEDICINENAME, medicineName)
-                        .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
                         .setField(MultipleFields.BOXID, boxId)
                         .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
                         .build();

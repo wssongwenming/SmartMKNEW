@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="24dp"
-                android:src="@mipmap/logo" />
+                android:src="@mipmap/indexlog" />
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"

@@ -93,7 +93,7 @@ public class AboutMeDelegate extends BottomItemDelegate implements  UserProfileC
         ListBean boxadd=new ListBean.Builder()
                 .setItemType(ListItemType.ITEM_WITH_IMAGE)
                 .setId(1)
-                .setText("添加药箱")
+                .setText("添加/删除药箱")
                 .setImage(R.drawable.self_add)
                 .build();
         ListBean minebox=new ListBean.Builder()

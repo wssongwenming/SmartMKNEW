@@ -198,7 +198,7 @@ public class MedicineMineDelegateForBox extends LatteDelegate implements View.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        medicineMineRecyclerAdapter = new MedicineMineRecyclerAdapter( mDatas,sets );
+        medicineMineRecyclerAdapter = new MedicineMineRecyclerAdapter( mDatas,sets,MedicineMineDelegateForBox.this);
         mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
     }
 

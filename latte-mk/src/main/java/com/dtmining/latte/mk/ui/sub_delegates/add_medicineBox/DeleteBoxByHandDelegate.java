@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
@@ -25,6 +26,9 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -50,7 +54,34 @@ public class DeleteBoxByHandDelegate extends LatteDelegate{
     }
     @OnClick(R2.id.btn_medicine_box_delete_submit)
     void onSubmit(){
-        if(checkForm()){}
+        if(checkForm()){
+            JsonObject detail=new JsonObject();
+            detail.addProperty("boxId",boxId);
+            detail.addProperty("tel",tel);
+            final JsonObject object=new JsonObject();
+            object.add("detail",detail);
+            RestClient.builder()
+                    .clearParams()
+                    .raw(object.toString())
+                    .url(UploadConfig.API_HOST+"/api/Box_delete")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            com.alibaba.fastjson.JSONObject object1= JSON.parseObject(response);
+                            int code=object1.getIntValue("code");
+                            if(code==1){
+                                getBoxId();
+                                if(boxId==LattePreference.getBoxId())
+                                {
+                                    LattePreference.setBoxID(null);
+                                    Toast.makeText(getContext(),"您删除了默认药箱",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                    })
+                    .build()
+                    .post();
+        }
 
     }
     @Override
@@ -82,7 +113,6 @@ public class DeleteBoxByHandDelegate extends LatteDelegate{
                 })
                 .build()
                 .get();
-
     }
     private boolean checkForm(){
         boolean isPass=true;

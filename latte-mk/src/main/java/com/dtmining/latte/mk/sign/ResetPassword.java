@@ -122,9 +122,9 @@ public class ResetPassword extends LatteDelegate {
             tel = args.getString(TEL);
         }
     }
-    public static ResetPassword newInstance(String medicineCode){
+    public static ResetPassword newInstance(String tel){
         final Bundle args = new Bundle();
-        args.putString(TEL,medicineCode);
+        args.putString(TEL,tel);
         final ResetPassword delegate = new ResetPassword();
         delegate.setArguments(args);
         return delegate;

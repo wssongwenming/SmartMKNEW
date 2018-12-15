@@ -182,7 +182,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
 
     }*/
 
-    public void firstPage_medicine_mine(String url,String tel){
+    public void firstPage_medicine_mine(String url, String tel, final LatteDelegate latteDelegate){
 
         RestClient.builder()
                 .url(url)
@@ -195,7 +195,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                             com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
                             if(code==1) {
-                                MedicineMineRecyclerAdapter mAdapter = MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response), SETS);
+                                MedicineMineRecyclerAdapter mAdapter = MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response), SETS,latteDelegate);
                                 RECYCLERVIEW.setAdapter(mAdapter);
                             }else if(code==17)
                             {
@@ -221,7 +221,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                             JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
                             if(code==1) {
-                                MedicineMineRecyclerAdapter mAdapter = MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response), SETS);
+                                MedicineMineRecyclerAdapter mAdapter = MedicineMineRecyclerAdapter.create(CONVERTER.setJsonData(response), SETS,null);
                                 RECYCLERVIEW.setAdapter(mAdapter);
                             }else if(code==17)
                             {

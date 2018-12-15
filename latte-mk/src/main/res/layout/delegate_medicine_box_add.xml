@@ -9,7 +9,7 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
-        android:text="添加药箱"
+        android:text="添加/删除药箱"
         android:textSize="18sp"
 
         android:gravity="center_vertical"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="55dp">
 
 
 <com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout
@@ -22,7 +22,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_btn_item_medicine_mine_pause"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="#aaaaaa"
                 android:focusable="false"
@@ -32,7 +32,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_btn_item_medicine_mine_start"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:visibility="gone"
                 android:layout_height="match_parent"
                 android:background="#aaaaaa"
@@ -43,17 +43,26 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_btn_item_medicine_mine_supply"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="@color/Energized"
                 android:focusable="false"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:text="补充" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_btn_item_medicine_mine_edit"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:background="@color/main_green_color"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="修改" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_btn_item_medicine_mine_delete"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:focusable="false"
                 android:textColor="@color/white"
                 android:layout_height="match_parent"
@@ -115,7 +124,7 @@
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:gravity="center_vertical"
-                android:layout_height="40dp">
+                android:layout_height="30dp">
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tv_item_medicine_mine_in_use"
                     android:text="在服"
@@ -153,6 +162,5 @@
         android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-
         android:background="@color/we_chat_black"/>
 </android.support.v7.widget.LinearLayoutCompat>

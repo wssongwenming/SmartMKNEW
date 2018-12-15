@@ -158,9 +158,32 @@ public class IndexDelegate extends BottomItemDelegate {
         .addCallback(CallbackType.ON_BIND_BOXID, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
-                Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             }
         }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX, new IGlobalCallback() {
+            @Override
+            public void executeCallback(@Nullable Object args) {
+                RestClient.builder()
+                        .url(UploadConfig.API_HOST+"/api/get_plan")
+                        //.url("medicine_plan")
+                        .params("tel",tel)
+                        .params("boxId",boxId)
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+                                com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                                int code=object.getIntValue("code");
+                                if(code==1) {
+                                    //Toast.makeText(getContext(),"该刷新了",Toast.LENGTH_LONG).show();
+                                    initData(response);
+                                    myAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        })
+                        .build()
+                        .get();
+            }
+        }).addCallback(CallbackType.ON_DELETE_BOXID, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
                 RestClient.builder()

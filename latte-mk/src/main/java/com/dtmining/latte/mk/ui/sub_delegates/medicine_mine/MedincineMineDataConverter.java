@@ -42,6 +42,10 @@ public class MedincineMineDataConverter extends DataConverter {
                 final String medicineValidity=data.getString("medicineValidity");
                 final String medicineId=data.getString("medicineId");
                 final int medicineCount = data.getInteger("medicineCount");
+                final int medicineUseCount=data.getIntValue("medicineUsecount");
+                final int timesonday=data.getIntValue("timesonday");
+                final int dayInterval=data.getIntValue("dayInterval");
+                final String startRemind=data.getString("startRemind");
                 final String medicineName = data.getString("medicineName");
                 final String medicine_img_url = data.getString("medicineUrl");
                 final String boxId = data.getString("boxId");
@@ -50,10 +54,17 @@ public class MedincineMineDataConverter extends DataConverter {
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, type)
                         .setField(MultipleFields.TEL, tel)
+                        .setField(MultipleFields.MEDICINEENDREMIND,endRemind)
+                        .setField(MultipleFields.MEDICINECODE,medicineCode)
+                        .setField(MultipleFields.MEDICINEVALIDITY,medicineValidity)
                         .setField(MultipleFields.MEDICINEID, medicineId)
                         .setField(MultipleFields.MEDICINECOUNT, medicineCount)
+                        .setField(MultipleFields.MEDICINETIMESONDAY,timesonday)
+                        .setField(MultipleFields.MEDICINEINTERVAL,dayInterval)
+                        .setField(MultipleFields.MEDICINESTARTREMIND,startRemind)
                         .setField(MultipleFields.MEDICINENAME, medicineName)
                         .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.MEDICINEUSECOUNT,medicineUseCount)
                         .setField(MultipleFields.BOXID, boxId)
                         .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
                         .build();

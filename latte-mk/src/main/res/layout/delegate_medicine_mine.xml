@@ -16,16 +16,15 @@
             android:text="我的药品"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-           />
+        />
     </android.support.v7.widget.Toolbar>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_medicine_mine"
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
         app:contentInsetStart="0dp"
         android:layout_marginTop="2dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         >
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -36,22 +35,22 @@
             android:orientation="horizontal">
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_rectange"
                 android:gravity="center_vertical">
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/ed_search_medicine"
+                    android:id="@+id/et_search_medicine"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:textSize="20sp" />
-                <android.support.v7.widget.AppCompatButton
+                    android:textSize="15sp" />
+               <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btn_search_medicine"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -62,14 +61,13 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_scan_medicine"
                 android:layout_width="30dp"
+                android:visibility="gone"
                 android:background="@mipmap/scan"
-                android:layout_height="30dp" />
+                android:layout_height="25dp" />
         </android.support.v7.widget.LinearLayoutCompat>
     </android.support.v7.widget.Toolbar>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_medicine_mine"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
-
 </android.support.v7.widget.LinearLayoutCompat>
