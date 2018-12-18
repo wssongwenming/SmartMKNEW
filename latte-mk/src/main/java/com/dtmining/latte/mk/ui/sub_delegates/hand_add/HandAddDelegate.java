@@ -30,6 +30,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.adapter.SpinnerAdapter;
 import com.dtmining.latte.mk.main.aboutme.AboutMeDelegate;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
@@ -49,6 +50,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -63,6 +65,7 @@ import butterknife.OnItemSelected;
  */
 public class HandAddDelegate extends LatteDelegate {
     private int interval;
+    private int medicineType;
     private static final String MEDICINE_CODE = "MEDICINE_CODE";
     //药品名称
     @BindView(R2.id.edit_medicine_hand_add_medicine_name)
@@ -73,6 +76,14 @@ public class HandAddDelegate extends LatteDelegate {
     // 药品有效期
     @BindView(R2.id.btn_medicine_hand_add_please_select_medicine_validity_time)
     AppCompatButton mBtnValidityTimeSelection=null;
+    //剂量单位
+    @BindView(R2.id.sp_medicine_hand_add_dose_unit)
+    Spinner mDoseUnitSpinner=null;
+    @OnItemSelected(R2.id.sp_medicine_hand_add_dose_unit)
+    public void onDoseUnitSelected(AdapterView<?> parent, View view,int pos, long id)
+    {
+        medicineType=pos-1;
+    }
     //药品添加数量
     @BindView(R2.id.edit_medicine_hand_add_medicine_count)
     AppCompatEditText mMedicineCount=null;
@@ -90,10 +101,6 @@ public class HandAddDelegate extends LatteDelegate {
     {
         interval=pos;
     }
-/*    //服药间隔
-    @BindView(R2.id.edit_medicine_hand_add_day_interval)
-    AppCompatEditText mInterval=null;*/
-    //每天服药次数
     @BindView(R2.id.edit_medicine_hand_add_times_onday)
     AppCompatEditText mTimesOnDay=null;
     //单次服药量
@@ -127,6 +134,7 @@ public class HandAddDelegate extends LatteDelegate {
             MedicineAddModel medicineAddModel=new MedicineAddModel();
             medicineModel.setBoxId(boxId);
             medicineModel.setDayInterval(interval);
+            medicineModel.setMedicineType(medicineType);
             medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
             medicineModel.setMedicineCode(mMedicineCode.getText().toString());
             medicineModel.setMedicineCount(Integer.parseInt(mMedicineCount.getText().toString()));
@@ -155,6 +163,7 @@ public class HandAddDelegate extends LatteDelegate {
                                     Toast.makeText(getContext(), "药品添加成功", Toast.LENGTH_LONG).show();
                                     mMedicinName.setText(null);
                                     mMedicineCode.setText(null);
+                                    mDoseUnitSpinner.setSelection(0);
                                     mBtnValidityTimeSelection.setText("请选择有效期");
                                     mMedicineCount.setText(null);
                                     mBtnStartRemindTimeSelection.setText("请选择开始提醒时间");
@@ -230,6 +239,13 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
             mMedicineCount.setError(null);
         }
+        //图片校验
+        if(medicineImage.isEmpty()||medicineImage==null){
+            mMedicineImage.setImageResource(R.drawable.warn);
+            isPass=false;
+        }else{
+            //mMedicineImage.setError(null);
+        }
 
         if(medicineStartTime.isEmpty()||medicineStartTime.equalsIgnoreCase("请选择开始提醒时间")){
             mBtnStartRemindTimeSelection.setError("请选择开始提醒时间！");
@@ -272,7 +288,17 @@ public class HandAddDelegate extends LatteDelegate {
                 textView.setError(null);
             }
         }
+        TextView doseUnit= (TextView) mDoseUnitSpinner.getChildAt(0);
+        if(doseUnit!=null){
+            if(doseUnit.getText().toString().equalsIgnoreCase("请选择剂量单位"))
+            {
+                doseUnit.setError("请选择剂量单位");
+                isPass = false;
 
+            }else {
+                doseUnit.setError(null);
+            }
+        }
         return isPass;
     }
 
@@ -367,8 +393,12 @@ public class HandAddDelegate extends LatteDelegate {
             getBoxIdList();
         }
         initData();
-        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
-        mTimeSpanSpinner.setAdapter(adap);
+        ArrayAdapter timespanadap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
+        mTimeSpanSpinner.setAdapter(timespanadap);
+
+        SpinnerAdapter doseunitadap = new SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包", "克", "毫升", "其他"}));
+        mDoseUnitSpinner.setAdapter(doseunitadap);
+
     }
 
     private void getBoxIdList(){

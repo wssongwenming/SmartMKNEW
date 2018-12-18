@@ -55,7 +55,7 @@ import butterknife.OnClick;
  * Date:2018/10/19
  * Description:
  */
-public class MedicineMineDelegate extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener{
+public class MedicineMineDelegate extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener,MedicineMineEditDelegate.RefreshListener{
     private String tel=null;
     private MedicineMineRecyclerAdapter medicineMineRecyclerAdapter;
     List<MultipleItemEntity> mDatas=new ArrayList<>();
@@ -115,7 +115,8 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         //initRefreshLayout();
         initRecyclerView();
         //getMedicineMine(UploadConfig.API_HOST+"/api/get_medicine");
-        mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel,MedicineMineDelegate.this);
+        //mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel,MedicineMineDelegate.this);
+        getMedicineMineAll(UploadConfig.API_HOST+"/api/get_medicine",tel);
     }
     private void getMedicineMine(String url,String tel,String medicineName){
          RestClient.builder()
@@ -194,6 +195,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
 
     public void convert_response_to_medicine_mine(String reponseJsonString) {
         if(reponseJsonString!=null) {
+
             final JSONObject jsonObject = JSON.parseObject(reponseJsonString);
             String tel = jsonObject.getString("tel");
             int code=jsonObject.getIntValue("code");
@@ -210,7 +212,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                 final int medicineCount = data.getInteger("medicine_count");
                 final String medicineName = data.getString("medicine_name");
                 final String boxId = data.getString("box_id");
-                //final String medicine_img_url = data.getString("medicineUrl");
+                final String medicine_img_url = data.getString("medicineUrl");
                 final int medicinePause = data.getInteger("medicine_pause");
                 int type = ItemType.MEDICINE_MINE;
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
@@ -229,5 +231,91 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         }
         //return mDatas;
     }
+    public List<MultipleItemEntity> convert(String reponseJsonString) {
+        if(reponseJsonString!=null) {
+            mDatas.clear();
+            final JSONObject jsonObject = JSON.parseObject(reponseJsonString);
+            String tel = jsonObject.getString("tel");
+            int code=jsonObject.getIntValue("code");
+            System.out.print("code="+code);
+            final JSONArray dataArray = jsonObject.getJSONArray("detail");
 
+            final int size = dataArray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject data = (JSONObject) dataArray.get(i);
+                final String endRemind=data.getString("endRemind");
+                final String medicineCode=data.getString("medicineCode");
+                final String medicineValidity=data.getString("medicineValidity");
+                final String medicineId=data.getString("medicineId");
+                final int medicineCount = data.getInteger("medicineCount");
+                final int medicineType=data.getIntValue("medicineType");
+                final int medicineUseCount=data.getIntValue("medicineUsecount");
+                final int timesonday=data.getIntValue("timesonday");
+                final int dayInterval=data.getIntValue("dayInterval");
+                final String startRemind=data.getString("startRemind");
+                final String medicineName = data.getString("medicineName");
+                final String medicine_img_url = data.getString("medicineUrl");
+                final String boxId = data.getString("boxId");
+                final int medicinePause = data.getInteger("medicinePause");
+                int type = ItemType.MEDICINE_MINE;
+                final MultipleItemEntity entity = MultipleItemEntity.builder()
+                        .setField(MultipleFields.ITEM_TYPE, type)
+                        .setField(MultipleFields.TEL, tel)
+                        .setField(MultipleFields.MEDICINEENDREMIND,endRemind)
+                        .setField(MultipleFields.MEDICINECODE,medicineCode)
+                        .setField(MultipleFields.MEDICINEVALIDITY,medicineValidity)
+                        .setField(MultipleFields.MEDICINEID, medicineId)
+                        .setField(MultipleFields.MEDICINETYPE,medicineType)
+                        .setField(MultipleFields.MEDICINECOUNT, medicineCount)
+                        .setField(MultipleFields.MEDICINETIMESONDAY,timesonday)
+                        .setField(MultipleFields.MEDICINEINTERVAL,dayInterval)
+                        .setField(MultipleFields.MEDICINESTARTREMIND,startRemind)
+                        .setField(MultipleFields.MEDICINENAME, medicineName)
+                        .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.MEDICINEUSECOUNT,medicineUseCount)
+                        .setField(MultipleFields.BOXID, boxId)
+                        .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
+                        .build();
+                mDatas.add(entity);
+
+            }
+        }
+        return mDatas;
+    }
+    private void getMedicineMineAll(String url,String tel){
+        RestClient.builder()
+                .url(url)
+                .params("tel",tel)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+
+                        if(response!=null) {
+                            JSONObject object= JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1) {
+                                Log.d("search", response);
+                                mDatas.clear();
+                                convert(response);
+                                //medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets);
+                                //medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets,MedicineMineDelegate.this);
+                                //mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
+                                medicineMineRecyclerAdapter.notifyDataSetChanged();
+                            }else if(code==17)
+                            {
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品",Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                    }
+                })
+                .build()
+                .get();
+
+    }
+    @Override
+    public void onRefresh() {
+        getMedicineMineAll(UploadConfig.API_HOST+"/api/get_medicine",tel);
+
+    }
 }

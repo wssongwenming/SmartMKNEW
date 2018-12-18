@@ -11,6 +11,7 @@ public class MedicineModel implements Serializable {
     public String boxId;
     public String medicineId;
     public int medicineCount;
+    public int medicineType;
     public String medicineName;
     public String medicineCode;
     public String medicineValidity;
@@ -108,6 +109,14 @@ public class MedicineModel implements Serializable {
 
     public void setMedicineUseCount(int medicineUseCount) {
         this.medicineUseCount = medicineUseCount;
+    }
+
+    public int getMedicineType() {
+        return medicineType;
+    }
+
+    public void setMedicineType(int medicineType) {
+        this.medicineType = medicineType;
     }
 
     public void setMedicineImage(String medicineImage) {

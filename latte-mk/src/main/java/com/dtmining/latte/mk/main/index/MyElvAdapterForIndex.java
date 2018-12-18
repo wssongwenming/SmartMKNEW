@@ -14,7 +14,7 @@ import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.OnClickDeleteListenter;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.OnClickDeleteListener;
 
 import java.util.List;
 
@@ -80,9 +80,9 @@ public class MyElvAdapterForIndex extends BaseExpandableListAdapter {
         }
     }
     // 删除接口回调方法
-    private OnClickDeleteListenter onClickDeleteListenter = null;
-    public void setOnClickDeleteListenter(OnClickDeleteListenter listener) {
-        this.onClickDeleteListenter = listener;
+    private OnClickDeleteListener onClickDeleteListener = null;
+    public void setOnClickDeleteListener(OnClickDeleteListener listener) {
+        this.onClickDeleteListener = listener;
     }
     @Override
     public int getChildrenCount(int arg0) {

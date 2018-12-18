@@ -19,7 +19,15 @@
         <item>5:间隔5天</item>
         <item>6:间隔6天</item>
         <item>7:间隔7天</item>
-
     </string-array>
-
+    <string-array name="dose_unit">
+        <item>请选择剂量单位</item>
+        <item>片</item>
+        <item>粒/颗</item>
+        <item>瓶/支</item>
+        <item>包</item>
+        <item>克</item>
+        <item>毫升</item>
+        <item>其他</item>
+    </string-array>
 </resources>

@@ -2,21 +2,17 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.mk.R;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlan;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
 
 
@@ -70,13 +66,17 @@ public class MyElvAdapter  extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 //删除事件，回调接口传参数
-                onClickDeleteListenter.onItemClick(v,groupPosition,position);
+                onClickDeleteListener.onItemClick(v,groupPosition,position);
                // new FrontViewToMove(viewHolder1.frontView, listView,200).generateRevealAnimate(viewHolder1.frontView,0);
 
             }
         });
-        //viewHolder1.textView.setTextSize(20);
-        //viewHolder1.textView.setTextColor(Color.DKGRAY);
+        viewHolder1.change.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                onClickChangeListener.onItemClick(v,groupPosition,position);
+            }
+        });
         viewHolder1.medicineName.setText("  " + list.get(groupPosition).getDatas().get(position).getMedicineName());
         viewHolder1.medicineUseCount.setText("  " + list.get(groupPosition).getDatas().get(position).getMedicineUseCount());
         return convertView;
@@ -96,9 +96,13 @@ public class MyElvAdapter  extends BaseExpandableListAdapter {
         }
     }
     // 删除接口回调方法
-    private OnClickDeleteListenter onClickDeleteListenter = null;
-    public void setOnClickDeleteListenter(OnClickDeleteListenter listener) {
-        this.onClickDeleteListenter = listener;
+    private OnClickDeleteListener onClickDeleteListener = null;
+    public void setOnClickDeleteListener(OnClickDeleteListener listener) {
+        this.onClickDeleteListener = listener;
+    }
+    private OnClickChangeListener onClickChangeListener=null;
+    public void setOnClickChangeListener (OnClickChangeListener listener){
+        this.onClickChangeListener=listener;
     }
     @Override
     public int getChildrenCount(int arg0) {

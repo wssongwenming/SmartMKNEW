@@ -21,7 +21,6 @@ public enum MultipleFields {
     ID,
     NAME,
     TAG,
-
     TEL,
     MEDICINECODE,
     MEDICINEID,
@@ -30,6 +29,7 @@ public enum MultipleFields {
     MEDICINEINTERVAL,
     MEDICINECOUNT,
     MEDICINENAME,
+    MEDICINETYPE,
     MEDICINETIMESONDAY,
     MEDICINEIMGURL,
     MEDICINEVALIDITY,

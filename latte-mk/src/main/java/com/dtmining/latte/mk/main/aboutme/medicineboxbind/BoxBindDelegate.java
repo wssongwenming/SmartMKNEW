@@ -60,6 +60,18 @@ public class BoxBindDelegate extends LatteDelegate {
             if (callback != null) {
                 callback.executeCallback(boxId);
             }
+            final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
+                    .getInstance()
+                    .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
+            if (UpdatePlanCallback_for_index!= null) {
+                UpdatePlanCallback_for_index.executeCallback("");
+            }
+            final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
+                    .getInstance()
+                    .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+            if (UpdatePlanCallback != null) {
+                UpdatePlanCallback.executeCallback("");
+            }
             pop();
         }
     }

@@ -208,7 +208,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
             @Override
             public void onClick(View v) {
                 JsonObject detail=new JsonObject();
-                detail.addProperty("planId",planId);
+                detail.addProperty("id",planId);
                 detail.addProperty("medicineUseCount",medicneUsecount);
                 detail.addProperty("atime",atime);
                 detail.addProperty("medicineName",medicinename);

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
-import com.dtmining.latte.mk.main.index.IndexDelegate;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
@@ -35,10 +33,8 @@ import com.dtmining.latte.util.storage.LattePreference;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -176,7 +172,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
         myAdapter = new MyElvAdapter(context, mExpandableListView,list);
         mExpandableListView.setAdapter(myAdapter);
         mExpandableListView.setGroupIndicator(null);
-        myAdapter.setOnClickDeleteListenter(new OnClickDeleteListenter() {
+        myAdapter.setOnClickDeleteListener(new OnClickDeleteListener() {
             @Override
             public void onItemClick(View view, final int groupPosition, final int childPosition) {
                 String planId=(list.get(groupPosition).getDatas()).get(childPosition).getId();
@@ -208,6 +204,28 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                         })
                         .build()
                         .post();
+
+
+            }
+        });
+
+        myAdapter.setOnClickChangeListener(new OnClickChangeListener() {
+            @Override
+            public void onItemClick(View view, final int groupPosition, final int childPosition) {
+                String planId=(list.get(groupPosition).getDatas()).get(childPosition).getId();
+                int medicneUsecount=(list.get(groupPosition).getDatas()).get(childPosition).getMedicineUseCount();
+                String atime=(list.get(groupPosition).getDatas()).get(childPosition).getAtime();
+                String medicinename=(list.get(groupPosition).getDatas()).get(childPosition).getMedicineName();
+                 JsonObject detail=new JsonObject();
+                detail.addProperty("planId",planId);
+                detail.addProperty("medicineUseCount",medicneUsecount);
+                detail.addProperty("atime",atime);
+                detail.addProperty("medicineName",medicinename);
+                detail.addProperty("boxId",boxId);
+                JsonObject jsonForChange=new JsonObject();
+                jsonForChange.add("detail",detail);
+                UpdatePlanDelegate delegate=UpdatePlanDelegate.newInstance(jsonForChange.toString());
+                start(delegate);
 
 
             }

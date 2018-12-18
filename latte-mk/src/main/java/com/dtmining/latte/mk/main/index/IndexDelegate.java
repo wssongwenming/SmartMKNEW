@@ -1,20 +1,14 @@
 package com.dtmining.latte.mk.main.index;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -31,7 +25,6 @@ import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.adapter.MyAdapter;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
-import com.dtmining.latte.mk.main.manage.ManageDelegate;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.tools.Icon;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
@@ -47,10 +40,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlan;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlanExpandableListViewAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePlanDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MyElvAdapter;
-import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.OnClickDeleteListenter;
 import com.dtmining.latte.mk.ui.sub_delegates.views.MyGridView;
-import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.launcher.LauncherHolderCreator;
@@ -58,15 +48,12 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -158,7 +145,7 @@ public class IndexDelegate extends BottomItemDelegate {
         .addCallback(CallbackType.ON_BIND_BOXID, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
-                //Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             }
         }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX, new IGlobalCallback() {
             @Override
@@ -167,7 +154,7 @@ public class IndexDelegate extends BottomItemDelegate {
                         .url(UploadConfig.API_HOST+"/api/get_plan")
                         //.url("medicine_plan")
                         .params("tel",tel)
-                        .params("boxId",boxId)
+                        .params("boxId",LattePreference.getBoxId())
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
@@ -190,7 +177,7 @@ public class IndexDelegate extends BottomItemDelegate {
                         .url(UploadConfig.API_HOST+"/api/get_plan")
                         //.url("medicine_plan")
                         .params("tel",tel)
-                        .params("boxId",boxId)
+                        .params("boxId",LattePreference.getBoxId())
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {

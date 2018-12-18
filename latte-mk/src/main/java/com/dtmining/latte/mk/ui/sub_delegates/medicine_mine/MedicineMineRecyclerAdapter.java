@@ -35,6 +35,9 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineStateM
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
 import com.google.gson.JsonObject;
 
@@ -85,6 +88,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         final String medicineCode;
         final int medicineCount;
         final String medicineImage;
+        final int medicineType;
         final String medicineName;
         final int medicineUseCount;
         final String medicineValidity;
@@ -124,6 +128,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                 medicineValidity=item.getField(MultipleFields.MEDICINEVALIDITY);
                 medicineId      =item.getField(MultipleFields.MEDICINEID);
                 medicineCount   =item.getField(MultipleFields.MEDICINECOUNT);
+                medicineType    =item.getField(MultipleFields.MEDICINETYPE);
                 timesOnDay      =item.getField(MultipleFields.MEDICINETIMESONDAY);
                 interval        =item.getField(MultipleFields.MEDICINEINTERVAL);
                 startRemindTime =item.getField(MultipleFields.MEDICINESTARTREMIND);
@@ -281,6 +286,19 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                                         final int currentPosition = holder.getAdapterPosition();
                                         mData.remove(holder.getAdapterPosition());
                                         notifyDataSetChanged();
+                                        //删除药物后计划也会删除，用回调刷新页面
+                                        final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
+                                                .getInstance()
+                                                .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
+                                        if (UpdatePlanCallback_for_index!= null) {
+                                            UpdatePlanCallback_for_index.executeCallback("");
+                                        }
+                                        final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
+                                                .getInstance()
+                                                .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                                        if (UpdatePlanCallback != null) {
+                                            UpdatePlanCallback.executeCallback("");
+                                        }
                                      }
 
                                 })
@@ -305,6 +323,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineModel.setMedicineValidity(medicineValidity);
                         medicineModel.setStartRemind(startRemindTime);
                         medicineModel.setEndRemind(endRemindTime);
+                        medicineModel.setMedicineType(medicineType);
                         medicineModel.setDayInterval(interval);
                         medicineModel.setMedicineCount(medicineCount);
                         medicineModel.setTimesOnDay(timesOnDay);
@@ -312,6 +331,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineModel.setMedicineUseCount(medicineUseCount);
                         medicineModel.setMedicineImage(medicineImageUrl);
                         medicineModel.setTel(tel);
+                        Latte.getConfigurator().withMedicineMineDelegate(DELEGATE);
                         DELEGATE.start(MedicineMineEditDelegate.newInstance(medicineModel));
 
                     }

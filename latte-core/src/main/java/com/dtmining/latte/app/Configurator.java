@@ -134,6 +134,11 @@ public class Configurator {
         LATTE_CONFIGS.put(ConfigKeys.ABOUNTMEDELEGATE,delegate);
         return this;
     }
+    public final Configurator withMedicineMineDelegate(LatteDelegate delegate)
+    {
+        LATTE_CONFIGS.put(ConfigKeys.MEDICINEMINEDELEGATE,delegate);
+        return this;
+    }
     public final <T> Configurator withLocalUser(T userProfile ){
         LATTE_CONFIGS.put(ConfigKeys.LOCAL_USER,userProfile);
         return this;

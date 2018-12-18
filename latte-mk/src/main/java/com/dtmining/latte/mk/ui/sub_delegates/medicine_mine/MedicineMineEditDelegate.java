@@ -8,26 +8,42 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
+import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineMineDelegateForBox;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.main.aboutme.profile.UserProfileDelegate;
+import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxByScanDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListAdapter;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.BoxListDataConverter;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineAddModel;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineEditModel;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModel;
+import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModelForEdit;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
+
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -39,6 +55,11 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class MedicineMineEditDelegate extends LatteDelegate {
+    private int medicineType;
+    private String tel;
+    private String medicineId;
+    private BoxListDataConverter converter=null;
+    private BoxListAdapter mAdapter=null;
     private int interval;
     private final static String MEDICINEMODEL="MEDICINEMODEL";
     private MedicineModel medicineModel;
@@ -51,6 +72,14 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     // 药品有效期
     @BindView(R2.id.btn_medicine_hand_edit_please_select_medicine_validity_time)
     AppCompatButton mBtnValidityTimeSelection=null;
+    //剂量单位
+    @BindView(R2.id.sp_medicine_hand_edit_dose_unit)
+    Spinner mDoseUnitSpinner=null;
+    @OnItemSelected(R2.id.sp_medicine_hand_edit_dose_unit)
+    public void onDoseUnitSelected(AdapterView<?> parent, View view,int pos, long id)
+    {
+        medicineType=pos-1;
+    }
     //药品添加数量
     @BindView(R2.id.edit_medicine_hand_edit_medicine_count)
     AppCompatEditText mMedicineCount=null;
@@ -68,10 +97,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     {
         interval=pos;
     }
-    /*    //服药间隔
-        @BindView(R2.id.edit_medicine_hand_add_day_interval)
-        AppCompatEditText mInterval=null;*/
-    //每天服药次数
+   //每天服药次数
     @BindView(R2.id.edit_medicine_hand_edit_times_onday)
     AppCompatEditText mTimesOnDay=null;
     //单次服药量
@@ -81,7 +107,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     @BindView(R2.id.img_medicine_hand_edit_appearance)
     AppCompatImageView mMedicineImage=null;
     //外包装图片回传路径
-    String medicineImage="";
+    String medicineImage=null;
     //药箱ID
     @BindView(R2.id.spinner_medicine_hand_edit_boxid)
     AppCompatSpinner mBoxidSpinner=null;
@@ -90,9 +116,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     String boxId=null;
     @OnItemSelected(R2.id.spinner_medicine_hand_edit_boxid)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-        //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
-        boxId=parent.getItemAtPosition(position).toString();
-
+         boxId=parent.getItemAtPosition(position).toString();
     }
 
     @OnClick(R2.id.btn_medicine_hand_edit_please_select_medicine_validity_time)
@@ -171,8 +195,149 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                 });
         this.startCameraWithCheck();
     }
+    @OnClick(R2.id.btn_medicine_hand_edit_submit)
+    void editMedicine(){
+        if(checkForm()){
+            MedicineModelForEdit medicineModel=new MedicineModelForEdit();
+            MedicineEditModel medicineEditModel=new MedicineEditModel();
+            medicineModel.setBoxId(boxId);
+            medicineModel.setDayInterval(interval);
+            medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
+            medicineModel.setMedicineCode(mMedicineCode.getText().toString());
+            medicineModel.setMedicineCount(mMedicineCount.getText().toString());
+            medicineModel.setMedicineImage(medicineImage);
+            medicineModel.setMedicineId(medicineId);
+            medicineModel.setMedicineType(medicineType);
+            medicineModel.setMedicineName(mMedicinName.getText().toString());
+            medicineModel.setMedicineUseCount(Integer.parseInt(mMedicineUseCount.getText().toString()));
+            medicineModel.setMedicineValidity(mBtnValidityTimeSelection.getText().toString());
+            medicineModel.setStartRemind(mBtnStartRemindTimeSelection.getText().toString());
+            medicineModel.setTel(tel);
+            medicineModel.setTimesOnDay(Integer.parseInt(mTimesOnDay.getText().toString()));
+            medicineEditModel.setDetail(medicineModel);
+            final String medicineEditJson = JSON.toJSON(medicineEditModel).toString();
+            Log.d("medicineEditJson",  medicineEditJson);
+            RestClient.builder()
+                    .url(UploadConfig.API_HOST+"/api/Medicine_update")
+                    .clearParams()
+                    .raw(medicineEditJson)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
 
+                            LatteDelegate delegate= Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE);
+                            if(delegate instanceof MedicineMineDelegate)
+                            {
+                                ((MedicineMineDelegate)delegate).onRefresh();
+                            }else if(delegate instanceof MedicineMineDelegateForBox)
+                            {
+                                ((MedicineMineDelegateForBox)delegate).onRefresh();
+                            }
+                           // ((MedicineMineDelegate)Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE)).onRefresh();
+                            pop();
+                        }
+                    })
+                    .build()
+                    .post();
+        }
+    }
+    private boolean checkForm(){
+        final String medicineName= mMedicinName.getText().toString();
+        final String medicineCode=mMedicineCode.getText().toString();
+        final String validityTime=mBtnValidityTimeSelection.getText().toString();
+        final String medicineCount=mMedicineCount.getText().toString();
+        final String medicineStartTime=mBtnStartRemindTimeSelection.getText().toString();
+        final String medicineEndTime=mBtnEndRemindTimeSelection.getText().toString();
+        final String timesOneDay=mTimesOnDay.getText().toString();
+        final String medicineUseCount=mMedicineUseCount.getText().toString();
+        boolean isPass=true;
+        if(medicineName.isEmpty()||medicineName==null){
+            mMedicinName.setError("请填写药品名！");
+            isPass=false;
+        }else{
+            mMedicinName.setError(null);
+        }
+        if(medicineCode.isEmpty()||medicineCode==null){
+            mMedicineCode.setError("请填写药品条形码！");
+            isPass=false;
+        }else{
+            mMedicineCode.setError(null);
+        }
+        if(validityTime.isEmpty()||validityTime.equalsIgnoreCase("请选择有效期")){
+            mBtnValidityTimeSelection.setError("请选择有效期");
+            isPass=false;
+        }else{
+            mBtnValidityTimeSelection.setError(null);
+        }
+        if(medicineCount.isEmpty()||medicineCount==null){
+            mMedicineCount.setError("请填写药品添加数量！");
+            isPass=false;
+        }else{
+            mMedicineCount.setError(null);
+        }
 
+        if(medicineStartTime.isEmpty()||medicineStartTime.equalsIgnoreCase("请选择开始提醒时间")){
+            mBtnStartRemindTimeSelection.setError("请选择开始提醒时间！");
+            isPass=false;
+        }else{
+            mBtnStartRemindTimeSelection.setError(null);
+        }
+        if(medicineEndTime.isEmpty()||medicineEndTime.equalsIgnoreCase("请选择结束提醒时间")){
+            mBtnEndRemindTimeSelection.setError("请选择结束提醒时间！");
+            isPass=false;
+        }else{
+            mBtnEndRemindTimeSelection.setError(null);
+        }
+/*        if(interval.isEmpty()||interval==null){
+            mInterval.setError("请填写服药间隔！");
+            isPass=false;
+        }else{
+            mInterval.setError(null);
+        }*/
+        //图片校验
+        if(medicineImage.isEmpty()||medicineImage==null){
+            mMedicineImage.setImageResource(R.drawable.warn);
+            isPass=false;
+        }else{
+            //mMedicineImage.setError(null);
+        }
+        if(timesOneDay.isEmpty()||timesOneDay==null){
+            mTimesOnDay.setError("请填写服药次数/每天！");
+            isPass=false;
+        }else{
+            mTimesOnDay.setError(null);
+        }
+        if(medicineUseCount.isEmpty()||medicineUseCount==null){
+            mMedicineUseCount.setError("请填写单次服药量！");
+            isPass=false;
+        }else{
+            mMedicineUseCount.setError(null);
+        }
+        TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
+        if(textView!=null){
+            if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
+            {
+                textView.setError("请选择药箱Id");
+                isPass = false;
+
+            }else {
+                textView.setError(null);
+            }
+        }
+        TextView doseUnit= (TextView) mDoseUnitSpinner.getChildAt(0);
+        if(doseUnit!=null){
+            if(doseUnit.getText().toString().equalsIgnoreCase("请选择剂量单位"))
+            {
+                doseUnit.setError("请选择剂量单位");
+                isPass = false;
+
+            }else {
+                doseUnit.setError(null);
+            }
+        }
+
+        return isPass;
+    }
 
     @Override
     public Object setLayout() {
@@ -181,6 +346,17 @@ public class MedicineMineEditDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+        UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
+        if(userProfile==null){
+            startWithPop(new SignInDelegate());
+        }else {
+            tel=Long.toString(userProfile.getTel());
+            getBoxIdList();
+         }
+        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
+        mTimeSpanSpinner.setAdapter(adap);
+        com.dtmining.latte.mk.adapter.SpinnerAdapter doseunitadap = new com.dtmining.latte.mk.adapter.SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包", "克", "毫升", "其他"}));
+        mDoseUnitSpinner.setAdapter(doseunitadap);
         initData();
     }
 
@@ -191,6 +367,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
         if (args != null) {
             medicineModel = (MedicineModel) args.getSerializable(MEDICINEMODEL);
         }
+
     }
     public static MedicineMineEditDelegate newInstance(MedicineModel medicineModel){
         final Bundle args = new Bundle();
@@ -200,33 +377,56 @@ public class MedicineMineEditDelegate extends LatteDelegate {
         return delegate;
     }
     private void initData(){
-        Log.d("count",medicineModel.getMedicineCount()+"");;
+        Log.d("count",medicineModel.getMedicineCount()+"");
         mMedicinName.setText(medicineModel.getMedicineName());
+        medicineId=medicineModel.getMedicineId();
         mMedicineCode.setText(medicineModel.getMedicineCode());
         mBtnValidityTimeSelection.setText(medicineModel.getMedicineValidity());
         mMedicineCount.setText(medicineModel.getMedicineCount()+"");
+
         mBtnStartRemindTimeSelection.setText(medicineModel.getStartRemind());
         mBtnEndRemindTimeSelection.setText(medicineModel.getEndRemind());
         mTimeSpanSpinner.setSelection(medicineModel.getDayInterval());
         mTimesOnDay.setText(medicineModel.getTimesOnDay()+"");
         mMedicineUseCount.setText(medicineModel.getMedicineUseCount()+"");
+        medicineImage=medicineModel.getMedicineImage();
         Glide.with(getContext())
                 .load(UploadConfig.UPLOAD_IMG+medicineModel.getMedicineImage())
                 .into(mMedicineImage);
         setSpinnerItemSelectedByValue(mBoxidSpinner,medicineModel.getBoxId());
-
-
+        mDoseUnitSpinner.setSelection(medicineModel.getMedicineType()+1);
     }
     public  void setSpinnerItemSelectedByValue(Spinner spinner,String value){
         SpinnerAdapter apsAdapter= spinner.getAdapter(); //得到SpinnerAdapter对象
         int k= apsAdapter.getCount();
         for(int i=0;i<k;i++){
             if(value.equals(apsAdapter.getItem(i).toString())){
-//                spinner.setSelection(i,true);// 默认选中项
                 spinner.setSelection(i);// 默认选中项
-
                 break;
             }
         }
     }
+
+    //返回键监听实现
+    public interface RefreshListener {
+        void onRefresh();
+    }
+    private void getBoxIdList(){
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_boxes")
+                .params("tel",tel)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        converter=new BoxListDataConverter();
+                        mAdapter= BoxListAdapter.create(converter.setJsonData(response),R.layout.simple_single_item_list);
+                        mBoxidSpinner.setAdapter(mAdapter);
+                        initData();
+                    }
+                })
+                .build()
+                .get();
+
+    }
+
 }

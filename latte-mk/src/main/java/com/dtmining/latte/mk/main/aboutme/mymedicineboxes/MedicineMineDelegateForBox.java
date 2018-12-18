@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
 import com.dtmining.latte.mk.ui.recycler.MyDecoration;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineEditDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineRecyclerAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedincineMineDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
@@ -46,7 +48,7 @@ import butterknife.BindView;
  * Date:2018/10/19
  * Description:
  */
-public class MedicineMineDelegateForBox extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener{
+public class MedicineMineDelegateForBox extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener,MedicineMineEditDelegate.RefreshListener{
     private String tel=null;
     private MedicineMineRecyclerAdapter medicineMineRecyclerAdapter;
     List<MultipleItemEntity> mDatas=new ArrayList<>();
@@ -98,12 +100,14 @@ public class MedicineMineDelegateForBox extends LatteDelegate implements View.On
         //initRefreshLayout();
         initRecyclerView();
         //getMedicineMine(UploadConfig.API_HOST+"/api/get_medicine");
-        mRefreshHandler.firstPage_medicine_mine_with_boxId(UploadConfig.API_HOST+"/api/get_medicine",tel,mBoxId);
+       // mRefreshHandler.firstPage_medicine_mine_with_boxId(UploadConfig.API_HOST+"/api/get_medicine_of_box",tel,mBoxId,MedicineMineDelegateForBox.this);
+        getMedicineMineInbox(UploadConfig.API_HOST+"/api/get_medicine_of_box",tel,mBoxId);
     }
-    private void getMedicineMine(String url){
+    private void getMedicineMine(String url,String tel,String boxId){
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
+                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -240,4 +244,90 @@ public class MedicineMineDelegateForBox extends LatteDelegate implements View.On
         //return mDatas;
     }
 
+    @Override
+    public void onRefresh() {
+        getMedicineMineInbox(UploadConfig.API_HOST+"/api/get_medicine_of_box",tel,mBoxId);
+    }
+
+    private void getMedicineMineInbox(String url,String tel,String boxId){
+        RestClient.builder()
+                .url(url)
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+
+                        if(response!=null) {
+                            JSONObject object= JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1) {
+                                Log.d("search", response);
+                                mDatas.clear();
+                                convert(response);
+                                //medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets);
+                                //medicineMineRecyclerAdapter=new MedicineMineRecyclerAdapter(mDatas,sets,MedicineMineDelegate.this);
+                                //mRecyclerView.setAdapter(medicineMineRecyclerAdapter);
+                                medicineMineRecyclerAdapter.notifyDataSetChanged();
+                            }else if(code==17)
+                            {
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"当前用户没有药品",Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                    }
+                })
+                .build()
+                .get();
+
+    }
+    public List<MultipleItemEntity> convert(String reponseJsonString) {
+        if(reponseJsonString!=null) {
+            mDatas.clear();
+            final JSONObject jsonObject = JSON.parseObject(reponseJsonString);
+            String tel = jsonObject.getString("tel");
+            int code=jsonObject.getIntValue("code");
+            System.out.print("code="+code);
+            final JSONArray dataArray = jsonObject.getJSONArray("detail");
+
+            final int size = dataArray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject data = (JSONObject) dataArray.get(i);
+                final String endRemind=data.getString("endRemind");
+                final String medicineCode=data.getString("medicineCode");
+                final String medicineValidity=data.getString("medicineValidity");
+                final String medicineId=data.getString("medicineId");
+                final int medicineCount = data.getInteger("medicineCount");
+                final int medicineUseCount=data.getIntValue("medicineUsecount");
+                final int timesonday=data.getIntValue("timesonday");
+                final int dayInterval=data.getIntValue("dayInterval");
+                final String startRemind=data.getString("startRemind");
+                final String medicineName = data.getString("medicineName");
+                final String medicine_img_url = data.getString("medicineUrl");
+                final String boxId = data.getString("boxId");
+                final int medicinePause = data.getInteger("medicinePause");
+                int type = ItemType.MEDICINE_MINE;
+                final MultipleItemEntity entity = MultipleItemEntity.builder()
+                        .setField(MultipleFields.ITEM_TYPE, type)
+                        .setField(MultipleFields.TEL, tel)
+                        .setField(MultipleFields.MEDICINEENDREMIND,endRemind)
+                        .setField(MultipleFields.MEDICINECODE,medicineCode)
+                        .setField(MultipleFields.MEDICINEVALIDITY,medicineValidity)
+                        .setField(MultipleFields.MEDICINEID, medicineId)
+                        .setField(MultipleFields.MEDICINECOUNT, medicineCount)
+                        .setField(MultipleFields.MEDICINETIMESONDAY,timesonday)
+                        .setField(MultipleFields.MEDICINEINTERVAL,dayInterval)
+                        .setField(MultipleFields.MEDICINESTARTREMIND,startRemind)
+                        .setField(MultipleFields.MEDICINENAME, medicineName)
+                        .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.MEDICINEUSECOUNT,medicineUseCount)
+                        .setField(MultipleFields.BOXID, boxId)
+                        .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
+                        .build();
+                mDatas.add(entity);
+
+            }
+        }
+        return mDatas;
+    }
 }

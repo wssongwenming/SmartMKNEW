@@ -8,18 +8,31 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.dtmining.latte.app.ConfigKeys;
+import com.dtmining.latte.app.Latte;
+import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
+import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.CustomDatePicker;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.regex.RegexTool;
+import com.dtmining.latte.util.storage.LattePreference;
 import com.google.gson.JsonObject;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +42,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnItemSelected;
 
 /**
  * author:songwenming
@@ -36,16 +50,25 @@ import butterknife.OnFocusChange;
  * Description:
  */
 public class UpdatePlanDelegate extends LatteDelegate {
+    private String tel;
+    private String medicineId=null;
     private  String medicineName=null;
     private String planId =null;
     private String medicineUsecount;
     private String atime=null;
     private String boxId=null;
+    private MedicineListDataConverter converter=null;
+    private MedicineListAdapter mAdapter=null;
     private CustomDatePicker customDatePicker;
     private static final String PLAN_DATA = "PLAN_DATA";
     private String planString=null;
-    @BindView(R2.id.edit_plan_update_medicine_name)
-    AppCompatEditText mMedicineName=null;
+    @BindView(R2.id.sp_delegate_medicine_take_plan_edit_medicine_name)
+    Spinner mMedicineListSpinner=null;
+    @OnItemSelected(R2.id.sp_delegate_medicine_take_plan_edit_medicine_name)
+    void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+        //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
+        medicineId=((MedicineModel)parent.getItemAtPosition(position)).getMedicineId();
+    }
     @BindView(R2.id.edit_plan_update_medicine_use_count)
     AppCompatEditText mMedicineUseCount=null;
     @BindView(R2.id.edit_plan_update_medicine_use_time)
@@ -60,28 +83,40 @@ public class UpdatePlanDelegate extends LatteDelegate {
     @OnClick(R2.id.btn_plan_update_submit)
     void submit(){
         if(checkForm()){
-            String medicineName=mMedicineName.getText().toString();
+            //String medicineName=mMedicineName.getText().toString();
             String planid =planId;
             int medicineUsecount=Integer.parseInt(mMedicineUseCount.getText().toString());
             String atime=mMedicineUseTime.getText().toString();
             String boxid=boxId;
-            JsonObject plan=new JsonObject();
+
             JsonObject detail=new JsonObject();
             JsonObject updateJson=new JsonObject();
-            plan.addProperty("atime",atime);
-            plan.addProperty("id",planid);
-            plan.addProperty("medicineUseCount",medicineUsecount);
-            plan.addProperty("boxId",boxid);
-            plan.addProperty("medicineName",medicineName);
-            detail.add("plan",plan);
-            updateJson.add("detai",detail);
+            detail.addProperty("atime",atime);
+            detail.addProperty("id",planid);
+            detail.addProperty("medicineUseCount",medicineUsecount);
+            detail.addProperty("boxId",boxid);
+            detail.addProperty("medicineId",medicineId);
+            updateJson.add("detail",detail);
+            Log.d("updateplan", updateJson.toString());
             RestClient.builder()
                     .clearParams()
                     .raw(updateJson.toString())
-                    .url("")
+                    .url(UploadConfig.API_HOST+"/api/update_plan")
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
+                            final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
+                                    .getInstance()
+                                    .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
+                            if (UpdatePlanCallback_for_index!= null) {
+                                UpdatePlanCallback_for_index.executeCallback("");
+                            }
+                            final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
+                                    .getInstance()
+                                    .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                            if (UpdatePlanCallback != null) {
+                                UpdatePlanCallback.executeCallback("");
+                            }
                             pop();
                         }
                     })
@@ -93,15 +128,19 @@ public class UpdatePlanDelegate extends LatteDelegate {
         }
     }
     private boolean checkForm(){
-        final String medicineName=mMedicineName.getText().toString();
         final String medicineUseCount=mMedicineUseCount.getText().toString();
         final String atime=mMedicineUseTime.getText().toString();
         boolean isPass=true;
-        if(medicineName.isEmpty()){
-            mMedicineName.setError("请填写药品名！");
-            isPass=false;
-        }else{
-            mMedicineName.setError(null);
+        TextView textView= (TextView) mMedicineListSpinner.getChildAt(0);
+        if(textView!=null){
+            if(textView.getText().toString().equalsIgnoreCase("请选择药品"))
+            {
+                textView.setError("请选择药品");
+                isPass=false;
+            }else {
+                textView.setError(null);
+
+            }
         }
         if(medicineUseCount.isEmpty()){
             mMedicineUseCount.setError("请填写服药剂量");
@@ -157,21 +196,58 @@ public class UpdatePlanDelegate extends LatteDelegate {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        initData();
-        mMedicineName.setFocusable(false);
+        UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
+        boxId= LattePreference.getBoxId();
+        if(userProfile==null){
+            startWithPop(new SignInDelegate());
+        }else {
+            tel=Long.toString(userProfile.getTel());
+            if(boxId==null){
+                Toast.makeText(getContext(),"App未绑定当前药箱",Toast.LENGTH_LONG).show();
+            }
+        }
+        getMedicineList();
+
     }
     private void initData() {
         if(planString!=null) {
             JSONObject jsonObject= JSON.parseObject(planString);
             JSONObject jsonObject1=jsonObject.getJSONObject("detail");
-             medicineName=jsonObject1.getString("medicineName");
-             planId =jsonObject1.getString("planId");
-             boxId=jsonObject1.getString("boxId");
-             medicineUsecount=jsonObject1.getString("medicineUseCount");
-             atime=jsonObject1.getString("atime");
-            mMedicineName.setText(medicineName);
+            medicineName=jsonObject1.getString("medicineName");
+            planId =jsonObject1.getString("planId");
+            boxId=jsonObject1.getString("boxId");
+            medicineUsecount=jsonObject1.getString("medicineUseCount");
+            atime=jsonObject1.getString("atime");
+            setSpinnerItemSelectedByValue(mMedicineListSpinner,medicineName);
             mMedicineUseCount.setText(medicineUsecount);
             mMedicineUseTime.setText(atime);
+        }
+    }
+    private void getMedicineList(){
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_medicine")
+                .clearParams()
+                .params("tel",tel)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        converter = new MedicineListDataConverter();
+                        mAdapter = MedicineListAdapter.create(converter.setJsonData(response), R.layout.simple_single_item_list);
+                        mMedicineListSpinner.setAdapter(mAdapter);
+                        initData();
+                    }
+                })
+                .build()
+                .get();
+    }
+    public  void setSpinnerItemSelectedByValue(Spinner spinner,String value){
+        SpinnerAdapter apsAdapter= spinner.getAdapter(); //得到SpinnerAdapter对象
+        int k= apsAdapter.getCount();
+        for(int i=0;i<k;i++){
+            if(value.equals(((MedicineModel)apsAdapter.getItem(i)).getMedicineName())){
+                spinner.setSelection(i);// 默认选中项
+                break;
+            }
         }
     }
 }
