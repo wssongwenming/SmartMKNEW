@@ -205,23 +205,37 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
             final int size = dataArray.size();
             for (int i = 0; i < size; i++) {
                 JSONObject data = (JSONObject) dataArray.get(i);
-                //final String endRemind=data.getString("endRemind");
-                //final String medicineCode=data.getString("medicineCode");
+                final String endRemind=data.getString("end_remind");
+                final String medicineCode=data.getString("medicine_code");
                 final String medicineValidity=data.getString("medicine_validity");
                 final String medicineId=data.getString("medicine_id");
+                final int medicineType=data.getIntValue("medicine_type");
                 final int medicineCount = data.getInteger("medicine_count");
+                final int medicineUseCount=data.getIntValue("medicine_useCount");
+                final int timesonday=data.getIntValue("timesOnDay");
+                final int dayInterval=data.getIntValue("day_interval");
+                final String startRemind=data.getString("start_remind");
                 final String medicineName = data.getString("medicine_name");
+                final String medicine_img_url = data.getString("medicine_url");
                 final String boxId = data.getString("box_id");
-                final String medicine_img_url = data.getString("medicineUrl");
                 final int medicinePause = data.getInteger("medicine_pause");
+
                 int type = ItemType.MEDICINE_MINE;
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, type)
                         .setField(MultipleFields.TEL, tel)
+                        .setField(MultipleFields.MEDICINEENDREMIND,endRemind)
+                        .setField(MultipleFields.MEDICINECODE,medicineCode)
+                        .setField(MultipleFields.MEDICINEVALIDITY,medicineValidity)
                         .setField(MultipleFields.MEDICINEID, medicineId)
+                        .setField(MultipleFields.MEDICINETYPE,medicineType)
                         .setField(MultipleFields.MEDICINECOUNT, medicineCount)
-                        //.setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.MEDICINETIMESONDAY,timesonday)
+                        .setField(MultipleFields.MEDICINEINTERVAL,dayInterval)
+                        .setField(MultipleFields.MEDICINESTARTREMIND,startRemind)
                         .setField(MultipleFields.MEDICINENAME, medicineName)
+                        .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
+                        .setField(MultipleFields.MEDICINEUSECOUNT,medicineUseCount)
                         .setField(MultipleFields.BOXID, boxId)
                         .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
                         .build();
@@ -277,7 +291,6 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                         .setField(MultipleFields.MEDICINEPAUSE, medicinePause)
                         .build();
                 mDatas.add(entity);
-
             }
         }
         return mDatas;
@@ -289,7 +302,6 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-
                         if(response!=null) {
                             JSONObject object= JSON.parseObject(response);
                             int code=object.getIntValue("code");

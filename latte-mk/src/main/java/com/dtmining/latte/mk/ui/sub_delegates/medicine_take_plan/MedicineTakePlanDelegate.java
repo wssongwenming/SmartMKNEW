@@ -93,7 +93,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                 .url(UploadConfig.API_HOST+"/api/get_plan")
                                 //.url("medicine_plan")
                                 .params("tel",tel)
-                                .params("boxId",boxId)
+                                .params("boxId",LattePreference.getBoxId())
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
@@ -251,6 +251,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                         medicinePlan.setAtime(jsonObject1.getString("atime"));
                         medicinePlan.setEndRemind(jsonObject1.getString("endRemind"));
                         medicinePlan.setId(jsonObject1.getString("id"));
+                        medicinePlan.setMedicineType(jsonObject1.getIntValue("medicineType"));
                         medicinePlan.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
                         //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                         medicinePlan.setStartRemind(jsonObject1.getString("startRemind"));

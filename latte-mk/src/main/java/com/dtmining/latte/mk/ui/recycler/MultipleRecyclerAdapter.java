@@ -47,6 +47,7 @@ public class MultipleRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleI
         OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener{
     //recyclerview 的机制是滑动下来再滑动上去，就重新加载一次数据，这里确保只初始化一次Banner，防止重复Item加载
     private final LatteDelegate DELEGATE;
+    private String doseUnit;
     private boolean mIsInitBanner=false;
     //设置图片加载策略
     private static final RequestOptions REQUEST_OPTIONS=
@@ -166,6 +167,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
         final String text;
         final String medicineName;
         final String medicineId;
+        final int medicineType;
         final String medicineUseTime;
         final String boxId;
         final String tel;
@@ -175,7 +177,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
         final Integer button_image;
         final String imageUrl;
         final ArrayList<Integer> bannerImages;
-        final long medicineUsertime;
+        final int medicineUsertime;
         final int medicineUserCount;
         switch (holder.getItemViewType())
         {
@@ -238,12 +240,36 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                 medicineName=entity.getField(MultipleFields.MEDICINENAME);
                 medicineCount=entity.getField(MultipleFields.MEDICINECOUNT);
                 validity=entity.getField(MultipleFields.MEDICINEVALIDITY);
+                medicineType=entity.getField(MultipleFields.MEDICINETYPE);
                 imageUrl=entity.getField(MultipleFields.MEDICINEIMGURL);
                 medicineId=entity.getField(MultipleFields.MEDICINEID);
                 boxId=entity.getField(MultipleFields.BOXID);
                 tel=entity.getField(MultipleFields.TEL);
+                switch (medicineType) {
+                    case 0:
+                        doseUnit = "片";
+                        break;
+                    case 1:
+                        doseUnit = "粒/颗";
+                        break;
+                    case 2:
+                        doseUnit = "瓶/支";
+                        break;
+                    case 3:
+                        doseUnit = "包";
+                        break;
+                    case 4:
+                        doseUnit = "克";
+                        break;
+                    case 5:
+                        doseUnit = "毫升";
+                        break;
+                    case 6:
+                        doseUnit = "其他";
+                        break;
+                }
                 holder.setText(R.id.tv_medicine_over_due_medicine_name,medicineName);
-                holder.setText(R.id.tv_medicine_over_due_medicine_count,"剩余"+medicineCount);
+                holder.setText(R.id.tv_medicine_over_due_medicine_count,"剩余"+medicineCount+doseUnit);
                 holder.setText(R.id.tv_medicine_over_due_validity_time,validity);
                 Glide.with(mContext)
                         .load(imageUrl)
@@ -347,8 +373,32 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                 medicineUserCount=entity.getField(MultipleFields.MEDICINE_USERCOUNT);
                 medicineUsertime=entity.getField(MultipleFields.MEDICINE_USERTIME);
                 medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
+                medicineType=entity.getField(MultipleFields.MEDICINETYPE);
+                switch (medicineType) {
+                    case 0:
+                        doseUnit = "片";
+                        break;
+                    case 1:
+                        doseUnit = "粒/颗";
+                        break;
+                    case 2:
+                        doseUnit = "瓶/支";
+                        break;
+                    case 3:
+                        doseUnit = "包";
+                        break;
+                    case 4:
+                        doseUnit = "克";
+                        break;
+                    case 5:
+                        doseUnit = "毫升";
+                        break;
+                    case 6:
+                        doseUnit = "其他";
+                        break;
+                }
                 holder.setText(R.id.tv_item_medicine_summary_medicine_name,medicineName);
-                holder.setText(R.id.tv_item_medicine_summary_medicine_use_time,formatDuring(medicineUsertime)+"服用："+medicineUserCount);
+                holder.setText(R.id.tv_item_medicine_summary_medicine_use_time,medicineUsertime+"天"+"服用："+medicineUserCount+doseUnit);
                 break;
             case ItemType.BOXLIST:
                 boxId=entity.getField(MultipleFields.BOXID);

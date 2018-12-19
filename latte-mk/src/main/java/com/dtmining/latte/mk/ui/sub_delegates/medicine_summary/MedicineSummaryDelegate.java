@@ -39,7 +39,7 @@ import static com.dtmining.latte.util.tool.translate;
  */
 public class MedicineSummaryDelegate extends LatteDelegate{
     private MedicineSummaryRefreshHandler mRefreshHandler=null;
-    private String begin_time="2018-12-12";
+    private String begin_time="2016-12-12";
     private String end_time="2100-12-12";
     private int _year;
     private int _month;

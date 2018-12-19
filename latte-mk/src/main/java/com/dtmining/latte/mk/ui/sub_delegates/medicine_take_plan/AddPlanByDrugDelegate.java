@@ -56,6 +56,8 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
+    String doseUnit="";
+    int medicineType=-1;
     private MyDBOpenHelper myDBOpenHelper;
     private ArrayList<String>original_time_set=new ArrayList<>();
     String tel=null;
@@ -95,11 +97,11 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     //设置铃声
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_set_music)
     void setAlarm(){
-
     }
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     void setPlanTime(){
-        setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this);
+        Toast.makeText(getContext(),doseUnit,Toast.LENGTH_LONG).show();
+        setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this,doseUnit);
         setTimesDialog.show();
     }
     //确定提交整个表单
@@ -140,7 +142,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                 if (callback_medicine_plan != null) {
                                     callback_medicine_plan.executeCallback("");
                                 }
-
                                 final IGlobalCallback<String> callback_medicine_plan_for_index = CallbackManager
                                         .getInstance()
                                         .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
@@ -150,7 +151,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                 RestClient.builder()
                                         .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
                                         .params("tel", tel)
-                                        .params("boxId", boxId)
+                                        .params("boxId",LattePreference.getBoxId())
                                         .success(new ISuccess() {
                                             @Override
                                             public void onSuccess(String response) {
@@ -273,16 +274,41 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         medicineModel=mAdapter.getItem(position);
         MedicinePlans medicinePlans=medicineModel.getMedicinePlans();
+        medicineType=medicineModel.getMedicintType();
+        switch (medicineType) {
+            case 0:
+                doseUnit = "片";
+                break;
+            case 1:
+                doseUnit = "粒/颗";
+                break;
+            case 2:
+                doseUnit = "瓶/支";
+                break;
+            case 3:
+                doseUnit = "包";
+                break;
+            case 4:
+                doseUnit = "克";
+                break;
+            case 5:
+                doseUnit = "毫升";
+                break;
+            case 6:
+                doseUnit = "其他";
+                break;
+        }
         if(medicinePlans!=null)
         {
-            timeSet=medicineModel.getMedicinePlans().getTime();
-            useCountSet= medicineModel.getMedicinePlans().getUseCount();
+
+            timeSet=medicineModel.getMedicinePlans().getTime();//药品包含的计划的时间串，
+            useCountSet= medicineModel.getMedicinePlans().getUseCount();//药品包含的计划的用linag
             int size=timeSet.size();
             origin_time_count_size=size;//取得原始的数据量
             ArrayList<String> time_count=new ArrayList<>();
             for (int i = 0; i <size ; i++) {
                 original_time_set.add(timeSet.get(i));
-                time_count.add(timeSet.get(i)+"剂量:"+useCountSet.get(i));
+                time_count.add(timeSet.get(i)+"剂量:"+useCountSet.get(i)+doseUnit);
             }
             set_time_count_tag(time_count);
 
@@ -321,8 +347,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-
-       UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
+        UserProfile userProfile= (UserProfile) Latte.getConfigurations().get(ConfigKeys.LOCAL_USER);
         boxId=LattePreference.getBoxId();
         if(userProfile==null){
             startWithPop(new SignInDelegate());
@@ -347,9 +372,10 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
 
     private void getMedicineList(){
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/get_medicine")
+                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 .clearParams()
                 .params("tel",tel)
+                .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

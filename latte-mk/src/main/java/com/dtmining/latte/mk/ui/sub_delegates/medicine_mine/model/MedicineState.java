@@ -7,6 +7,7 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model;
  */
 public class MedicineState {
     public String medicineId;
+    private String doseUnit;
     public String medicinePause;
     public String boxId;
     public String tel;
@@ -63,6 +64,14 @@ public class MedicineState {
 
     public void setMedicineUseCount(String medicineUseCount) {
         this.medicineUseCount = medicineUseCount;
+    }
+
+    public String getDoseUnit() {
+        return doseUnit;
+    }
+
+    public void setDoseUnit(String doseUnit) {
+        this.doseUnit = doseUnit;
     }
 
     public void setBoxId(String boxId) {

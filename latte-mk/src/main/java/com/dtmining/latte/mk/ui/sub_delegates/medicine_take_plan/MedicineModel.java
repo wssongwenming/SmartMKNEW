@@ -19,6 +19,7 @@ public class MedicineModel {
     private String medicineName;
     private String medicineId;
     private String boxId;
+    private int medicintType;
     private String medicinePause;
     private String medicineCount;
     private String tel;
@@ -89,6 +90,22 @@ public class MedicineModel {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getMedicineValidity() {
+        return medicineValidity;
+    }
+
+    public int getMedicintType() {
+        return medicintType;
+    }
+
+    public void setMedicineValidity(String medicineValidity) {
+        this.medicineValidity = medicineValidity;
+    }
+
+    public void setMedicintType(int medicintType) {
+        this.medicintType = medicintType;
     }
 
     public void setMedicinePlans(MedicinePlans medicinePlans) {

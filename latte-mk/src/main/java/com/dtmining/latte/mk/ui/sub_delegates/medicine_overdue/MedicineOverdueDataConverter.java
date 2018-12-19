@@ -40,6 +40,7 @@ public class MedicineOverdueDataConverter extends DataConverter {
                 String validity=jsonObject.getString("medicineValidity");
                 String medicineCount=jsonObject.getString("medicineCount");
                 String medicineId=jsonObject.getString("medicineId");
+                int medicineType=jsonObject.getIntValue("medicineType");
                 String boxId=jsonObject.getString("boxId");
                 String tel=jsonObject.getString("tel");
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
@@ -48,6 +49,7 @@ public class MedicineOverdueDataConverter extends DataConverter {
                         .setField(MultipleFields.MEDICINENAME,medicineName)
                         .setField(MultipleFields.MEDICINEVALIDITY,validity)
                         .setField(MultipleFields.MEDICINECOUNT,medicineCount)
+                        .setField(MultipleFields.MEDICINETYPE,medicineType)
                         .setField(MultipleFields.MEDICINEID,medicineId)
                         .setField(MultipleFields.TEL,tel)
                         .setField(MultipleFields.BOXID,boxId)

@@ -65,7 +65,7 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final MedicineState medicineState = mDatas.get(position);
-        holder.tv_add_plan_by_time_medicine_name.setText(medicineState.getMedicineName());
+        holder.tv_add_plan_by_time_medicine_name.setText(medicineState.getMedicineName()+"("+medicineState.getDoseUnit()+")");
 
         if (holder.et_add_plan_by_time_medicine_usecount.getTag() instanceof TextWatcher) {
             holder.et_add_plan_by_time_medicine_usecount.removeTextChangedListener((TextWatcher) holder.et_add_plan_by_time_medicine_usecount.getTag());

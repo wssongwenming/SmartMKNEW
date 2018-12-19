@@ -1,6 +1,7 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -32,13 +33,16 @@ public class MedicineListDataConverter {
             int code = jsonObject.getIntValue("code");
             if(code==1) {
             String tel = jsonObject.getString("tel");
-            final JSONArray dataArray = jsonObject.getJSONArray("detail");
-            final int size = dataArray.size();
+            final JSONArray detail = jsonObject.getJSONArray("detail");
+
+            final int size = detail.size();
             for (int i = 0; i < size; i++) {
                 MedicineModel medicineModel1 = new MedicineModel();
-                JSONObject jsondata = (JSONObject) dataArray.get(i);
+                JSONObject jsondata = (JSONObject) detail.get(i);
                 medicineModel1.setMedicineName(jsondata.getString("medicineName"));
                 medicineModel1.setBoxId(jsondata.getString("boxId"));
+                Log.d("detail", "medicineName="+jsondata.getString("medicineName")+"type="+jsondata.getIntValue("medicineType"));
+                medicineModel1.setMedicintType(jsondata.getIntValue("medicineType"));
                 medicineModel1.setMedicineId(jsondata.getString("medicineId"));
                 JSONArray planArray = jsondata.getJSONArray("medicinePlan");
                 if (planArray != null) {

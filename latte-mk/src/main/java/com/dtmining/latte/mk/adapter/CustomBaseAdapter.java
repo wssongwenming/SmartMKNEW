@@ -31,6 +31,10 @@ public abstract class CustomBaseAdapter<T> extends BaseAdapter {
         this.mLayoutRes = mLayoutRes;
     }
 
+    public LinkedList<T> getmData() {
+        return mData;
+    }
+
     @Override
     public int getCount() {
         return mData != null ? mData.size() : 0;

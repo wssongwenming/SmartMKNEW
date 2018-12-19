@@ -70,7 +70,6 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:id="@+id/rv_medicine_summary"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="wrap_content">

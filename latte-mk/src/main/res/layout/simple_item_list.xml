@@ -11,45 +11,64 @@
         android:layout_marginLeft="15dp"
         android:paddingRight="15dp"
         android:background="@drawable/stroke_edit"
-        android:layout_weight="1"
+        android:layout_weight="5"
         android:orientation="horizontal"
         android:layout_height="35dp">
         <TextView
-            android:id="@+id/tv_time_for_plan_set"
-            android:layout_width="0dip"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:paddingLeft="3dp"
             android:layout_gravity="center"
-            android:layout_weight="2"
             android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:textSize="18sp" />
+            android:text="服药时间:"
+            android:textSize="15sp" />
         <TextView
-            android:layout_gravity="center"
-            android:layout_width="10dp"
-            android:background="@mipmap/dropdown"
-            android:layout_height="10dp" />
-        <TextView
+            android:id="@+id/tv_time_for_plan_set"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="center"
+
+            android:gravity="center_vertical"
+            android:paddingLeft="3dp"
+            android:textSize="15sp" />
+<!--        <TextView
+            android:layout_gravity="center"
+            android:layout_width="10dp"
+            android:background="@mipmap/dropdown"
+            android:layout_height="10dp" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:paddingLeft="3dp"
+            android:layout_gravity="center"
             android:gravity="center_vertical"
             android:text="剂量："
-            android:textSize="18sp" />
+            android:textSize="15sp" />
         <EditText
             android:layout_gravity="center"
             android:id="@+id/et_medicine_usecount_for_plan_set"
             android:layout_width="0dp"
             android:background="@null"
             android:layout_weight="1"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_height="30dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/tv_dose_unit_for_plan_set"
+            android:layout_height="30dp"
+            android:paddingLeft="3dp"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="15sp" />
     </LinearLayout>
 
 
     <LinearLayout
         android:id="@+id/btn_delete"
-        android:layout_width="60dp"
+        android:layout_width="0dp"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:gravity="center"
         android:layout_height="30dp">
         <TextView

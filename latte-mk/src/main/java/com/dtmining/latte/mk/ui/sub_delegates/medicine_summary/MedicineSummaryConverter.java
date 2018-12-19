@@ -34,6 +34,7 @@ public class MedicineSummaryConverter extends DataConverter {
     }
 
     private ArrayList<MultipleItemEntity> convertMedicineSummary() {
+        ENTITIES.clear();
         if(getJsonData()!=null) {
             JSONObject jsonobject = JSON.parseObject(getJsonData());
             JSONObject jsonObject1 = jsonobject.getJSONObject("detail");
@@ -41,14 +42,17 @@ public class MedicineSummaryConverter extends DataConverter {
             int size=jsonArray.size();
             for (int i = 0; i <size ; i++) {
                 JSONObject jsonObject=jsonArray.getJSONObject(i);
-                int medicine_userCount=jsonObject.getInteger("medicine_userCount");
-                long medicine_userTime=jsonObject.getLong("medicine_userTime");
+                int medicine_userCount=jsonObject.getInteger("useCount");
+                int medicineType=jsonObject.getIntValue("medicine_type");
+                //long medicine_userTime=jsonObject.getLong("medicine_userTime");
+                int days=jsonObject.getIntValue("days");
                 String medicine_name=jsonObject.getString("medicine_name");
 
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_SUMMARY)
                         .setField(MultipleFields.MEDICINE_NAME,medicine_name)
-                        .setField(MultipleFields.MEDICINE_USERTIME,medicine_userTime)
+                        .setField(MultipleFields.MEDICINE_USERTIME,days)
+                        .setField(MultipleFields.MEDICINETYPE,medicineType)
                         .setField(MultipleFields.MEDICINE_USERCOUNT,medicine_userCount)
                          .build();
                 ENTITIES.add(entity);

@@ -37,6 +37,7 @@ import java.util.Map;
 public class SetTimesDialog extends Dialog  implements View.OnClickListener,MedicineSimpleAdapter.Callback{
     private Context context;
     private String confirmButtonText;
+    private String doseUnit;
     private String cacelButtonText;
     private ClickListenerInterface clickListenerInterface;
     private ArrayList<String> original_time_set;
@@ -73,7 +74,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         public void doCancel();
     }
 
-    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface) {
+    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface,String doseUnit) {
         super(context, R.style.Theme_MYDialog);
         this.original_time_set=original_time_set;
         this.context = context;
@@ -81,7 +82,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         this.cacelButtonText = cacelButtonText;
         this.mclicklistenerinterface=clicklistenerinterface;
         this.time_list=time_list;
-
+        this.doseUnit=doseUnit;
         this.count_list=count_list;
     }
 
@@ -100,12 +101,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         setContentView(view);
 
         lv_set_time= (ListView) view.findViewById(R.id.lv_set_time);
-        //time_list=new ArrayList<String>();
-        //count_list=new ArrayList<>();
-        //time_list.add("08:00");
-        //time_list.add("12:00");
-        //time_list.add("19:00");
-        adapter=new MedicineSimpleAdapter(time_list,original_time_set,count_list,this.context,"1",SetTimesDialog.this);
+        adapter=new MedicineSimpleAdapter(time_list,original_time_set,count_list,this.context,"1",SetTimesDialog.this,doseUnit);
         lv_set_time.setAdapter(adapter);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
@@ -119,15 +115,12 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
                     Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"该时间段已有服药计划",Toast.LENGTH_LONG).show();
                 }else{
                     time_list.add(time);
-
                     adapter.notifyDataSetChanged();
                 }
-
             }
         }, "2010-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(true); // 显示时和分
         customDatePicker.setIsLoop(true); // 允许循环滚动
-
 
         TextView tvConfirm = (TextView) view.findViewById(R.id.confirm);
         TextView tvCancel = (TextView) view.findViewById(R.id.cancel);
@@ -153,7 +146,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) {//单添加服药时间,弹出时间选择窗口
         int i = v.getId();
         if (i == R.id.btn_add_time) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);

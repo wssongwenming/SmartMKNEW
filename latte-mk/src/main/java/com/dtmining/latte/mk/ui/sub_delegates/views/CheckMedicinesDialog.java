@@ -83,7 +83,7 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
         checkedPosition=seletor;
 
         checkedMedicine=seletorString;
-        Toast.makeText(getContext(), checkedPosition+"",Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), checkedPosition+"",Toast.LENGTH_LONG).show();
     }
 
     public interface ClickListenerInterface {
@@ -125,10 +125,10 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
 
     private void initDatas(){
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/get_medicine")
+                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 .clearParams()
                 .params("tel",tel)
-                .params("boxId",boxId)
+                .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -141,14 +141,40 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
                                 JSONObject data = (JSONObject) dataArray.get(i);
                                 final String medicineId = data.getString("medicineId");
                                 final int medicineCount = data.getInteger("medicineCount");
+                                final int medicineType  =data.getIntValue("medicineType");
                                 final String medicineName = data.getString("medicineName");
                                 final String medicine_img_url = data.getString("medicine_img_url");
                                 final String boxId = data.getString("boxId");
                                 final int medicinePause = data.getInteger("medicinePause");
+                                String doseUnit="";
+                                switch (medicineType) {
+                                    case 0:
+                                        doseUnit = "片";
+                                        break;
+                                    case 1:
+                                        doseUnit = "粒/颗";
+                                        break;
+                                    case 2:
+                                        doseUnit = "瓶/支";
+                                        break;
+                                    case 3:
+                                        doseUnit = "包";
+                                        break;
+                                    case 4:
+                                        doseUnit = "克";
+                                        break;
+                                    case 5:
+                                        doseUnit = "毫升";
+                                        break;
+                                    case 6:
+                                        doseUnit = "其他";
+                                        break;
+                                }
                                 MedicineState medicineState=new MedicineState();
                                 medicineState.setMedicineId(medicineId);
                                 medicineState.setBoxId(boxId);
                                 medicineState.setMedicineName(medicineName);
+                                medicineState.setDoseUnit(doseUnit);
                                 medicines.add(medicineState);
 
                             }

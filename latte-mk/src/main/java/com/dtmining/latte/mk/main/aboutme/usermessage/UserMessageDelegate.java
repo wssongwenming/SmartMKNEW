@@ -18,6 +18,7 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
@@ -136,7 +137,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
     private void get_medicine_use_message(final String tel) {
         RestClient.builder()
                 .clearParams()
-                .url("usemessage")
+                .url(UploadConfig.API_HOST+"/api/get_medicine_use_message")
                 //.url(UploadConfig.API_HOST+"/api/get_medicine_use_message")
                 .params("tel",tel)
                 .success(new ISuccess() {
@@ -159,8 +160,35 @@ public class UserMessageDelegate  extends LatteDelegate  {
                                     int size1=plans.size();
                                     for (int j = 0; j <size1 ; j++){
                                         JSONObject plan=(JSONObject) plans.get(j);
+                                        String boxId=plan.getString("boxId");
                                         String medicineName=plan.getString("medicineName");
-                                        plansbuilder.append(medicineName);
+                                        int medicineUseCount=plan.getIntValue("medicineUseCount");
+                                        int medicineType=plan.getIntValue("medicineType");
+                                        String doseUnit="";
+                                        switch (medicineType) {
+                                            case 0:
+                                                doseUnit = "片";
+                                                break;
+                                            case 1:
+                                                doseUnit = "粒/颗";
+                                                break;
+                                            case 2:
+                                                doseUnit = "瓶/支";
+                                                break;
+                                            case 3:
+                                                doseUnit = "包";
+                                                break;
+                                            case 4:
+                                                doseUnit = "克";
+                                                break;
+                                            case 5:
+                                                doseUnit = "毫升";
+                                                break;
+                                            case 6:
+                                                doseUnit = "其他";
+                                                break;
+                                        }
+                                        plansbuilder.append("药盒"+boxId+"内:"+medicineName+medicineUseCount+doseUnit);
                                     }
                                 }
                                 final MultipleItemEntity entity=MultipleItemEntity.builder()
@@ -182,7 +210,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
     private void get_medicine_supply_message(final String tel){
         RestClient.builder()
                 .clearParams()
-                .url("supply")
+                .url(UploadConfig.API_HOST+"/api/get_medicine_supply_message")
                 //.url(UploadConfig.API_HOST+"/api/get_medicine_supply_message")
                 .params("tel",tel)
                 .success(new ISuccess() {
@@ -223,7 +251,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
     private void get_medicine_overdue_message(String tel){
         RestClient.builder()
                 .clearParams()
-                .url("overdue")
+                .url(UploadConfig.API_HOST+"/api/get_medicine_over_due_message")
                 //.url(UploadConfig.API_HOST+"/api/get_medicine_over_due_message")
                 .params("tel",tel)
                 .success(new ISuccess() {

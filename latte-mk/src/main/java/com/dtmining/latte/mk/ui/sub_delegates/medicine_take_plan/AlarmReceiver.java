@@ -37,8 +37,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("ids", ids+"");
         if(intent.getAction().equals(AlarmsSetting.ALARM_ALERT_ACTION)) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日——HH时mm分ss秒SSS毫秒");
-            Log.e("###########此次闹钟#######", "alarmsSetting.getNextAlarm()" + formatter.format(new Date(alarmsSetting.getNextAlarm())));
+            Log.e("###########此次闹钟#######", "alarmsSetting.getNextAlarm()" + formatter.format(new Date(nextalarm)));
             Log.e("###########当前系统时间###", "System.currentTimeMillis()" + formatter.format(new Date(System.currentTimeMillis())));
+            Log.e("##############", "System.currentTimeMillis()" + formatter.format(new Date(nextalarm)));
             if (nextalarm + 1000 * 30 < System.currentTimeMillis()){//解决闹钟广播比设置时间闹钟快的问题
                 Log.e("###########无效闹钟#######", "不执行");
                 return;

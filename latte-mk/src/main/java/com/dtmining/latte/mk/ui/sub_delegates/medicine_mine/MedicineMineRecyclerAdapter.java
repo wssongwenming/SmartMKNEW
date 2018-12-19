@@ -72,11 +72,9 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         init();
         this.sets=sets;
     }
-
     public static MedicineMineRecyclerAdapter create(List<MultipleItemEntity>data,Set<SwipeListLayout> sets,LatteDelegate latteDelegate){
         return new MedicineMineRecyclerAdapter(data,sets,latteDelegate);
     }
-
     public static MedicineMineRecyclerAdapter create(DataConverter converter,Set<SwipeListLayout> sets,LatteDelegate latteDelegate){
         return new MedicineMineRecyclerAdapter(converter.convert(),sets,latteDelegate);
     }
@@ -98,7 +96,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         final int medicinePause;
         final String medicineId;
         final String medicineImageUrl;
-
         LinearLayoutCompat view = (LinearLayoutCompat) holder.itemView;
         SwipeListLayout swipeListLayout=((SwipeListLayout)view.findViewById(R.id.itemview_swipe));
         swipeListLayout.setOnSwipeStatusListener(new onSlipStatusListener(swipeListLayout));
@@ -108,7 +105,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         AppCompatTextView mMedicineOverdue=(AppCompatTextView) view.findViewById(R.id.tv_item_medicine_mine_overdue);
         //已暂停状态
         AppCompatTextView mMedicinePause=(AppCompatTextView) view.findViewById(R.id.tv_item_medicine_mine_pause);
-
         //暂停动作
         AppCompatTextView mBtnPause= (AppCompatTextView) view.findViewById(R.id.tv_btn_item_medicine_mine_pause);
         //开始动作
@@ -142,7 +138,8 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         .load(UploadConfig.UPLOAD_IMG+medicineImageUrl)
                         .apply(REQUEST_OPTIONS)
                         .into((ImageView) (view.findViewById(R.id.iv_item_medicine_mine)));
-                        holder.setText(R.id.tv_item_medicine_mine_medicine_name,medicineName);
+                 holder.setText(R.id.tv_item_medicine_mine_position,"药箱:"+boxId);
+                 holder.setText(R.id.tv_item_medicine_mine_medicine_name,medicineName);
                 ((TextView)(view.findViewById(R.id.tv_item_medicine_mine_medicine_count))).setText("剩余"+medicineCount);
                 if(medicinePause==0){//药品状态，0：在服
                     mMedicineInUse.setVisibility(View.VISIBLE);
@@ -174,7 +171,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
 
                     @Override
                     public void onClick(View view) {
-
                         inputDialog = new InputDialog((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "输入补充数量" , "确定",MedicineMineRecyclerAdapter.this);
                         MEDICINEID=medicineId;
                         POSITION=holder.getAdapterPosition();
@@ -193,7 +189,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineState.setMedicinePause("1");
                         medicineStateModel.setDetail(medicineState);
                         String json = JSON.toJSON(medicineStateModel).toString();
-
                         RestClient.builder()
                                 .clearParams()
                                 .url(UploadConfig.API_HOST+"/api/Medicine_update_state")
@@ -315,7 +310,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                 mBtnEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         MedicineModel medicineModel=new MedicineModel();
                         medicineModel.setBoxId(boxId);
                         medicineModel.setMedicineName(medicineName);
@@ -333,7 +327,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         medicineModel.setTel(tel);
                         Latte.getConfigurator().withMedicineMineDelegate(DELEGATE);
                         DELEGATE.start(MedicineMineEditDelegate.newInstance(medicineModel));
-
                     }
                 });
                 break;
@@ -341,7 +334,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                 break;
             default:
                 break;
-
         }
     }
 
@@ -364,7 +356,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
 
     }
-
     class onSlipStatusListener implements SwipeListLayout.OnSwipeStatusListener {
         private SwipeListLayout slipListLayout;
 
@@ -394,8 +385,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         public void onStartOpenAnimation() {
 
         }
-
-
     }
 
     @Override
@@ -408,18 +397,15 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         System.out.println(input);
         try {
             final int supply = Integer.parseInt(input);
-            Log.d("input", supply+"");
             JsonObject detail=new JsonObject();
             detail.addProperty("medicineId",MEDICINEID);
             detail.addProperty("supplynumber",supply+MEDICINE_ORIGN_COUNT);
             JsonObject subjson=new JsonObject();
             subjson.add("detail",detail);
-            Log.d("sup",  subjson.toString());
             RestClient.builder()
                     .clearParams()
                     .url(UploadConfig.API_HOST+"/api/Medicine_update_supply")
                     .raw(subjson.toString())
-
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
@@ -435,8 +421,6 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-
-
         inputDialog.dismiss();
     }
 }

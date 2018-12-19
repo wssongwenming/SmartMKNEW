@@ -101,7 +101,7 @@ public abstract class PermissionCheckerDelegate extends BaseDelegate {
                     final Uri resultUri = CameraImageBean.getInstance().getPath();
                     if (getContext() != null) {
                         UCrop.of(resultUri, resultUri)
-                                .withMaxResultSize(190, 190)
+                                .withMaxResultSize(100, 100)
                                 .start(getContext(), this);
                     }
                     break;
@@ -112,7 +112,7 @@ public abstract class PermissionCheckerDelegate extends BaseDelegate {
                         final String pickCropPath = LatteCamera.createCropFile().getPath();
                         if (pickPath != null && getContext() != null) {
                             UCrop.of(pickPath, Uri.parse(pickCropPath))
-                                    .withMaxResultSize(190, 190)
+                                    .withMaxResultSize(100, 100)
                                     .start(getContext(), this);
                         }
                     }
