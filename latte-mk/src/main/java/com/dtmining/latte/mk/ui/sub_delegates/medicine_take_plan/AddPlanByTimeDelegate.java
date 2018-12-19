@@ -322,13 +322,13 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
     public void doConfirm(List<MedicineState> medicineStateList,List<String>useCountList) {
         medicineSet=medicineStateList;
         useCountSet=useCountList;
-        ArrayList<String>medicineNames_useCount=new ArrayList<>();
+        ArrayList<String>medicineNames_useCount_doseUnit=new ArrayList<>();
         int size=medicineStateList.size();
         for (int i = 0; i <size ; i++) {
-            medicineNames_useCount.add(medicineSet.get(i).getMedicineName()+":"+useCountSet.get(i));
+            medicineNames_useCount_doseUnit.add(medicineSet.get(i).getMedicineName()+":"+useCountSet.get(i)+medicineSet.get(i).getDoseUnit());
             //
         }
-        set_medicine_tag(medicineNames_useCount);
+        set_medicine_tag(medicineNames_useCount_doseUnit);
         checkMedicinesDialog.dismiss();
     }
     // 设置时间提示标签　tips

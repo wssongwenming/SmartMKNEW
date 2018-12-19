@@ -68,6 +68,7 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
     private List<MedicineState> checkedMedicine=new ArrayList<>();
     private List<Integer>checkedPosition=new ArrayList<>();
     private List<String>checkedUseCount=new ArrayList<>();
+    private List<String>doseUnits=new ArrayList<>();
 
 
 

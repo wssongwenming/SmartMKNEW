@@ -78,17 +78,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     //药名列表
     @BindView(R2.id.sp_delegate_medicine_take_plan_add_by_drug_medicine_name)
     Spinner mMedicineListSpinner=null;
-/*    //时间间隔
-    @BindView(R2.id.sp_delegate_medicine_take_plan_add_by_drug_time_span)
-    Spinner mTimeSpanSpinner=null;
-
-    @OnItemSelected(R2.id.sp_delegate_medicine_take_plan_add_by_drug_time_span)
-    void getInterVal(AdapterView<?> parent, View view, int position, long id){
-        interval=position+"";
-    }
-    //用药量
-    @BindView(R2.id.et_delegate_medicine_take_plan_add_by_drug_medicine_count)
-    EditText mMedicineUseCount=null;*/
     //时间设置
     @BindView(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     Button setTimeButton=null;
@@ -396,13 +385,13 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
 
     @Override
-    public void doConfirm(ArrayList<String> times,ArrayList<String>counts) {
+    public void doConfirm(ArrayList<String> times,ArrayList<String>counts,String doseUnit) {
         timeSet=times;
         useCountSet=counts;
         ArrayList<String>time_useCount=new ArrayList<>();
         int size=times.size();
         for (int i = 0; i <size ; i++) {
-            time_useCount.add(timeSet.get(i)+"剂量:"+useCountSet.get(i));
+            time_useCount.add(timeSet.get(i)+"剂量:"+useCountSet.get(i)+doseUnit);
         }
         set_time_count_tag(time_useCount);
         setTimesDialog.dismiss();

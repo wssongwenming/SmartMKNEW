@@ -69,7 +69,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
 
     public interface ClickListenerInterface {
 
-        public void doConfirm(ArrayList<String> times,ArrayList<String>useCounts);
+        public void doConfirm(ArrayList<String> times,ArrayList<String>useCounts,String doseUnit);
 
         public void doCancel();
     }
@@ -193,7 +193,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
                     getUseCount();
                     Log.d("time1", time_list.toString());
                     Log.d("count", count_list.toString());
-                    mclicklistenerinterface.doConfirm(time_list,count_list);
+                    mclicklistenerinterface.doConfirm(time_list,count_list,doseUnit);
                 }
 
             } else if (id == R.id.cancel) {

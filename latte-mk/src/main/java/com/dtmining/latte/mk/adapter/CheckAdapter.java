@@ -32,6 +32,7 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.ViewHolder> 
     private CheckItemListener mCheckListener;
     private List<Integer> seletor;
     private List<MedicineState> seletorString = new ArrayList<>();
+    private List<String>doseUnit=new ArrayList<>();
 
 
     public CheckAdapter(Context mContext, List<MedicineState> mDatas, CheckItemListener mCheckListener) {
