@@ -67,6 +67,7 @@ public class HandAddDelegate extends LatteDelegate {
     private int interval;
     private int medicineType;
     private static final String MEDICINE_CODE = "MEDICINE_CODE";
+    private static final String MEDICINE_NAME="MEDICINE_NAME";
     //药品名称
     @BindView(R2.id.edit_medicine_hand_add_medicine_name)
     AppCompatEditText mMedicinName=null;
@@ -124,6 +125,7 @@ public class HandAddDelegate extends LatteDelegate {
 
     }
     private String medicineCode=null;
+    private String medicineName=null;
     private BoxListDataConverter converter=null;
     private BoxListAdapter mAdapter=null;
     private String tel=null;
@@ -190,11 +192,16 @@ public class HandAddDelegate extends LatteDelegate {
         final Bundle args = getArguments();
         if (args != null) {
             medicineCode = args.getString(MEDICINE_CODE);
+            medicineName=args.getString(MEDICINE_NAME);
+
         }
     }
-    public static HandAddDelegate newInstance(String medicineCode){
+    public static HandAddDelegate newInstance(String medicineCode,String medicineName){
         final Bundle args = new Bundle();
         args.putString(MEDICINE_CODE,medicineCode);
+        //if(medicineName!=null){
+            args.putString(MEDICINE_NAME,medicineName);
+        //}
         final HandAddDelegate delegate = new HandAddDelegate();
         delegate.setArguments(args);
         return delegate;
@@ -202,6 +209,8 @@ public class HandAddDelegate extends LatteDelegate {
     private void initData() {
         if(medicineCode!=null) {
             mMedicineCode.setText(medicineCode);
+            mMedicinName.setText(medicineName);
+
         }
     }
     //表单验证
@@ -259,12 +268,7 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
             mBtnEndRemindTimeSelection.setError(null);
         }
-/*        if(interval.isEmpty()||interval==null){
-            mInterval.setError("请填写服药间隔！");
-            isPass=false;
-        }else{
-            mInterval.setError(null);
-        }*/
+
         if(timesOneDay.isEmpty()||timesOneDay==null){
             mTimesOnDay.setError("请填写服药次数/每天！");
             isPass=false;
@@ -286,6 +290,17 @@ public class HandAddDelegate extends LatteDelegate {
 
             }else {
                 textView.setError(null);
+            }
+        }
+        TextView daysInterval= (TextView) mTimeSpanSpinner.getChildAt(0);
+        if(daysInterval!=null){
+            if(daysInterval.getText().toString().equalsIgnoreCase("请选择服药间隔"))
+            {
+                daysInterval.setError("请选择服药间隔");
+                isPass = false;
+
+            }else {
+                daysInterval.setError(null);
             }
         }
         TextView doseUnit= (TextView) mDoseUnitSpinner.getChildAt(0);
@@ -393,7 +408,7 @@ public class HandAddDelegate extends LatteDelegate {
             getBoxIdList();
         }
         initData();
-        ArrayAdapter timespanadap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
+        ArrayAdapter timespanadap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"请选择服药间隔","每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
         mTimeSpanSpinner.setAdapter(timespanadap);
 
         SpinnerAdapter doseunitadap = new SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包", "克", "毫升", "其他"}));

@@ -324,6 +324,17 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                 textView.setError(null);
             }
         }
+        TextView daysInterval= (TextView) mTimeSpanSpinner.getChildAt(0);
+        if(daysInterval!=null){
+            if(daysInterval.getText().toString().equalsIgnoreCase("请选择服药间隔"))
+            {
+                daysInterval.setError("请选择服药间隔");
+                isPass = false;
+
+            }else {
+                daysInterval.setError(null);
+            }
+        }
         TextView doseUnit= (TextView) mDoseUnitSpinner.getChildAt(0);
         if(doseUnit!=null){
             if(doseUnit.getText().toString().equalsIgnoreCase("请选择剂量单位"))
@@ -353,7 +364,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
             tel=Long.toString(userProfile.getTel());
             getBoxIdList();
          }
-        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
+        ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"请选择服药间隔","每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
         mTimeSpanSpinner.setAdapter(adap);
         com.dtmining.latte.mk.adapter.SpinnerAdapter doseunitadap = new com.dtmining.latte.mk.adapter.SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包", "克", "毫升", "其他"}));
         mDoseUnitSpinner.setAdapter(doseunitadap);

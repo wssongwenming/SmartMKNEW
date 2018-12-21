@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by shikun on 18-5-26.
  */
 
 public class MyDBOpenHelper extends SQLiteOpenHelper {
@@ -202,13 +201,14 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(alarm.getId())});
     }
 
-    public void updateStartTime(String starttime, String id) {
+   public void updateStartTime(String starttime, int id) {
         openDatabase();
         ContentValues cv = new ContentValues();
         cv.put("starttime", String.valueOf(starttime));
-        db.update(TABLE_NAME, cv, "_id = ?",
-                new String[]{id});
+        db.update(TABLE_NAME, cv, "id = ?",
+                new String[]{String.valueOf(id)});
     }
+
 
     public Alarm queryById(int ID) {
 

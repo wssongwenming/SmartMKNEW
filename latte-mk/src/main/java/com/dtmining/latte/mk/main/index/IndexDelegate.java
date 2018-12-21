@@ -134,18 +134,35 @@ public class IndexDelegate extends BottomItemDelegate {
         }
         CallbackManager.getInstance()
                 .addCallback(CallbackType.ON_SCAN, new IGlobalCallback() {
+                    String medicineName=null;
                     @Override
                     public void executeCallback(@Nullable Object args){
-                        Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
-                        HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString());
-                        start(delegate);
+
+                        //Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
+                        RestClient.builder()
+                                .params("code",args.toString())
+                                .success(new ISuccess() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        JSONObject object=JSON.parseObject(response);
+                                        int code= object.getIntValue("code");
+                                        if(code==1){
+                                            JSONObject detail=object.getJSONObject("detail");
+                                            medicineName=detail.getString("name");
+                                        }
+                                    }
+                                })
+                                .build()
+                                .get();
+                        HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString(),medicineName);
+                        getParentDelegate().start(delegate);
 
                     }
                 })
         .addCallback(CallbackType.ON_BIND_BOXID, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
-                Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"boxId="+ LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             }
         }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX, new IGlobalCallback() {
             @Override

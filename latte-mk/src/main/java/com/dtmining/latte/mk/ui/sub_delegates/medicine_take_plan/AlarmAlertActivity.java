@@ -49,7 +49,7 @@ public class AlarmAlertActivity extends Activity {
 
 		new AlertDialog.Builder(AlarmAlertActivity.this)
 				.setTitle(tile).setMessage(content).setCancelable(false)
-				.setPositiveButton("马上动身", new DialogInterface.OnClickListener() {
+				.setPositiveButton("好的，知道了", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						finish();
 //						System.exit(0);

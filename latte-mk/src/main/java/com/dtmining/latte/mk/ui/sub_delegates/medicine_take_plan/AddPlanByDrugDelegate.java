@@ -89,7 +89,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     void setPlanTime(){
-        Toast.makeText(getContext(),doseUnit,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(),doseUnit,Toast.LENGTH_LONG).show();
         setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this,doseUnit);
         setTimesDialog.show();
     }
@@ -158,7 +158,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                             String time = planData.getString("time");
                                                             JSONArray planArray = planData.getJSONArray("plans");
                                                             HashMap<String, HashMap<String, ArrayList<String>>> map_interval = new HashMap<>();
-                                                            map_interval.put("0", null);
+                                                            //map_interval.put("0", null);
                                                             map_interval.put("1", null);
                                                             map_interval.put("2", null);
                                                             map_interval.put("3", null);
@@ -172,13 +172,38 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                                 String interval = plan.getString("dayInterval");
                                                                 String starttime = plan.getString("startRemind");
                                                                 String endtime = plan.getString("endRemind");
+                                                                int medicineType=plan.getIntValue("medicineType");
+                                                                String unitfordose=null;
+                                                                switch (medicineType) {
+                                                                    case 0:
+                                                                        unitfordose = "片";
+                                                                        break;
+                                                                    case 1:
+                                                                        unitfordose = "粒/颗";
+                                                                        break;
+                                                                    case 2:
+                                                                        unitfordose = "瓶/支";
+                                                                        break;
+                                                                    case 3:
+                                                                        unitfordose = "包";
+                                                                        break;
+                                                                    case 4:
+                                                                        unitfordose = "克";
+                                                                        break;
+                                                                    case 5:
+                                                                        unitfordose = "毫升";
+                                                                        break;
+                                                                    case 6:
+                                                                        unitfordose = "其他";
+                                                                        break;
+                                                                }
                                                                 String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
                                                                 String medicineName = plan.getString("medicineName");
                                                                 //先以interval判断，如果
                                                                 if (map_interval.get(interval) == null) {
                                                                     HashMap<String, ArrayList<String>> map_start_time = new HashMap<>();
                                                                     ArrayList<String> infoArray = new ArrayList<>();
-                                                                    infoArray.add(medicineName + ":服用" + medicineUseCount);
+                                                                    infoArray.add(medicineName + ":服用" + medicineUseCount+unitfordose);
                                                                     map_start_time.put(starttime, infoArray);
                                                                     map_interval.put(interval, map_start_time);
                                                                 } else {
@@ -197,10 +222,10 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                                         }
                                                                     }
                                                                     if (has) {
-                                                                        ((ArrayList<String>) map_interval.get(interval).get(starttime)).add(medicineName + ":服用" + medicineUseCount);
+                                                                        ((ArrayList<String>) map_interval.get(interval).get(starttime)).add(medicineName + ":服用" + medicineUseCount+unitfordose);
                                                                     } else {
                                                                         ArrayList<String> infoArray = new ArrayList<>();
-                                                                        infoArray.add(medicineName + ":服用" + medicineUseCount);
+                                                                        infoArray.add(medicineName + ":服用" + medicineUseCount+unitfordose);
                                                                         map_interval.get(interval).put(starttime, infoArray);
                                                                     }
                                                                 }

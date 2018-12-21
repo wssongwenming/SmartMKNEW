@@ -56,13 +56,18 @@ public class AlarmOpreation {
                     String messsage=alarm.getMessage();
                     Log.d("date", "id:"+Id+"starttime:"+date+"hour:"+hour+"minute:"+minute+"diff:"+interval);
                     Calendar mCalendar = cacluteNextAlarm(date,hour, minute, interval);//选择了一周中的哪几天，比如周一、周三、周四,可以用daydiffer
-                    /*if (mCalendar.getTimeInMillis() < System.currentTimeMillis()) {
-                        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"setAlarm FAIL:设置时间小于当前系统时间",Toast.LENGTH_LONG).show();
+             /*       if (mCalendar.getTimeInMillis() < System.currentTimeMillis()) {
+                        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"设置时间小于当前系统时间闹钟，将于"+interval+"天后生效",Toast.LENGTH_LONG).show();
                         //    return;
                     }*/
+                    while (mCalendar.getTimeInMillis()< System.currentTimeMillis())
+                    {
+                        mCalendar.add(mCalendar.DATE, interval);//间隔1天实际上多两天
+                    }
                     Intent intent = new Intent(AlarmsSetting.ALARM_ALERT_ACTION);
                     intent.putExtra("nextalarm",mCalendar.getTimeInMillis());
                     intent.putExtra("type", Id);
+                    intent.putExtra("interval",interval);
                     intent.putExtra("id",Id);
                     intent.putExtra("message", messsage);
                     intent.putExtra("ids",ids);

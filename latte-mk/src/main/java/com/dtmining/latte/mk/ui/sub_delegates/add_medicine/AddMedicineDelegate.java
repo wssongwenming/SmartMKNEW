@@ -43,7 +43,7 @@ public class AddMedicineDelegate extends LatteDelegate {
                     @Override
                     public void executeCallback(@Nullable Object args) {
                         //Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
-                        HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString());
+                        HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString(),null);
                         start(delegate);
                     }
                 });

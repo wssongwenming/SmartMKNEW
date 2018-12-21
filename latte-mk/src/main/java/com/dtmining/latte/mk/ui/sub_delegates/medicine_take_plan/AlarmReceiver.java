@@ -13,10 +13,13 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dtmining.latte.alarmclock.MyDBOpenHelper;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -40,16 +43,21 @@ public class AlarmReceiver extends BroadcastReceiver {
             Log.e("###########此次闹钟#######", "alarmsSetting.getNextAlarm()" + formatter.format(new Date(nextalarm)));
             Log.e("###########当前系统时间###", "System.currentTimeMillis()" + formatter.format(new Date(System.currentTimeMillis())));
             Log.e("##############", "System.currentTimeMillis()" + formatter.format(new Date(nextalarm)));
-            if (nextalarm + 1000 * 30 < System.currentTimeMillis()){//解决闹钟广播比设置时间闹钟快的问题
+/*            if (nextalarm + 1000 * 30 < System.currentTimeMillis()){//解决闹钟广播比设置时间闹钟快的问题
                 Log.e("###########无效闹钟#######", "不执行");
                 return;
-            }
+            }*/
+            java.sql.Date startTime=getDate(nextalarm);
+            MyDBOpenHelper.getInstance((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY)).updateStartTime(startTime.toString(),id);
             Log.e("###########准备弹出提示框###", " ");
             intent.setClass(context, AlarmAlertActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
+            Log.d("here", "here");
             AlarmOpreation.cancelAlert(context,id);
             AlarmOpreation.enableAlert(context,id, ids);
+
+
         }else{
             for (int i = 0; i <ids.length ; i++) {
                 int ID=ids[i];
@@ -59,5 +67,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         }
 
+    }
+    private static java.sql.Date getDate(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.sql.Date date = null;
+        try {
+            date =new java.sql.Date((sdf.parse(sdf.format(time))).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }

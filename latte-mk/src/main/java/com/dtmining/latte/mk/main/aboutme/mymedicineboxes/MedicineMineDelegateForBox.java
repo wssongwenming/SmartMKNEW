@@ -300,6 +300,7 @@ public class MedicineMineDelegateForBox extends LatteDelegate implements View.On
                 final int medicineCount = data.getInteger("medicineCount");
                 final int medicineUseCount=data.getIntValue("medicineUsecount");
                 final int timesonday=data.getIntValue("timesonday");
+                final int medicineType=data.getIntValue("medicineType");
                 final int dayInterval=data.getIntValue("dayInterval");
                 final String startRemind=data.getString("startRemind");
                 final String medicineName = data.getString("medicineName");
@@ -318,6 +319,7 @@ public class MedicineMineDelegateForBox extends LatteDelegate implements View.On
                         .setField(MultipleFields.MEDICINETIMESONDAY,timesonday)
                         .setField(MultipleFields.MEDICINEINTERVAL,dayInterval)
                         .setField(MultipleFields.MEDICINESTARTREMIND,startRemind)
+                        .setField(MultipleFields.MEDICINETYPE,medicineType)
                         .setField(MultipleFields.MEDICINENAME, medicineName)
                         .setField(MultipleFields.MEDICINEIMGURL, medicine_img_url)
                         .setField(MultipleFields.MEDICINEUSECOUNT,medicineUseCount)
