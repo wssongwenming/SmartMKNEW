@@ -129,7 +129,7 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
                                 if (callback_medicine_plan_for_index != null) {
                                     callback_medicine_plan_for_index.executeCallback("");
                                 }
-                                RestClient.builder()
+/*                                RestClient.builder()
                                         .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
                                         .params("tel", tel)
                                         .params("boxId", boxId)
@@ -243,7 +243,8 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
                                             }
                                         })
                                         .build()
-                                        .get();
+                                        .get();*/
+                                pop();
                             }
 
                         }

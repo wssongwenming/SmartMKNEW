@@ -16,8 +16,6 @@ import java.util.List;
  */
 
 public class MyDBOpenHelper extends SQLiteOpenHelper {
-
-
     // 数据表名，一个数据库中可以有多个表（虽然本例中只建立了一个表）
     public static final String TABLE_NAME = "AlarmTable";
 
@@ -270,7 +268,9 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
 
     public void deleteAlarm() {
         openDatabase();
+        Log.d("delete", "delete......................");
         db.delete(TABLE_NAME, null, null);
+        Log.d("delete", "deleteok......................");
     }
  /*   //保存用户数据
     public long saveUserByThirdId(User1 user) {

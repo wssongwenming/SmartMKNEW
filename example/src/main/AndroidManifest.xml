@@ -20,6 +20,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
     <!-- 发送短信-->
     <uses-permission android:name="android.permission.SEND_SMS" />
     <!-- 阅读消息 -->
@@ -78,22 +80,26 @@
         <!--QQ登录配置 end-->
 
 
-        <receiver android:name="com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.AlarmReceiver"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+        <receiver android:name="com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.alarm.AlarmReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
-                <action android:name="android.intent.action.TIME_SET"/>
             </intent-filter>
         </receiver>
         <activity
-            android:name="com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.AlarmAlertActivity"
+            android:name="com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.alarm.AlarmAlertActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|navigation"
             android:theme="@android:style/Theme.Dialog"
             android:excludeFromRecents="true"
             android:taskAffinity=""/>
+        <receiver android:name="com.dtmining.MedicalKit.myapplication.BootInfoReceiver"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter >  
+                <action android:name="android.intent.action.BOOT_COMPLETED" />  
+                <category android:name="android.intent.category.HOME" />  
+            </intent-filter>  
+        </receiver>
     </application>
 
 </manifest>

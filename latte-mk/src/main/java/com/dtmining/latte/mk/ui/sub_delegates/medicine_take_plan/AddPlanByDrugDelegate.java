@@ -137,7 +137,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                 if (callback_medicine_plan_for_index != null) {
                                     callback_medicine_plan_for_index.executeCallback("");
                                 }
-                                RestClient.builder()
+/*                                RestClient.builder()
                                         .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
                                         .params("tel", tel)
                                         .params("boxId",LattePreference.getBoxId())
@@ -276,7 +276,8 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                             }
                                         })
                                         .build()
-                                        .get();
+                                        .get();*/
+                                pop();
                         }
                     }
                     })

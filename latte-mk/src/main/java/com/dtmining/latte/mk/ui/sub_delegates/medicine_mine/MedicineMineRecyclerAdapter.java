@@ -134,13 +134,37 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                 medicineUseCount=item.getField(MultipleFields.MEDICINEUSECOUNT);
                 medicinePause   =item.getField(MultipleFields.MEDICINEPAUSE);
                 tel=            item.getField(MultipleFields.TEL);
+                String doseUnit=null;
+                switch (medicineType) {
+                    case 0:
+                        doseUnit = "片";
+                        break;
+                    case 1:
+                        doseUnit = "粒/颗";
+                        break;
+                    case 2:
+                        doseUnit = "瓶/支";
+                        break;
+                    case 3:
+                        doseUnit = "包";
+                        break;
+                    case 4:
+                        doseUnit = "克";
+                        break;
+                    case 5:
+                        doseUnit = "毫升";
+                        break;
+                    case 6:
+                        doseUnit = "其他";
+                        break;
+                }
                 Glide.with(mContext)
                         .load(UploadConfig.UPLOAD_IMG+medicineImageUrl)
                         .apply(REQUEST_OPTIONS)
                         .into((ImageView) (view.findViewById(R.id.iv_item_medicine_mine)));
                  holder.setText(R.id.tv_item_medicine_mine_position,"药箱:"+boxId);
                  holder.setText(R.id.tv_item_medicine_mine_medicine_name,medicineName);
-                ((TextView)(view.findViewById(R.id.tv_item_medicine_mine_medicine_count))).setText("剩余"+medicineCount);
+                ((TextView)(view.findViewById(R.id.tv_item_medicine_mine_medicine_count))).setText("剩余"+medicineCount+doseUnit);
                 if(medicinePause==0){//药品状态，0：在服
                     mMedicineInUse.setVisibility(View.VISIBLE);
                     mMedicineOverdue.setVisibility(View.GONE);
