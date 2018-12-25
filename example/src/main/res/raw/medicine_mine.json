@@ -1,0 +1,48 @@
+{
+  "code": 1,
+  "tel": "15620151475",
+  "detail": [
+    {
+      "endRemind": "2018-8-20",
+      "medicineValidity": "2018-07-20",
+      "medicineId": "24c7e5416d9547e6a2ab410387e5d4bb",
+      "medicineCount": 21,
+      "timesonday": 4,
+      "dayInterval": 1,
+      "startRemind": "2018-7-20",
+      "medicineName": "牛黄上清片",
+      "medicineUsecount": 3,
+      "boxId": "101",
+      "medicinePause": 2,
+      "medicinePlan": [
+
+      ]
+    },    {
+      "endRemind": "2018-8-20",
+      "medicineValidity": "2018-07-20",
+      "medicineId": "24c7e5416d9547e6a2ab410387e5d4bb",
+      "medicineCount": 21,
+      "timesonday": 4,
+      "dayInterval": 1,
+      "startRemind": "2018-7-20",
+      "medicineName": "感冒通",
+      "medicineUsecount":2,
+      "boxId": "101",
+      "medicinePause": 2,
+      "medicinePlan": [
+        { "atime": "11:00",
+          "medicineId": "24c7e5416d9547e6a2ab410387e5d4bb",
+          "id": "5",
+          "medicineUsecount": 3
+        },{ "atime": "10:00",
+          "medicineId": "24c7e5416d9547e6a2ab410387e5d4bb",
+          "id": "6",
+          "medicineUsecount": 3
+        }
+
+      ]
+    }
+
+  ],
+  "message": "success"
+}

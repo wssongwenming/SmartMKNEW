@@ -92,14 +92,14 @@
             android:theme="@android:style/Theme.Dialog"
             android:excludeFromRecents="true"
             android:taskAffinity=""/>
-        <receiver android:name="com.dtmining.MedicalKit.myapplication.BootInfoReceiver"
+        <!--<receiver android:name="com.dtmining.MedicalKit.myapplication.BootInfoReceiver"
             android:exported="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter >  
                 <action android:name="android.intent.action.BOOT_COMPLETED" />  
                 <category android:name="android.intent.category.HOME" />  
             </intent-filter>  
-        </receiver>
+        </receiver>-->
     </application>
 
 </manifest>
