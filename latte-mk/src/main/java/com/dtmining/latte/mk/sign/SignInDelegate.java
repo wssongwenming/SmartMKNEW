@@ -84,9 +84,10 @@ public class SignInDelegate extends LatteDelegate {
             String singInJson = JSON.toJSON(signModel).toString();
             System.out.print(singInJson);
             RestClient.builder()
-                    .url(UploadConfig.API_HOST+"/api/UserLogin")
+                    //.url(UploadConfig.API_HOST+"/api/UserLogin")
                     .clearParams()
                     //.url("http://10.0.2.2:8081/Web01_exec/UserLogin")
+                    .url("http://192.168.1.3:8081/Web01_exec/UserLogin")
                     .raw(singInJson)
 
                     .success(new ISuccess() {
@@ -224,7 +225,7 @@ public class SignInDelegate extends LatteDelegate {
             Log.d("授权",o.toString());
             try {
                 org.json.JSONObject jsonObject = new org.json.JSONObject(o.toString());
-                initOpenidAndToken(jsonObject);
+                initOpenidAndToken(jsonObject);//登陆在这一步
                 updateUserInfo();
             } catch (JSONException e) {
                 e.printStackTrace();

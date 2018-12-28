@@ -18,6 +18,7 @@ public class MedicineModel {
     private String medicineValidity;
     private String medicineName;
     private String medicineId;
+    private int medicineUsecount;
     private String boxId;
     private int medicintType;
     private String medicinePause;
@@ -110,6 +111,14 @@ public class MedicineModel {
 
     public void setMedicinePlans(MedicinePlans medicinePlans) {
         this.medicinePlans = medicinePlans;
+    }
+
+    public int getMedicineUsecount() {
+        return medicineUsecount;
+    }
+
+    public void setMedicineUsecount(int medicineUsecount) {
+        this.medicineUsecount = medicineUsecount;
     }
 
     public MedicineModel() {

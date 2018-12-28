@@ -25,8 +25,11 @@ public class BootInfoReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context ctx, Intent arg1) {
+        Intent intent=new Intent(ctx,ActivityForReceiver.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(intent);
         // TODO Auto-generated method stub
-        setAlarmAccordSqlite(ctx);
+        //setAlarmAccordSqlite(ctx);
         /*final Context context = ctx;
         new Thread(new Runnable() {
             @Override
@@ -39,13 +42,11 @@ public class BootInfoReceiver extends BroadcastReceiver {
     private void setAlarmAccordSqlite(Context context){
         myDBOpenHelper= MyDBOpenHelper.getInstance(context);
         List<Alarm> alarms = myDBOpenHelper.query();
-        int[] alarmIds=new int[alarms.size()];
+        int[] alarmIds   =new int[alarms.size()];
         int size=alarms.size();
         for (int i = 0; i <size ; i++) {
             alarmIds[i]=alarms.get(i).getId();
-            Log.d("ids"+i,alarmIds[i]+"");
         }
-        Log.d("ids", alarmIds+"111");
         int length=alarmIds.length;
         for (int i = 0; i <length ; i++) {
             int alarmid=alarmIds[i];

@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -88,7 +90,7 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         ArrayList<Alarm> alarms = new ArrayList<Alarm>();
         while (c.moveToNext()) {
             Alarm alarm = new Alarm();
-            alarm._id = c.getInt(c.getColumnIndex("_id"));
+            alarm.id = c.getInt(c.getColumnIndex("id"));
             alarm.starttime= Date.valueOf(c.getString(c.getColumnIndex("starttime")));
             alarm.music=c.getString(c.getColumnIndex("music"));
             alarm.interval=c.getInt(c.getColumnIndex("interval"));
@@ -184,7 +186,8 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
             // 带两个参数的execSQL()方法，采用占位符参数？，把参数值放在后面，顺序对应
             // 一个参数的execSQL()方法中，用户输入特殊字符时需要转义
             // 使用占位符有效区分了这种情况
-            db.execSQL("UPDATE " + TABLE_NAME + " set id=_id");
+            db.execSQL("UPDATE " + TABLE_NAME + " set id=hour||minute||interval||strftime('%m',starttime)||strftime('%d',starttime)");
+            //db.execSQL("UPDATE " + TABLE_NAME + " set id=_id");
             db.setTransactionSuccessful(); // 设置事务成功完成
         } finally {
             db.endTransaction(); // 结束事务
@@ -207,26 +210,25 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(id)});
     }
 
-
-    public Alarm queryById(int ID) {
+    public Alarm queryByMixedInfo(Date startTime,int interval,int hour,int minute){
 
         try{
             openDatabase();
-            Cursor c = db.query(TABLE_NAME, null, "_id=?", new String[]{ID+""}, null, null, null);
+            Cursor c = db.query(TABLE_NAME, null, "starttime=?,interval=?,hour=?,minute=?", new String[]{startTime.toString(),interval+"",hour+"",minute+""}, null, null, null);
             System.out.println("count   "+c.getCount());
             Alarm alarm = new Alarm();
 
             while (c.moveToNext()) {
                 int id = c.getInt(c.getColumnIndex("_id"));
 
-                    alarm._id = c.getInt(c.getColumnIndex("_id"));
-                    alarm.starttime = Date.valueOf(c.getString(c.getColumnIndex("starttime")));
-                    alarm.music = c.getString(c.getColumnIndex("music"));
-                    alarm.interval = c.getInt(c.getColumnIndex("interval"));
-                    alarm.state = c.getInt(c.getColumnIndex("state"));
-                    alarm.message = c.getString(c.getColumnIndex("message"));
-                    alarm.hour = c.getInt(c.getColumnIndex("hour"));
-                    alarm.minute = c.getInt(c.getColumnIndex("minute"));
+                alarm.id = c.getInt(c.getColumnIndex("id"));
+                alarm.starttime = Date.valueOf(c.getString(c.getColumnIndex("starttime")));
+                alarm.music = c.getString(c.getColumnIndex("music"));
+                alarm.interval = c.getInt(c.getColumnIndex("interval"));
+                alarm.state = c.getInt(c.getColumnIndex("state"));
+                alarm.message = c.getString(c.getColumnIndex("message"));
+                alarm.hour = c.getInt(c.getColumnIndex("hour"));
+                alarm.minute = c.getInt(c.getColumnIndex("minute"));
 
 
             }
@@ -237,8 +239,122 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
             return null;
         }
 
+    }
+
+    public Alarm queryById2(int ID) {
+        try{
+            openDatabase();
+            Cursor c = db.query(TABLE_NAME, null, "id=?", new String[]{ID+""}, null, null, null);
+            java.sql.Date STARTTIME=new java.sql.Date(System.currentTimeMillis());
+            int HOUR=-1;
+            int MINUTE=-1;
+            boolean has=false;
+            Alarm alarm = new Alarm();
+            while (c.moveToNext()) {
+                has=true;
+                alarm.id = c.getInt(c.getColumnIndex("id"));
+                alarm.starttime = Date.valueOf(c.getString(c.getColumnIndex("starttime")));
+                STARTTIME= Date.valueOf(c.getString(c.getColumnIndex("starttime")));
+                alarm.music = c.getString(c.getColumnIndex("music"));
+                alarm.interval = c.getInt(c.getColumnIndex("interval"));
+                alarm.state = c.getInt(c.getColumnIndex("state"));
+                alarm.message = c.getString(c.getColumnIndex("message"));
+                alarm.hour = c.getInt(c.getColumnIndex("hour"));
+                HOUR=c.getInt(c.getColumnIndex("hour"));
+                alarm.minute = c.getInt(c.getColumnIndex("minute"));
+                MINUTE=c.getInt(c.getColumnIndex("minute"));
+            }
+            c.close();
+ /*           if(has) {
+                Cursor c1 = db.query(TABLE_NAME, null, "starttime=?,hour=?,minute=?", new String[]{STARTTIME.toString(), HOUR + "", MINUTE + ""}, null, null, null);
+                while (c1.moveToNext()) {
+                    alarm.addMessage(c.getString(c.getColumnIndex("message")));
+                }
+                c1.close();
+            }*/
+
+            return alarm;
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+    public Alarm queryById(int ID) {
+        try{
+            openDatabase();
+            Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
+            ArrayList<java.sql.Date> STARTTIMES=new ArrayList<>();
+            ArrayList<Integer> INTERVALS=new ArrayList<>();
+            ArrayList<Integer> HOURS=new ArrayList<>();
+            ArrayList<Integer> MINUTES=new ArrayList<>();
+            ArrayList<String>  MESSAGES=new ArrayList<>();
+            java.sql.Date STARTTIME=new java.sql.Date(System.currentTimeMillis());
+            int INTERVAL=-1;
+            int HOUR=-1;
+            int MINUTE=-1;
+            Alarm alarm = new Alarm();
+            while (c.moveToNext()) {
+                int id=c.getInt(c.getColumnIndex("id"));
+                java.sql.Date starttime=Date.valueOf(c.getString(c.getColumnIndex("starttime")));
+                String music=c.getString(c.getColumnIndex("music"));
+                int interval=c.getInt(c.getColumnIndex("interval"));
+                int state=c.getInt(c.getColumnIndex("state"));
+                String message=c.getString(c.getColumnIndex("message"));
+                int hour=c.getInt(c.getColumnIndex("hour"));
+                int minute= c.getInt(c.getColumnIndex("minute"));
+
+                if(ID==id) {
+                    alarm.id = id;
+                    alarm.starttime = starttime;
+                    alarm.music = music;
+                    alarm.interval = interval;
+                    alarm.state = state;
+                    alarm.message = message;
+                    alarm.hour =hour;
+                    alarm.minute = minute;
+                    INTERVAL=interval;
+                    STARTTIME=starttime;
+                    HOUR=hour;
+                    MINUTE=minute;
+                }else
+                {
+                    STARTTIMES.add(starttime);
+                    HOURS.add(hour);
+                    INTERVALS.add(interval);
+                    MINUTES.add(minute);
+                    MESSAGES.add(message);
+                }
+            }
+            c.close();
+            int size=STARTTIMES.size();
+            Log.d("sizeof", size+"");
+            for (int i = 0; i <size ; i++) {
+                if(getRingTime(STARTTIMES.get(i),INTERVALS.get(i)).compareTo(getRingTime(STARTTIME,INTERVAL))==0){
+                    if(HOURS.get(i)==HOUR){
+                        if(MINUTES.get(i)==MINUTE)
+                        {
+                            alarm.addMessage(MESSAGES.get(i));
+
+                            alarm.setMessage(alarm.getMessage().replace("][",","));
+                            Log.d("mymessage", alarm.getMessage());
+                            Log.d("mymessage1",MESSAGES.get(i));
+
+                        }
+                    }
+                }
+            }
+
+            return alarm;
+        }
+        catch (Exception e){
+            return null;
+        }
+
 
     }
+
+
+
 
     public Cursor queryTheCursor() {
         openDatabase();
@@ -327,6 +443,15 @@ public class MyDBOpenHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query("user", null, null, null, null, null, null);
         return cursor.getCount();
     }*/
+
+    protected Date getRingTime(Date holdDate,int interval) {
+        Calendar calendar =new GregorianCalendar();
+        calendar.setTime(holdDate);
+        calendar.add(calendar.DATE, interval);
+        // calendar的time转成java.util.Date格式日期
+        java.util.Date utilDate = (java.util.Date)calendar.getTime();
+        return new Date(utilDate.getTime());
+    }
 
 
 }

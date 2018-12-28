@@ -42,6 +42,7 @@ public class MedicineListDataConverter {
                 medicineModel1.setMedicineName(jsondata.getString("medicineName"));
                 medicineModel1.setBoxId(jsondata.getString("boxId"));
                 Log.d("detail", "medicineName="+jsondata.getString("medicineName")+"type="+jsondata.getIntValue("medicineType"));
+                medicineModel1.setMedicineUsecount(jsondata.getIntValue("medicineUsecount"));
                 medicineModel1.setMedicintType(jsondata.getIntValue("medicineType"));
                 medicineModel1.setMedicineId(jsondata.getString("medicineId"));
                 JSONArray planArray = jsondata.getJSONArray("medicinePlan");

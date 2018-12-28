@@ -27,6 +27,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.alarm.AlarmOpre
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.ClickUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -68,12 +69,19 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     ExpandableListView mExpandableListView=null;
     @OnClick(R2.id.btn_medicine_take_plan_add)
     void onClickAddPlan(){
-        start(new MedicinePlanAddChoiceDelegate());
+        //start(new MedicinePlanAddChoiceDelegate());
+        start(new AddPlanByDrugDelegate());
     }
     @OnClick(R2.id.btn_medicine_take_plan_set_alarm)
     void onClickSetAlarm(){
-        synPlanWithSqlite();
-        setAlarmAccordSqlite();
+        if (!ClickUtil.isFastClick()) {
+            synPlanWithSqlite();
+
+        }else{
+            Toast.makeText(getContext(), "请不要频繁点击", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
     }
     private Set<SwipeListLayout> sets = new HashSet();
     @Override
@@ -98,8 +106,8 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                     @Override
                     public void executeCallback(@Nullable Object args) {
                         RestClient.builder()
-                                .url(UploadConfig.API_HOST+"/api/get_plan")
-                                //.url("medicine_plan")
+                                //.url(UploadConfig.API_HOST+"/api/get_plan")
+                                .url("medicine_plan")
                                 .params("tel",tel)
                                 .params("boxId",LattePreference.getBoxId())
                                 .success(new ISuccess() {
@@ -134,7 +142,8 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/get_plan")
+                //.url(UploadConfig.API_HOST+"/api/get_plan")
+                .url("medicine_plan")
                 .params("tel",tel)
                 .params("boxId",boxId)
                 .success(new ISuccess() {
@@ -155,13 +164,11 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
 
     private void setAlarmAccordSqlite(){
         List<Alarm> alarms = myDBOpenHelper.query();
-        int[] alarmIds=new int[alarms.size()];
+         int[] alarmIds   =new int[alarms.size()];
         int size=alarms.size();
         for (int i = 0; i <size ; i++) {
             alarmIds[i]=alarms.get(i).getId();
-            Log.d("ids"+i,alarmIds[i]+"");
         }
-        Log.d("ids", alarmIds+"");
         int length=alarmIds.length;
         for (int i = 0; i <length ; i++) {
             int alarmid=alarmIds[i];
@@ -271,7 +278,8 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     }
     public void synPlanWithSqlite(){
         RestClient.builder()
-                .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
+                //.url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
+                .url("medicine_plan")
                 .params("tel", tel)
                 .params("boxId", LattePreference.getBoxId())
                 .success(new ISuccess() {
@@ -402,6 +410,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                                 }
                                             }
                                         }
+                                        setAlarmAccordSqlite();
                                     }
                                 }
                             }

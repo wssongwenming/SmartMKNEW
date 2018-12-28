@@ -34,17 +34,14 @@ public class AlarmOpreation {
         mAlarmManager.cancel(pi);
 
     }
-
     public static void enableAlert(final Context context, final int Id, final int[]ids){
         new Thread(new Runnable() {
 	            @Override
                 public void run() {
-
                     MyDBOpenHelper dbOpenHelper=MyDBOpenHelper.getInstance((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY));
                     Alarm alarm= dbOpenHelper.queryById(Id);
                     Log.d("nao", "alarm="+alarm.getId()+";"+alarm.getStarttime()+";"+alarm.getMessage()+";"+alarm.getHour()+";"+alarm.getMinute()+":"+alarm.getInterval());
-                    Log.d("bbbbbb", context+"");
-
+                    //Log.d("bbbbbb", context+"");
                     AlarmManager mAlarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                     int type=Id;
                     Date date=alarm.getStarttime();

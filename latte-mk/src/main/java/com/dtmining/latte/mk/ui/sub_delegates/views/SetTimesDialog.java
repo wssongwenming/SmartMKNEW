@@ -38,6 +38,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     private Context context;
     private String confirmButtonText;
     private String doseUnit;
+    private int medicineUsecount;
     private String cacelButtonText;
     private ClickListenerInterface clickListenerInterface;
     private ArrayList<String> original_time_set;
@@ -47,9 +48,6 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     private ArrayList<String> count_list;//用药量
     private  MedicineSimpleAdapter adapter;
     private ClickListenerInterface mclicklistenerinterface;
-
-
-
     @Override
     public void click(final View v) {
         int i = v.getId();
@@ -60,12 +58,8 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
             }
             System.out.print(time_list);
             adapter.notifyDataSetChanged();
-
         }
-
-
     }
-
 
     public interface ClickListenerInterface {
 
@@ -74,7 +68,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         public void doCancel();
     }
 
-    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface,String doseUnit) {
+    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface,int medicineUsecount,String doseUnit) {
         super(context, R.style.Theme_MYDialog);
         this.original_time_set=original_time_set;
         this.context = context;
@@ -82,6 +76,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         this.cacelButtonText = cacelButtonText;
         this.mclicklistenerinterface=clicklistenerinterface;
         this.time_list=time_list;
+        this.medicineUsecount=medicineUsecount;
         this.doseUnit=doseUnit;
         this.count_list=count_list;
     }
@@ -90,7 +85,6 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-
         init();
     }
 
@@ -101,7 +95,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         setContentView(view);
 
         lv_set_time= (ListView) view.findViewById(R.id.lv_set_time);
-        adapter=new MedicineSimpleAdapter(time_list,original_time_set,count_list,this.context,"1",SetTimesDialog.this,doseUnit);
+        adapter=new MedicineSimpleAdapter(time_list,original_time_set,count_list,this.context,"1",SetTimesDialog.this,medicineUsecount,doseUnit);
         lv_set_time.setAdapter(adapter);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
@@ -109,16 +103,20 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         customDatePicker = new CustomDatePicker(this.context, new CustomDatePicker.ResultHandler() {
             @Override
             public void handle(String time) { // 回调接口，获得选中的时间
-                Log.d("time", time);
+                Log.d("time",time);
                 if(time_list.contains(time))
                 {
                     Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"该时间段已有服药计划",Toast.LENGTH_LONG).show();
-                }else{
+                }else if(time_list.size()>7)
+                {
+                    Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"服药计划总数已超过上限8",Toast.LENGTH_LONG).show();
+                }
+                else {
                     time_list.add(time);
                     adapter.notifyDataSetChanged();
                 }
             }
-        }, "2010-01-01 00:00", now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
+        }, "2010-01-01 00:00",now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(true); // 显示时和分
         customDatePicker.setIsLoop(true); // 允许循环滚动
 

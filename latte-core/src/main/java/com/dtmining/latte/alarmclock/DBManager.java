@@ -98,7 +98,7 @@ public class DBManager {
         {
             int id= c.getInt(c.getColumnIndex("_id"));
             if(id==ID){
-                alarm._id = c.getInt(c.getColumnIndex("_id"));
+                alarm.id = c.getInt(c.getColumnIndex("id"));
                 alarm.starttime= Date.valueOf(c.getString(c.getColumnIndex("starttime")));
                 alarm.music=c.getString(c.getColumnIndex("music"));
                 alarm.interval=c.getInt(c.getColumnIndex("interval"));
@@ -119,7 +119,7 @@ public class DBManager {
         while (c.moveToNext())
         {
             Alarm alarm = new Alarm();
-            alarm._id = c.getInt(c.getColumnIndex("_id"));
+            alarm.id = c.getInt(c.getColumnIndex("id"));
             alarm.starttime= Date.valueOf(c.getString(c.getColumnIndex("starttime")));
             alarm.music=c.getString(c.getColumnIndex("music"));
             alarm.interval=c.getInt(c.getColumnIndex("interval"));

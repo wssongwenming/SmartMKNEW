@@ -39,9 +39,9 @@ public class ExampleApp  extends Application{
                 //.withInterceptor(new DebugInterceptor("usemessage",R.raw.usemessage))
                 //.withInterceptor(new DebugInterceptor("overdue",R.raw.overdue))
                // .withInterceptor(new DebugInterceptor("supply",R.raw.supply))
-                .withWeChatAppId("wxe89a2c2ec439b1ac")//微信登陆初始化AppId
-                .withWeChatAppSecret("b16238a4df5dd49f1b524c56537762cb")//微信登陆人传入Secret
-                .withQQAppID("1106210336")
+                .withWeChatAppId("wxe42b49bb3dff09ab")//微信登陆初始化AppId
+                .withWeChatAppSecret("da557a780af2ef52411d1205519cd3ce")//微信登陆人传入Secret
+                .withQQAppID("1108067090")
                 .withIcon(new FontMkModule())
                 .withApiHost("http://127.5.5.1")
                 .configure();

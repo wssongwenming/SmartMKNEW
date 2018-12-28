@@ -273,7 +273,7 @@ public class IndexDelegate extends BottomItemDelegate {
     }
     private void initBanner(){
         INTEGERS.add(R.mipmap.banner_01);
-        INTEGERS.add(R.mipmap.banner_02);
+        //INTEGERS.add(R.mipmap.banner_02);
         INTEGERS.add(R.mipmap.banner_03);
         mConvenientBanner
                 .setPages(new LauncherHolderCreator(),INTEGERS)

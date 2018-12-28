@@ -16,31 +16,29 @@ import com.dtmining.latte.mk.R;
 import java.util.ArrayList;
 
 /**
- * Created by shikun on 18-5-12.
  */
-
 public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickListener{
     private String doseUnit;
+    private int medicineUsecount;
     private ArrayList<String> time_list;
     private ArrayList<String> count_list;
     private ArrayList<String> original_time_set;
     private Context context;
     private String method;
     private Callback mcallback;
-
     public interface Callback {
         public void click(View v);
     }
-    public MedicineSimpleAdapter(ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, Context context, String method, Callback callback,String doseUnit){
+    public MedicineSimpleAdapter(ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, Context context, String method, Callback callback,int medicineUsecount,String doseUnit){
         this.time_list=time_list;
         this.count_list=count_list;
         this.method=method;
         this.original_time_set=original_time_set;
         this.context=context;
+        this.medicineUsecount=medicineUsecount;
         this.doseUnit=doseUnit;
         this.mcallback=callback;
     }
-
     @Override
     public int getCount(){
         return time_list.size();
@@ -73,13 +71,13 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
             {
                 holder = (Holder_Time_Add)convertView.getTag();
             }
-
             holder.time.setText(time_list.get(position));
+            holder.medicineUseCount.setText(medicineUsecount+"");
             holder.doseUnit.setText(doseUnit);
-            if(count_list.size()>position) {
-                holder.medicineUseCount.setText(count_list.get(position));
-                holder.doseUnit.setText(doseUnit);
-            }
+            //if(count_list.size()>position) {
+            //    holder.medicineUseCount.setText(count_list.get(position));
+            //    holder.doseUnit.setText(doseUnit);
+           // }
             holder.btn_delete.setOnClickListener(this);
             holder.btn_delete.setTag(position);
             holder.change_time.setOnClickListener(this);
@@ -95,16 +93,12 @@ public class MedicineSimpleAdapter extends BaseAdapter implements View.OnClickLi
                 holder.btn_delete.setVisibility(View.VISIBLE);
             }
         }
-
         return convertView;
     }
-
     @Override
     public void onClick(View v) {
         mcallback.click(v);
     }
-
-
     private static class Holder_Time_Add{
         TextView time;
         EditText medicineUseCount;

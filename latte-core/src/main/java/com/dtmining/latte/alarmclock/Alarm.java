@@ -9,7 +9,7 @@ import java.sql.Date;
  */
 
 public class Alarm {
-    public int _id;
+    public int id;
     public String ids;
     public Date starttime;
     public int hour;
@@ -23,9 +23,6 @@ public class Alarm {
 
     }
 
-    public int getId() {
-        return _id;
-    }
 
     public Alarm(Date starttime, int hour, int minute, int interval, String message, String music, int state) {
         this.starttime = starttime;
@@ -35,10 +32,19 @@ public class Alarm {
         this.message = message;
         this.music = music;
         this.state = state;
+
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Date getStarttime() {
         return starttime;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getHour() {
@@ -65,9 +71,6 @@ public class Alarm {
         return state;
     }
 
-    public void setId(int id) {
-        this._id = id;
-    }
 
     public void setStarttime(Date starttime) {
         this.starttime = starttime;
@@ -102,6 +105,9 @@ public class Alarm {
 
     }
 
+    public void addMessage(String message){
+        this.message+=message;
+    }
     public void setIds(String ids) {
         this.ids = ids;
     }

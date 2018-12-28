@@ -6,21 +6,21 @@
         "plans": [
           {
             "endRemind": "2018-8-20",
-            "atime": "08:00",
+            "atime": "09:32",
             "id": "1",
             "medicineUseCount": 4,
             "dayInterval": 5,
-            "startRemind": "2018-7-20",
+            "startRemind": "2018-12-27",
             "medicineName": "感冒片",
             "boxId": "102"
           },
           {
             "endRemind": "2018-8-20",
-            "atime": "08:00",
+            "atime": "09:15",
             "id": "3",
             "medicineUseCount": 2,
             "dayInterval": 5,
-            "startRemind": "2018-7-20",
+            "startRemind": "2018-12-27",
             "medicineName": "牛黄上清片",
             "boxId": "102"
           },
@@ -30,47 +30,47 @@
             "id": "3",
             "medicineUseCount": 2,
             "dayInterval": 2,
-            "startRemind": "2018-7-20",
+            "startRemind": "2018-12-27",
             "medicineName": "牛黄解毒片",
             "boxId": "102"
           }
         ],
-        "time": "08:00"
+        "time": "20:48"
       },
       {
         "plans": [
           {
             "endRemind": "2018-8-20",
-            "atime": "12:00",
+            "atime": "09:18",
             "id": "2",
             "medicineUseCount": 5,
             "dayInterval": 1,
-            "startRemind": "2018-7-20",
+            "startRemind": "2018-12-27",
             "medicineName": "感冒片",
             "boxId": "102"
           },
           {
             "endRemind": "2018-8-20",
-            "atime": "12:00",
+            "atime": "09:16",
             "id": "4",
             "medicineUseCount": 2,
             "dayInterval": 1,
-            "startRemind": "2018-7-20",
+            "startRemind": "2018-12-27",
             "medicineName": "牛黄上清片",
             "boxId": "102"
           },
           {
             "endRemind": "2018-8-21",
-            "atime": "12:00",
+            "atime": "09:16",
             "id": "4",
             "medicineUseCount": 2,
             "dayInterval": 1,
-            "startRemind": "2018-7-22",
+            "startRemind": "2018-12-27",
             "medicineName": "牛黄上清片",
             "boxId": "102"
           }
         ],
-        "time": "12:00"
+        "time": "20:45"
       }
     ]
   },

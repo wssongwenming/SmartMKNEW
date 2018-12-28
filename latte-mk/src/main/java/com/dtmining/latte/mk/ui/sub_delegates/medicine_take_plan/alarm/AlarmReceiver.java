@@ -25,9 +25,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     private AlarmsSetting alarmsSetting;
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("ids", "000000000000000");
-        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"启动了",Toast.LENGTH_LONG).show();
-        alarmsSetting = new AlarmsSetting(context);
+        //Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"启动了",Toast.LENGTH_LONG).show();
+        //alarmsSetting = new AlarmsSetting(context);
         int type = intent.getIntExtra("type",0);
         int id=intent.getIntExtra("id",0);
         long nextalarm=intent.getLongExtra("nextalarm",0);
@@ -54,14 +53,15 @@ public class AlarmReceiver extends BroadcastReceiver {
             context.startActivity(intent);
             Log.d("here", "here");
             AlarmOpreation.cancelAlert(context,id);
+            Log.d("next", "nextid="+id);
             AlarmOpreation.enableAlert(context,id, ids);
 
 
         }else{
             for (int i = 0; i <ids.length ; i++) {
                 int ID=ids[i];
-                AlarmOpreation.cancelAlert(context, id);
-                AlarmOpreation.enableAlert(context, id, ids);
+                AlarmOpreation.cancelAlert(context, ID);
+                AlarmOpreation.enableAlert(context, ID, ids);
             }
 
         }

@@ -6,6 +6,9 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -65,6 +68,9 @@ import butterknife.OnItemSelected;
  */
 public class HandAddDelegate extends LatteDelegate {
     private int interval;
+    private HandlerThread handlerThread=new HandlerThread("");
+    private  Handler myHandler=null;
+    private String msgid=null;
     private int medicineType;
     private static final String MEDICINE_CODE = "MEDICINE_CODE";
     private static final String MEDICINE_NAME="MEDICINE_NAME";
@@ -151,7 +157,8 @@ public class HandAddDelegate extends LatteDelegate {
             final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
             Log.d("drugadd", medicineAddJson);
             RestClient.builder()
-                    .url(UploadConfig.API_HOST+"/api/Medicine_add")
+                    .url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
+                    //.url(UploadConfig.API_HOST+"/api/Medicine_add")
                     .clearParams()
                     .raw(medicineAddJson)
                     .success(new ISuccess() {
@@ -162,21 +169,11 @@ public class HandAddDelegate extends LatteDelegate {
                                 int code=object.getIntValue("code");
                                 if(code==1)
                                 {
-                                    Toast.makeText(getContext(), "药品添加成功", Toast.LENGTH_LONG).show();
-                                    mMedicinName.setText(null);
-                                    mMedicineCode.setText(null);
-                                    mDoseUnitSpinner.setSelection(0);
-                                    mBtnValidityTimeSelection.setText("请选择有效期");
-                                    mMedicineCount.setText(null);
-                                    mBtnStartRemindTimeSelection.setText("请选择开始提醒时间");
-                                    mBtnEndRemindTimeSelection.setText("请选择结束提醒时间");
-                                    mMedicineUseCount.setText(null);
-                                    mTimesOnDay.setText(null);
-                                    Glide.with(getContext())
-                                            .load(null)
-                                            .into(mMedicineImage);
-
-
+                                    msgid=object.getString("msgid");
+                                    Log.d("msgid", "msgid="+msgid);
+                                    if(msgid!=null) {
+                                        myHandler.postDelayed(updateThread, 1000);
+                                    }
                                 }
                             }
                         }
@@ -185,15 +182,63 @@ public class HandAddDelegate extends LatteDelegate {
                     .post();
         }
     }
+    Runnable updateThread=new Runnable() {
+        @Override
+        public void run() {
+            RestClient.builder()
+                    .clearParams()
+                    .params("uuid",msgid)
+                    .url("http://192.168.1.3:8081/Web01_exec/getStatus")
+                    //.url(UploadConfig.API_HOST+"/api/getStatus")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            Log.d("statuscode", code+"");
+                            if(code==1){
+                                Toast.makeText(getContext(), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                myHandler.postDelayed(updateThread,1000);
+                            }
+                            if(code==2){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText(getContext(), "药品数据已添加ch", Toast.LENGTH_LONG).show();
+                                mMedicinName.setText(null);
+                                mMedicineCode.setText(null);
+                                mDoseUnitSpinner.setSelection(0);
+                                mBtnValidityTimeSelection.setText("请选择有效期");
+                                mMedicineCount.setText(null);
+                                mBtnStartRemindTimeSelection.setText("请选择开始提醒时间");
+                                mBtnEndRemindTimeSelection.setText("请选择结束提醒时间");
+                                mMedicineUseCount.setText(null);
+                                mTimesOnDay.setText(null);
+                                Glide.with(getContext())
+                                        .load(null)
+                                        .into(mMedicineImage);
+
+                            }
+                            if(code==3||code==4){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText(getContext(), "药品添加失败，请重新添加", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    })
+                    .build()
+                    .get();
+
+
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        handlerThread.start();
+        myHandler=new Handler(handlerThread.getLooper());
         super.onCreate(savedInstanceState);
         final Bundle args = getArguments();
         if (args != null) {
             medicineCode = args.getString(MEDICINE_CODE);
             medicineName=args.getString(MEDICINE_NAME);
-
         }
     }
     public static HandAddDelegate newInstance(String medicineCode,String medicineName){
@@ -248,13 +293,13 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
             mMedicineCount.setError(null);
         }
-        //图片校验
+ /*       //图片校验
         if(medicineImage.isEmpty()||medicineImage==null){
             mMedicineImage.setImageResource(R.drawable.warn);
             isPass=false;
         }else{
             //mMedicineImage.setError(null);
-        }
+        }*/
 
         if(medicineStartTime.isEmpty()||medicineStartTime.equalsIgnoreCase("请选择开始提醒时间")){
             mBtnStartRemindTimeSelection.setError("请选择开始提醒时间！");
@@ -282,7 +327,7 @@ public class HandAddDelegate extends LatteDelegate {
             mMedicineUseCount.setError(null);
         }
         TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
-        if(textView!=null){
+/*        if(textView!=null){
             if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
             {
                 textView.setError("请选择药箱Id");
@@ -291,7 +336,7 @@ public class HandAddDelegate extends LatteDelegate {
             }else {
                 textView.setError(null);
             }
-        }
+        }*/
         TextView daysInterval= (TextView) mTimeSpanSpinner.getChildAt(0);
         if(daysInterval!=null){
             if(daysInterval.getText().toString().equalsIgnoreCase("请选择服药间隔"))
@@ -489,6 +534,7 @@ public class HandAddDelegate extends LatteDelegate {
             e.printStackTrace();
         }
     }
+
 
 
 }

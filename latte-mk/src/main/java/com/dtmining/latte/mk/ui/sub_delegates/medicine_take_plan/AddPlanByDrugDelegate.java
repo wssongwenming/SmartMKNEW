@@ -58,6 +58,7 @@ import butterknife.OnItemSelected;
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
     String doseUnit="";
     int medicineType=-1;
+    int medicineUsecount=0;
     private MyDBOpenHelper myDBOpenHelper;
     private ArrayList<String>original_time_set=new ArrayList<>();
     String tel=null;
@@ -90,7 +91,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     void setPlanTime(){
         //Toast.makeText(getContext(),doseUnit,Toast.LENGTH_LONG).show();
-        setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this,doseUnit);
+        setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this,medicineUsecount,doseUnit);
         setTimesDialog.show();
     }
     //确定提交整个表单
@@ -290,6 +291,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
         medicineModel=mAdapter.getItem(position);
         MedicinePlans medicinePlans=medicineModel.getMedicinePlans();
         medicineType=medicineModel.getMedicintType();
+        medicineUsecount=medicineModel.getMedicineUsecount();
         switch (medicineType) {
             case 0:
                 doseUnit = "片";
@@ -387,8 +389,9 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
 
     private void getMedicineList(){
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
+                //.url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 .clearParams()
+                .url("medicine_mine")
                 .params("tel",tel)
                 .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {

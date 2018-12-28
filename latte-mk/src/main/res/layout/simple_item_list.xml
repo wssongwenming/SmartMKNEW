@@ -48,6 +48,7 @@
             android:layout_gravity="center"
             android:id="@+id/et_medicine_usecount_for_plan_set"
             android:layout_width="0dp"
+            android:enabled="false"
             android:background="@null"
             android:layout_weight="1"
             android:textSize="15sp"
