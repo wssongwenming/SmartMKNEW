@@ -40,6 +40,8 @@ import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.AddMedicineBoxByScanDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineAddModel;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModel;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineListAdapter;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineListDataConverter;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
@@ -53,6 +55,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -67,6 +70,7 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class HandAddDelegate extends LatteDelegate {
+    private ArrayList<String> medicineNameList=new java.util.ArrayList<>();
     private int interval;
     private HandlerThread handlerThread=new HandlerThread("");
     private  Handler myHandler=null;
@@ -106,7 +110,7 @@ public class HandAddDelegate extends LatteDelegate {
     @OnItemSelected(R2.id.sp_medicine_hand_add_day_interval)
     public void onIntervalSelected(AdapterView<?> parent, View view,int pos, long id)
     {
-        interval=pos;
+        interval=pos-1;
     }
     @BindView(R2.id.edit_medicine_hand_add_times_onday)
     AppCompatEditText mTimesOnDay=null;
@@ -126,9 +130,12 @@ public class HandAddDelegate extends LatteDelegate {
     String boxId=null;
     @OnItemSelected(R2.id.spinner_medicine_hand_add_boxid)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-        //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
         boxId=parent.getItemAtPosition(position).toString();
-
+        if(!boxId.equalsIgnoreCase("请选择药箱Id")){
+            getMedicineList(boxId);
+        }else {
+            //Toast.makeText(this.getContext(),boxId,Toast.LENGTH_SHORT).show();
+        }
     }
     private String medicineCode=null;
     private String medicineName=null;
@@ -157,8 +164,8 @@ public class HandAddDelegate extends LatteDelegate {
             final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
             Log.d("drugadd", medicineAddJson);
             RestClient.builder()
-                    .url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
-                    //.url(UploadConfig.API_HOST+"/api/Medicine_add")
+                    //.url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
+                    .url(UploadConfig.API_HOST+"/api/Medicine_add")
                     .clearParams()
                     .raw(medicineAddJson)
                     .success(new ISuccess() {
@@ -188,21 +195,21 @@ public class HandAddDelegate extends LatteDelegate {
             RestClient.builder()
                     .clearParams()
                     .params("uuid",msgid)
-                    .url("http://192.168.1.3:8081/Web01_exec/getStatus")
-                    //.url(UploadConfig.API_HOST+"/api/getStatus")
+                    //.url("http://192.168.1.3:8081/Web01_exec/getStatus")
+                    .url(UploadConfig.API_HOST+"/api/getStatus")
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
                             JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
-                            Log.d("statuscode", code+"");
+                            Log.d("statuscode", msgid+"");
                             if(code==1){
                                 Toast.makeText(getContext(), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "药品数据已添加ch", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "药品数据已添加成功", Toast.LENGTH_LONG).show();
                                 mMedicinName.setText(null);
                                 mMedicineCode.setText(null);
                                 mDoseUnitSpinner.setSelection(0);
@@ -218,8 +225,9 @@ public class HandAddDelegate extends LatteDelegate {
 
                             }
                             if(code==3||code==4){
-                                myHandler.removeCallbacks(updateThread);
                                 Toast.makeText(getContext(), "药品添加失败，请重新添加", Toast.LENGTH_LONG).show();
+                                myHandler.removeCallbacks(updateThread);
+
                             }
                         }
                     })
@@ -232,9 +240,9 @@ public class HandAddDelegate extends LatteDelegate {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         handlerThread.start();
         myHandler=new Handler(handlerThread.getLooper());
-        super.onCreate(savedInstanceState);
         final Bundle args = getArguments();
         if (args != null) {
             medicineCode = args.getString(MEDICINE_CODE);
@@ -253,6 +261,7 @@ public class HandAddDelegate extends LatteDelegate {
     }
     private void initData() {
         if(medicineCode!=null) {
+
             mMedicineCode.setText(medicineCode);
             mMedicinName.setText(medicineName);
 
@@ -272,7 +281,11 @@ public class HandAddDelegate extends LatteDelegate {
         if(medicineName.isEmpty()||medicineName==null){
             mMedicinName.setError("请填写药品名！");
             isPass=false;
-        }else{
+        }else if(medicineNameList.contains(medicineName)){
+            mMedicinName.setError("药箱中已有该药品");
+            isPass=false;
+        }
+        else {
          mMedicinName.setError(null);
         }
         if(medicineCode.isEmpty()||medicineCode==null){
@@ -293,13 +306,13 @@ public class HandAddDelegate extends LatteDelegate {
         }else{
             mMedicineCount.setError(null);
         }
- /*       //图片校验
+        //图片校验
         if(medicineImage.isEmpty()||medicineImage==null){
             mMedicineImage.setImageResource(R.drawable.warn);
             isPass=false;
         }else{
             //mMedicineImage.setError(null);
-        }*/
+        }
 
         if(medicineStartTime.isEmpty()||medicineStartTime.equalsIgnoreCase("请选择开始提醒时间")){
             mBtnStartRemindTimeSelection.setError("请选择开始提醒时间！");
@@ -327,7 +340,7 @@ public class HandAddDelegate extends LatteDelegate {
             mMedicineUseCount.setError(null);
         }
         TextView textView= (TextView) mBoxidSpinner.getChildAt(0);
-/*        if(textView!=null){
+        if(textView!=null){
             if(textView.getText().toString().equalsIgnoreCase("请选择药箱Id"))
             {
                 textView.setError("请选择药箱Id");
@@ -336,7 +349,7 @@ public class HandAddDelegate extends LatteDelegate {
             }else {
                 textView.setError(null);
             }
-        }*/
+        }
         TextView daysInterval= (TextView) mTimeSpanSpinner.getChildAt(0);
         if(daysInterval!=null){
             if(daysInterval.getText().toString().equalsIgnoreCase("请选择服药间隔"))
@@ -427,7 +440,7 @@ public class HandAddDelegate extends LatteDelegate {
                                             if (code == 1) {
                                                 //获得图片保存路径
                                                 medicineImage=responseObject.getString("url");
-                                                //Toast.makeText(getContext(),medicineImage,Toast.LENGTH_LONG).show();
+                                                Toast.makeText(getContext(),medicineImage,Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     }
@@ -477,64 +490,22 @@ public class HandAddDelegate extends LatteDelegate {
                 .get();
 
     }
+    private void getMedicineList(String boxId){
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
+                //.url("medicine_mine")
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        MedicineListDataConverter converter = new MedicineListDataConverter();
+                        medicineNameList.addAll(converter.getMedicinesOfBox(response));
+                        //Toast.makeText(getContext(),medicineNameList.toString(),Toast.LENGTH_LONG).show();
+                    }
+                })
+                .build()
+                .get();
 
-
-    public void compressImage2FileBySize(Bitmap bmp , File file,int kb)
-    {
-        //压缩尺寸倍数 值越大 ，图片的尺寸就越小
-        int ratio = 1 ;
-        Bitmap result = Bitmap.createBitmap(bmp.getWidth() /ratio , bmp.getHeight() / ratio ,Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result) ;
-        Rect rect = new Rect(0,0,bmp.getWidth() / ratio ,bmp.getHeight() / ratio );
-        canvas.drawBitmap(bmp,null,rect,null);
-        int options = 100;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
-        result.compress(Bitmap.CompressFormat.JPEG,100,bos);
-        Log.d("is", "正在压缩: "+bos.toByteArray().length/1024);
-        while (bos.toByteArray().length / 1024 > kb) {
-            Log.d("is", "正在压缩11: "+bos.toByteArray().length/1024);
-            bos.reset();//重置baos即清空baos
-            if (options <= 10) {
-                options -= 3;//每次压缩3%
-            } else {
-                options -= 10;//每次压缩10%
-            }
-            if (options <= 0) break;
-            result.compress(Bitmap.CompressFormat.JPEG, options, bos);//这里压缩options%，把压缩后的数据存放到baos中
-        }
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bos.toByteArray());
-            Log.d("aa", "compressImage2FileBySize: ");
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
-
-    public void compressImage2FileBySize(Bitmap bmp , File file)
-    {
-        //压缩尺寸倍数 值越大 ，图片的尺寸就越小
-        int ratio = 4 ;
-        Bitmap result = Bitmap.createBitmap(bmp.getWidth() /ratio , bmp.getHeight() / ratio ,Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result) ;
-        Rect rect = new Rect(0,0,bmp.getWidth() / ratio ,bmp.getHeight() / ratio );
-        canvas.drawBitmap(bmp,null,rect,null);
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
-        result.compress(Bitmap.CompressFormat.JPEG,100,bos);
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bos.toByteArray());
-
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
 }

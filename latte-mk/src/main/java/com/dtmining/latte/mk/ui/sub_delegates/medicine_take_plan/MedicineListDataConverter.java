@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -22,6 +23,24 @@ public class MedicineListDataConverter {
         return MEDICINES;
     }
 
+    public ArrayList<String> getMedicinesOfBox(String response){
+        ArrayList<String> medicineNameList=new ArrayList<>();
+        if(response!=null){
+            final JSONObject jsonObject = JSON.parseObject(response);
+            int code = jsonObject.getIntValue("code");
+            if(code==1) {
+                String tel = jsonObject.getString("tel");
+                final JSONArray detail = jsonObject.getJSONArray("detail");
+                final int size = detail.size();
+                for (int i = 0; i < size; i++) {
+                    JSONObject jsondata = (JSONObject) detail.get(i);
+                    String medicineName=jsondata.getString("medicineName");
+                    medicineNameList.add(medicineName);
+                }
+            }
+        }
+        return medicineNameList;
+    }
 
     public LinkedList<MedicineModel> convert() {
         JSONObject jsonobject = JSON.parseObject(getJsonData());
@@ -34,7 +53,6 @@ public class MedicineListDataConverter {
             if(code==1) {
             String tel = jsonObject.getString("tel");
             final JSONArray detail = jsonObject.getJSONArray("detail");
-
             final int size = detail.size();
             for (int i = 0; i < size; i++) {
                 MedicineModel medicineModel1 = new MedicineModel();

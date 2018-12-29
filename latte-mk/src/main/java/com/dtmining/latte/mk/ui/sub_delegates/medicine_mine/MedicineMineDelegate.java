@@ -2,6 +2,8 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -56,6 +58,7 @@ import butterknife.OnClick;
  * Description:
  */
 public class MedicineMineDelegate extends LatteDelegate implements View.OnClickListener,AdapterView.OnItemClickListener,MedicineMineEditDelegate.RefreshListener{
+
     private String tel=null;
     private MedicineMineRecyclerAdapter medicineMineRecyclerAdapter;
     List<MultipleItemEntity> mDatas=new ArrayList<>();

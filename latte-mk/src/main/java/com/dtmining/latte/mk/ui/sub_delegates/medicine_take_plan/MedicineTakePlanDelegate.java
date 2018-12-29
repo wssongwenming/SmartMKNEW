@@ -2,6 +2,8 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
@@ -20,8 +22,10 @@ import com.dtmining.latte.database.UserProfile;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.mk.R2;
+import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineMineDelegateForBox;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.alarm.AlarmOpreation;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
@@ -55,7 +59,11 @@ import butterknife.OnClick;
  * Description:
  */
 public class MedicineTakePlanDelegate extends LatteDelegate{
-
+    private HandlerThread handlerThread=new HandlerThread("");
+    private Handler myHandler=null;
+    private String msgid=null;
+    private int GROUPPOSITION=-1;
+    private int CHILDPOSITION=-1;
     private List<MedicinePlanInfo> list =new ArrayList<>();
     private Context context;
     private MyElvAdapter myAdapter;
@@ -106,8 +114,8 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                     @Override
                     public void executeCallback(@Nullable Object args) {
                         RestClient.builder()
-                                //.url(UploadConfig.API_HOST+"/api/get_plan")
-                                .url("medicine_plan")
+                                .url(UploadConfig.API_HOST+"/api/get_plan")
+                                //.url("medicine_plan")
                                 .params("tel",tel)
                                 .params("boxId",LattePreference.getBoxId())
                                 .success(new ISuccess() {
@@ -135,6 +143,8 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handlerThread.start();
+        myHandler=new Handler(handlerThread.getLooper());
         myDBOpenHelper=MyDBOpenHelper.getInstance((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY));
     }
 
@@ -142,8 +152,8 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         RestClient.builder()
-                //.url(UploadConfig.API_HOST+"/api/get_plan")
-                .url("medicine_plan")
+                .url(UploadConfig.API_HOST+"/api/get_plan")
+                //.url("medicine_plan")
                 .params("tel",tel)
                 .params("boxId",boxId)
                 .success(new ISuccess() {
@@ -188,12 +198,13 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
         myAdapter.setOnClickDeleteListener(new OnClickDeleteListener() {
             @Override
             public void onItemClick(View view, final int groupPosition, final int childPosition) {
+                CHILDPOSITION=childPosition;
+                GROUPPOSITION=groupPosition;
                 String planId=(list.get(groupPosition).getDatas()).get(childPosition).getId();
                 JsonObject detail=new JsonObject();
                 detail.addProperty("planId",planId);
                 JsonObject jsonForDelete=new JsonObject();
                 jsonForDelete.add("detail",detail);
-
                 RestClient.builder()
                         .url(UploadConfig.API_HOST+"/api/delete_plan")
                         .clearParams()
@@ -201,8 +212,18 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
+                                JSONObject object=JSON.parseObject(response);
+                                int code=object.getIntValue("code");
+                                if(code==1){
+                                    msgid=object.getString("msgid");
+                                    Log.d("msgid", "msgid="+msgid);
+                                    if(msgid!=null) {
+                                        myHandler.postDelayed(updateThread, 1000);
+                                    }
+                                }
 
-                                list.get(groupPosition).getDatas().remove(childPosition);
+
+ /*                             list.get(groupPosition).getDatas().remove(childPosition);
                                 if(list.get(groupPosition).getDatas().size()==0){
                                     list.remove(groupPosition);
                                 }
@@ -212,7 +233,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                         .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
                                 if (callback_medicine_plan_for_index != null) {
                                     callback_medicine_plan_for_index.executeCallback("");
-                                }
+                                }*/
                             }
                         })
                         .build()
@@ -299,7 +320,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                     String time = planData.getString("time");
                                     JSONArray planArray = planData.getJSONArray("plans");
                                     HashMap<String, HashMap<String, ArrayList<String>>> map_interval = new HashMap<>();
-                                    //map_interval.put("0", null);
+                                    map_interval.put("0", null);
                                     map_interval.put("1", null);
                                     map_interval.put("2", null);
                                     map_interval.put("3", null);
@@ -397,7 +418,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                                                 message = item_starttime.getValue().toString();
                                                                 int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
                                                                 int minute = Integer.parseInt(time.substring(time.indexOf(":") + 1, time.length()));
-                                                                int interval = Integer.parseInt(Interval);
+                                                                int interval = Integer.parseInt(Interval)+1;//由于每天服用表示间隔0，但实际这在设置闹钟时还是相差1天，
                                                                 Alarm alarm = new Alarm(getDate(starttime, interval), hour, minute, interval, message, "aaa.mp3", 1);
                                                                 try {
                                                                     add(alarm);
@@ -445,6 +466,52 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
         }
         return date2;
     }
+    Runnable updateThread=new Runnable() {
+        @Override
+        public void run() {
+            RestClient.builder()
+                    .clearParams()
+                    .params("uuid",msgid)
+                    .url(UploadConfig.API_HOST+"/api/getStatus")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            Log.d("statuscode", code+"");
+                            if(code==1){
+                                Toast.makeText(getContext(), "用药计划已经删除等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                myHandler.postDelayed(updateThread,1000);
+                            }
+                            if(code==2){
+                                Toast.makeText(getContext(), "用药计划已经删除成功", Toast.LENGTH_SHORT).show();
+                                myHandler.removeCallbacks(updateThread);
+                                list.get(GROUPPOSITION).getDatas().remove(CHILDPOSITION);
+                                if(list.get(GROUPPOSITION).getDatas().size()==0){
+                                    list.remove(GROUPPOSITION);
+                                }
+                                myAdapter.notifyDataSetChanged();
+                                final IGlobalCallback<String> callback_medicine_plan_for_index = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
+                                if (callback_medicine_plan_for_index != null) {
+                                    callback_medicine_plan_for_index.executeCallback("");
+                                }
+
+
+                            }
+                            if(code==3||code==4){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText(getContext(), "用药计划删除失败，请重新操作", Toast.LENGTH_LONG).show();
+                                pop();
+                            }
+                        }
+                    })
+                    .build()
+                    .get();
+
+        }
+    };
 }
 
 

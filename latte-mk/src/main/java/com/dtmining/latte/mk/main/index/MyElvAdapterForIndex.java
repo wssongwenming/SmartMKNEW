@@ -62,11 +62,35 @@ public class MyElvAdapterForIndex extends BaseExpandableListAdapter {
         }else {
             viewHolder1=(ViewHolder1)convertView.getTag();
         }
-
+        int medicineType=list.get(groupPosition).getDatas().get(position).getMedicineType();
+        String unitfordose=null;
+        switch (medicineType) {
+            case 0:
+                unitfordose = "片";
+                break;
+            case 1:
+                unitfordose = "粒/颗";
+                break;
+            case 2:
+                unitfordose = "瓶/支";
+                break;
+            case 3:
+                unitfordose = "包";
+                break;
+            case 4:
+                unitfordose = "克";
+                break;
+            case 5:
+                unitfordose = "毫升";
+                break;
+            case 6:
+                unitfordose = "其他";
+                break;
+        }
         //viewHolder1.textView.setTextSize(20);
         //viewHolder1.textView.setTextColor(Color.DKGRAY);
         viewHolder1.medicineName.setText("  " + list.get(groupPosition).getDatas().get(position).getMedicineName());
-        viewHolder1.medicineUseCount.setText("  " + list.get(groupPosition).getDatas().get(position).getMedicineUseCount());
+        viewHolder1.medicineUseCount.setText("  " + list.get(groupPosition).getDatas().get(position).getMedicineUseCount()+unitfordose);
         return convertView;
     }
 

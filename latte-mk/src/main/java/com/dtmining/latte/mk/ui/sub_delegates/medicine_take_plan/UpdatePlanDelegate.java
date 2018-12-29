@@ -2,6 +2,8 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
@@ -50,6 +53,9 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class UpdatePlanDelegate extends LatteDelegate {
+    private HandlerThread handlerThread=new HandlerThread("");
+    private Handler myHandler=null;
+    private String msgid=null;
     private String tel;
     private String medicineId=null;
     private  String medicineName=null;
@@ -105,6 +111,20 @@ public class UpdatePlanDelegate extends LatteDelegate {
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
+                            if(response!=null) {
+                                JSONObject object=JSON.parseObject(response);
+                                int code=object.getIntValue("code");
+                                if(code==1)
+                                {
+                                    msgid=object.getString("msgid");
+                                    Log.d("msgid", "msgid="+msgid);
+                                    if(msgid!=null) {
+                                        myHandler.postDelayed(updateThread, 1000);
+                                    }
+                                }
+                            }
+
+/*
                             final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
                                     .getInstance()
                                     .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
@@ -117,7 +137,7 @@ public class UpdatePlanDelegate extends LatteDelegate {
                             if (UpdatePlanCallback != null) {
                                 UpdatePlanCallback.executeCallback("");
                             }
-                            pop();
+                            pop();*/
                         }
                     })
                     .build()
@@ -175,6 +195,8 @@ public class UpdatePlanDelegate extends LatteDelegate {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handlerThread.start();
+        myHandler=new Handler(handlerThread.getLooper());
         initDatePicker();
         final Bundle args = getArguments();
         if (args != null) {
@@ -250,4 +272,54 @@ public class UpdatePlanDelegate extends LatteDelegate {
             }
         }
     }
+    Runnable updateThread=new Runnable() {
+        @Override
+        public void run() {
+            RestClient.builder()
+                    .clearParams()
+                    .params("uuid",msgid)
+                    //.url("http://192.168.1.3:8081/Web01_exec/getStatus")
+                    .url(UploadConfig.API_HOST+"/api/getStatus")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            Log.d("statuscode", msgid+"");
+                            if(code==1){
+                                Toast.makeText(getContext(), "用药计划已修改等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                myHandler.postDelayed(updateThread,1000);
+                            }
+                            if(code==2){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText(getContext(), "用药计划修改成功", Toast.LENGTH_LONG).show();
+
+                                final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
+                                if (UpdatePlanCallback_for_index!= null) {
+                                    UpdatePlanCallback_for_index.executeCallback("");
+                                }
+                                final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                                if (UpdatePlanCallback != null) {
+                                    UpdatePlanCallback.executeCallback("");
+                                }
+                                pop();
+
+                            }
+                            if(code==3||code==4){
+                                Toast.makeText(getContext(), "用药计划修改失败，请重新操作", Toast.LENGTH_LONG).show();
+                                myHandler.removeCallbacks(updateThread);
+
+                            }
+                        }
+                    })
+                    .build()
+                    .get();
+
+
+        }
+    };
 }

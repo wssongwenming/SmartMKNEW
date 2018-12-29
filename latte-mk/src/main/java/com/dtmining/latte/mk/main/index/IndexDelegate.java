@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -64,6 +65,7 @@ import butterknife.OnClick;
  * Description:
  */
 public class IndexDelegate extends BottomItemDelegate {
+    String medicineName=null;
     private List<MedicinePlanInfo> list =new ArrayList<>();
     private MyElvAdapterForIndex myAdapter;
     private Context context;
@@ -134,28 +136,33 @@ public class IndexDelegate extends BottomItemDelegate {
         }
         CallbackManager.getInstance()
                 .addCallback(CallbackType.ON_SCAN, new IGlobalCallback() {
-                    String medicineName=null;
+
                     @Override
-                    public void executeCallback(@Nullable Object args){
+                    public void executeCallback(@Nullable final Object args){
 
                         //Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
                         RestClient.builder()
-                                .params("code",args.toString())
+                                .url(UploadConfig.API_HOST+"/api/get_drugs_by_code")
+                                .params("code",args.toString().trim())
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
+                                        Log.d("responseforscan", response);
                                         JSONObject object=JSON.parseObject(response);
                                         int code= object.getIntValue("code");
                                         if(code==1){
                                             JSONObject detail=object.getJSONObject("detail");
                                             medicineName=detail.getString("name");
+                                            HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString().trim(),medicineName);
+                                            getParentDelegate().start(delegate);
+                                            //Log.d("medicinename", "name="+medicineName);
                                         }
                                     }
                                 })
                                 .build()
                                 .get();
-                        HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString(),medicineName);
-                        getParentDelegate().start(delegate);
+
+
 
                     }
                 })
@@ -175,7 +182,7 @@ public class IndexDelegate extends BottomItemDelegate {
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
-                                com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                                JSONObject object= JSON.parseObject(response);
                                 int code=object.getIntValue("code");
                                 if(code==1) {
                                     //Toast.makeText(getContext(),"该刷新了",Toast.LENGTH_LONG).show();
@@ -465,7 +472,7 @@ public class IndexDelegate extends BottomItemDelegate {
                 medicinePlan.setEndRemind(jsonObject1.getString("endRemind"));
                 medicinePlan.setId(jsonObject1.getString("id"));
                 medicinePlan.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
-                //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
+                medicinePlan.setMedicineType(jsonObject1.getIntValue("medicineType"));
                 medicinePlan.setStartRemind(jsonObject1.getString("startRemind"));
                 medicinePlan.setMedicineName(jsonObject1.getString("medicineName"));
                 medicinePlan.setBoxId(jsonObject1.getString("boxId"));

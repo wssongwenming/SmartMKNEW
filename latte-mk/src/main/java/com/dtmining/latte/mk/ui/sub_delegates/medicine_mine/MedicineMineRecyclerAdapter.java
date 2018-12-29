@@ -1,6 +1,8 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -52,6 +55,10 @@ import java.util.Set;
 public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<MultipleItemEntity,MultipleViewHolder> implements
          OnItemClickListener,BaseQuickAdapter.OnItemChildClickListener,InputDialog.ClickListenerInterface {
     AppCompatTextView mMedicineInUse=null;
+    private HandlerThread handlerThread=new HandlerThread("");
+    private Handler myHandler=null;
+    private String msgid=null;
+    private int DELETEPOSITION=-1;
     private  LatteDelegate DELEGATE;
     private  String MEDICINEID;
     private  int MEDICINE_ORIGN_COUNT=0;//补充时需要加上原来的数量
@@ -71,6 +78,9 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         this.DELEGATE=delegate;
         init();
         this.sets=sets;
+        //初始化HANDLER
+        handlerThread.start();
+        myHandler=new Handler(handlerThread.getLooper());
     }
     public static MedicineMineRecyclerAdapter create(List<MultipleItemEntity>data,Set<SwipeListLayout> sets,LatteDelegate latteDelegate){
         return new MedicineMineRecyclerAdapter(data,sets,latteDelegate);
@@ -302,23 +312,35 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                                 .success(new ISuccess() {
                                     @Override
                                     public void onSuccess(String response) {
-                                        final int currentPosition = holder.getAdapterPosition();
-                                        mData.remove(holder.getAdapterPosition());
-                                        notifyDataSetChanged();
-                                        //删除药物后计划也会删除，用回调刷新页面
-                                        final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
-                                                .getInstance()
-                                                .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
-                                        if (UpdatePlanCallback_for_index!= null) {
-                                            UpdatePlanCallback_for_index.executeCallback("");
+                                        JSONObject object = JSON.parseObject(response);
+                                        int code = object.getIntValue("code");
+                                        if (code == 1) {
+                                            msgid=object.getString("msgid");
+                                            DELETEPOSITION=holder.getAdapterPosition();
+                                            Log.d("msgid", "msgid="+msgid);
+                                            if(msgid!=null) {
+
+                                                myHandler.postDelayed(updateThread, 1000);
+                                            }
+/*
+                                            final int currentPosition = holder.getAdapterPosition();
+                                            mData.remove(holder.getAdapterPosition());
+                                            notifyDataSetChanged();
+                                            //删除药物后计划也会删除，用回调刷新页面
+                                            final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
+                                                    .getInstance()
+                                                    .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
+                                            if (UpdatePlanCallback_for_index != null) {
+                                                UpdatePlanCallback_for_index.executeCallback("");
+                                            }
+                                            final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
+                                                    .getInstance()
+                                                    .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                                            if (UpdatePlanCallback != null) {
+                                                UpdatePlanCallback.executeCallback("");
+                                            }*/
                                         }
-                                        final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
-                                                .getInstance()
-                                                .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
-                                        if (UpdatePlanCallback != null) {
-                                            UpdatePlanCallback.executeCallback("");
-                                        }
-                                     }
+                                    }
 
                                 })
                                 .error(new IError() {
@@ -447,4 +469,54 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
         }
         inputDialog.dismiss();
     }
+
+
+    Runnable updateThread=new Runnable() {
+        @Override
+        public void run() {
+            RestClient.builder()
+                    .clearParams()
+                    .params("uuid",msgid)
+                    //.url("http://192.168.1.3:8081/Web01_exec/getStatus")
+                    .url(UploadConfig.API_HOST+"/api/getStatus")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            Log.d("statuscode", code+"");
+                            if(code==1){
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已删除等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                myHandler.postDelayed(updateThread,1000);
+                            }
+                            if(code==2){
+                                myHandler.removeCallbacks(updateThread);
+                                mData.remove(DELETEPOSITION);
+                                notifyDataSetChanged();
+                                //删除药物后计划也会删除，用回调刷新页面
+                                final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX);
+                                if (UpdatePlanCallback_for_index != null) {
+                                    UpdatePlanCallback_for_index.executeCallback("");
+                                }
+                                final IGlobalCallback<String> UpdatePlanCallback = CallbackManager
+                                        .getInstance()
+                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
+                                if (UpdatePlanCallback != null) {
+                                    UpdatePlanCallback.executeCallback("");
+                                }
+                            }
+                            if(code==3||code==4){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已删除失败请稍后重试", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .build()
+                    .get();
+
+
+        }
+    };
 }

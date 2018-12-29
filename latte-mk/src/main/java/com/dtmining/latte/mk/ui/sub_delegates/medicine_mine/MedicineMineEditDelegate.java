@@ -2,6 +2,8 @@ package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -15,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -36,6 +39,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineAddModel;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineEditModel;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModel;
 import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModelForEdit;
+import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineListDataConverter;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
@@ -43,6 +47,7 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.BindView;
@@ -55,6 +60,11 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class MedicineMineEditDelegate extends LatteDelegate {
+    private ArrayList<String> medicineNameList=new java.util.ArrayList<>();
+    private HandlerThread handlerThread=new HandlerThread("");
+    private Handler myHandler=null;
+    private String msgid=null;
+
     private int medicineType;
     private String tel;
     private String medicineId;
@@ -95,7 +105,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     @OnItemSelected(R2.id.sp_medicine_hand_edit_day_interval)
     public void onIntervalSelected(AdapterView<?> parent, View view,int pos, long id)
     {
-        interval=pos;
+        interval=pos-1;
     }
    //每天服药次数
     @BindView(R2.id.edit_medicine_hand_edit_times_onday)
@@ -116,7 +126,12 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     String boxId=null;
     @OnItemSelected(R2.id.spinner_medicine_hand_edit_boxid)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-         boxId=parent.getItemAtPosition(position).toString();
+        boxId=parent.getItemAtPosition(position).toString();
+        if(!boxId.equalsIgnoreCase("请选择药箱Id")){
+            getMedicineList(boxId);
+        }else {
+            //Toast.makeText(this.getContext(),boxId,Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R2.id.btn_medicine_hand_edit_please_select_medicine_validity_time)
@@ -224,8 +239,16 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-
-                            LatteDelegate delegate= Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE);
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1){
+                                msgid=object.getString("msgid");
+                                Log.d("msgid", "msgid="+msgid);
+                                if(msgid!=null) {
+                                    myHandler.postDelayed(updateThread, 1000);
+                                }
+                            }
+                            /*LatteDelegate delegate= Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE);
                             if(delegate instanceof MedicineMineDelegate)
                             {
                                 ((MedicineMineDelegate)delegate).onRefresh();
@@ -233,8 +256,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                             {
                                 ((MedicineMineDelegateForBox)delegate).onRefresh();
                             }
-                           // ((MedicineMineDelegate)Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE)).onRefresh();
-                            pop();
+                            pop();*/
                         }
                     })
                     .build()
@@ -288,12 +310,6 @@ public class MedicineMineEditDelegate extends LatteDelegate {
         }else{
             mBtnEndRemindTimeSelection.setError(null);
         }
-/*        if(interval.isEmpty()||interval==null){
-            mInterval.setError("请填写服药间隔！");
-            isPass=false;
-        }else{
-            mInterval.setError(null);
-        }*/
         //图片校验
         if(medicineImage.isEmpty()||medicineImage==null){
             mMedicineImage.setImageResource(R.drawable.warn);
@@ -374,6 +390,8 @@ public class MedicineMineEditDelegate extends LatteDelegate {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handlerThread.start();
+        myHandler=new Handler(handlerThread.getLooper());
         final Bundle args = getArguments();
         if (args != null) {
             medicineModel = (MedicineModel) args.getSerializable(MEDICINEMODEL);
@@ -397,7 +415,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
 
         mBtnStartRemindTimeSelection.setText(medicineModel.getStartRemind());
         mBtnEndRemindTimeSelection.setText(medicineModel.getEndRemind());
-        mTimeSpanSpinner.setSelection(medicineModel.getDayInterval());
+        mTimeSpanSpinner.setSelection(medicineModel.getDayInterval()+1);
         mTimesOnDay.setText(medicineModel.getTimesOnDay()+"");
         mMedicineUseCount.setText(medicineModel.getMedicineUseCount()+"");
         medicineImage=medicineModel.getMedicineImage();
@@ -439,5 +457,69 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                 .get();
 
     }
+    private void getMedicineList(String boxId){
+        RestClient.builder()
+                .clearParams()
+                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
+                //.url("medicine_mine")
+                .params("tel",tel)
+                .params("boxId",boxId)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        MedicineListDataConverter converter = new MedicineListDataConverter();
+                        medicineNameList.addAll(converter.getMedicinesOfBox(response));
+                        Toast.makeText(getContext(),medicineNameList.toString(),Toast.LENGTH_LONG).show();
+                    }
+                })
+                .build()
+                .get();
+
+    }
+    Runnable updateThread=new Runnable() {
+        @Override
+        public void run() {
+            RestClient.builder()
+                    .clearParams()
+                    .params("uuid",msgid)
+                    //.url("http://192.168.1.3:8081/Web01_exec/getStatus")
+                    .url(UploadConfig.API_HOST+"/api/getStatus")
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            JSONObject object=JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            Log.d("statuscode", code+"");
+                            if(code==1){
+                                Toast.makeText(getContext(), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                myHandler.postDelayed(updateThread,1000);
+                            }
+                            if(code==2){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText(getContext(), "药品数据已修改完毕", Toast.LENGTH_LONG).show();
+                                LatteDelegate delegate= Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE);
+                                if(delegate instanceof MedicineMineDelegate)
+                                {
+                                    ((MedicineMineDelegate)delegate).onRefresh();
+                                }else if(delegate instanceof MedicineMineDelegateForBox)
+                                {
+                                    ((MedicineMineDelegateForBox)delegate).onRefresh();
+                                }
+                                pop();
+
+
+                            }
+                            if(code==3||code==4){
+                                myHandler.removeCallbacks(updateThread);
+                                Toast.makeText(getContext(), "药品添加失败，请重新编辑", Toast.LENGTH_LONG).show();
+                                pop();
+                            }
+                        }
+                    })
+                    .build()
+                    .get();
+
+        }
+    };
 
 }
