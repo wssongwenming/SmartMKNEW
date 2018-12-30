@@ -100,6 +100,8 @@ public class IndexDataConverter extends DataConverter {
     public ArrayList<MultipleItemEntity> convertMedicineHistory(){
         String medicineId=null;
         String medicineName=null;
+        String medicineHistoryType=null;
+        int historyType=-1;
         String medicineUseTime=null;
         String tel=null;
         String boxId=null;
@@ -115,6 +117,27 @@ public class IndexDataConverter extends DataConverter {
                 medicineName=jsonobject2.getString("medicineNames");
                 medicineUseTime=jsonobject2.getString("medicineUseTime");
                 tel=jsonobject2.getString("tel");
+                historyType=jsonobject2.getIntValue("status");
+                switch (historyType) {
+                    case 1:
+                        medicineHistoryType = "药盒按时服用:";
+                        break;
+                    case 2:
+                        medicineHistoryType = "药箱按时服用:";
+                        break;
+                    case 3:
+                        medicineHistoryType = "药盒未按时服用:";
+                        break;
+                    case 4:
+                        medicineHistoryType = "药箱未按时服用:";
+                        break;
+                    case 5:
+                        medicineHistoryType = "药盒非服药操作";
+                        break;
+                    case 6:
+                        medicineHistoryType = "药箱非服药操作";
+                        break;
+                }
                 id=jsonobject2.getString("id");
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
@@ -122,6 +145,7 @@ public class IndexDataConverter extends DataConverter {
                         .setField(MultipleFields.MEDICINE_NAME,medicineName)
                         .setField(MultipleFields.MEDICINEUSERTIME,medicineUseTime)
                         .setField(MultipleFields.BOXID,boxId)
+                        .setField(MultipleFields.MEDICINEHISTORYTYPE,medicineHistoryType)
                         .setField(MultipleFields.TEL,tel)
                         .setField(MultipleFields.ID,id)
                         .build();

@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_mine;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -469,7 +470,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                     public void onSuccess(String response) {
                         MedicineListDataConverter converter = new MedicineListDataConverter();
                         medicineNameList.addAll(converter.getMedicinesOfBox(response));
-                        Toast.makeText(getContext(),medicineNameList.toString(),Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(),medicineNameList.toString(),Toast.LENGTH_LONG).show();
                     }
                 })
                 .build()
@@ -491,12 +492,12 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                Toast.makeText(getContext(), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已修改等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "药品数据已修改完毕", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已成功修改", Toast.LENGTH_LONG).show();
                                 LatteDelegate delegate= Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE);
                                 if(delegate instanceof MedicineMineDelegate)
                                 {
@@ -511,7 +512,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "药品添加失败，请重新编辑", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新编辑", Toast.LENGTH_LONG).show();
                                 pop();
                             }
                         }

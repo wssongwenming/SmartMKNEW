@@ -170,7 +170,7 @@ public class CustomDatePicker {
             if ((scrollUnits & SCROLL_TYPE.MINUTE.value) != SCROLL_TYPE.MINUTE.value) {
                 minute.add(formatTimeUnit(startMinute));
             } else {
-                for (int i = startMinute; i <= MAX_MINUTE; i=i+1) {
+                for (int i = startMinute; i <= MAX_MINUTE; i=i+10) {
                     minute.add(formatTimeUnit(i));
                 }
             }
@@ -194,7 +194,7 @@ public class CustomDatePicker {
             if ((scrollUnits & SCROLL_TYPE.MINUTE.value) != SCROLL_TYPE.MINUTE.value) {
                 minute.add(formatTimeUnit(startMinute));
             } else {
-                for (int i = startMinute; i <= MAX_MINUTE; i=i+1) {
+                for (int i = startMinute; i <= MAX_MINUTE; i=i+10) {
                     minute.add(formatTimeUnit(i));
                 }
             }
@@ -216,7 +216,7 @@ public class CustomDatePicker {
             if ((scrollUnits & SCROLL_TYPE.MINUTE.value) != SCROLL_TYPE.MINUTE.value) {
                 minute.add(formatTimeUnit(startMinute));
             } else {
-                for (int i = startMinute; i <= MAX_MINUTE;i=i+1) {
+                for (int i = startMinute; i <= MAX_MINUTE;i=i+10) {
                     minute.add(formatTimeUnit(i));
                 }
             }
@@ -236,7 +236,7 @@ public class CustomDatePicker {
             if ((scrollUnits & SCROLL_TYPE.MINUTE.value) != SCROLL_TYPE.MINUTE.value) {
                 minute.add(formatTimeUnit(startMinute));
             } else {
-                for (int i = startMinute; i <= MAX_MINUTE; i=i+1) {
+                for (int i = startMinute; i <= MAX_MINUTE; i=i+10) {
                     minute.add(formatTimeUnit(i));
                 }
             }
@@ -249,7 +249,7 @@ public class CustomDatePicker {
             if ((scrollUnits & SCROLL_TYPE.MINUTE.value) != SCROLL_TYPE.MINUTE.value) {
                 minute.add(formatTimeUnit(startMinute));
             } else {
-                for (int i = startMinute; i <= endMinute; i=i+1) {
+                for (int i = startMinute; i <= endMinute; i=i+10) {
                     minute.add(formatTimeUnit(i));
                 }
             }

@@ -1,4 +1,5 @@
 package com.dtmining.latte.mk.ui.sub_delegates.hand_add;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -204,12 +205,12 @@ public class HandAddDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", msgid+"");
                             if(code==1){
-                                Toast.makeText(getContext(), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "药品数据已添加成功", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功", Toast.LENGTH_LONG).show();
                                 mMedicinName.setText(null);
                                 mMedicineCode.setText(null);
                                 mDoseUnitSpinner.setSelection(0);
@@ -225,7 +226,7 @@ public class HandAddDelegate extends LatteDelegate {
 
                             }
                             if(code==3||code==4){
-                                Toast.makeText(getContext(), "药品添加失败，请重新添加", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新添加", Toast.LENGTH_LONG).show();
                                 myHandler.removeCallbacks(updateThread);
 
                             }
@@ -243,6 +244,7 @@ public class HandAddDelegate extends LatteDelegate {
         super.onCreate(savedInstanceState);
         handlerThread.start();
         myHandler=new Handler(handlerThread.getLooper());
+        //myHandler=Latte.getConfiguration(ConfigKeys.HANDLER);
         final Bundle args = getArguments();
         if (args != null) {
             medicineCode = args.getString(MEDICINE_CODE);
@@ -440,7 +442,7 @@ public class HandAddDelegate extends LatteDelegate {
                                             if (code == 1) {
                                                 //获得图片保存路径
                                                 medicineImage=responseObject.getString("url");
-                                                Toast.makeText(getContext(),medicineImage,Toast.LENGTH_LONG).show();
+                                                //Toast.makeText(getContext(),medicineImage,Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     }

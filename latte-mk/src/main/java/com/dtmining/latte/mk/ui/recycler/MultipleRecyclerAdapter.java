@@ -166,6 +166,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
     protected void convert(final MultipleViewHolder holder, MultipleItemEntity entity) {
         final String text;
         final String medicineName;
+        final String medicineHistoryType;
         final String medicineId;
         final int medicineType;
         final String medicineUseTime;
@@ -307,10 +308,12 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                 break;
             case ItemType.MEDICINE_HISTORY://这里是单独的用药历史列表,不同于首页的用药历史
                 medicineName=entity.getField(MultipleFields.MEDICINE_NAME);
+                medicineHistoryType=entity.getField(MultipleFields.MEDICINEHISTORYTYPE);
                 medicineUseTime=entity.getField(MultipleFields.MEDICINEUSERTIME);
                 final String historyId=entity.getField(MultipleFields.ID);
                 holder.setText(R.id.tv_medicine_history_medicine_time,medicineUseTime);
                 holder.setText(R.id.tv_medicine_history_medicine_name,medicineName);
+                holder.setText(R.id.tv_medicine_history_medicine_history_type,medicineHistoryType);
                 Button button =holder.getView(R.id.btn_medicine_history_medicine_use_reflect);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override

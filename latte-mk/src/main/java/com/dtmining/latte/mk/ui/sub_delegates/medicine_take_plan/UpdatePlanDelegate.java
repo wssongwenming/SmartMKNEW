@@ -1,5 +1,6 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
+import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,6 +75,7 @@ public class UpdatePlanDelegate extends LatteDelegate {
     void onItemSelected(AdapterView<?> parent, View view, int position, long id){
         //Toast.makeText(this.getContext(),parent.getItemAtPosition(position).toString(),Toast.LENGTH_SHORT).show();
         medicineId=((MedicineModel)parent.getItemAtPosition(position)).getMedicineId();
+        Toast.makeText(this.getContext(),medicineId,Toast.LENGTH_SHORT).show();
     }
     @BindView(R2.id.edit_plan_update_medicine_use_count)
     AppCompatEditText mMedicineUseCount=null;
@@ -247,8 +249,8 @@ public class UpdatePlanDelegate extends LatteDelegate {
     }
     private void getMedicineList(){
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/get_medicine")
                 .clearParams()
+                .url(UploadConfig.API_HOST+"/api/get_medicine")
                 .params("tel",tel)
                 .success(new ISuccess() {
                     @Override
@@ -287,12 +289,12 @@ public class UpdatePlanDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", msgid+"");
                             if(code==1){
-                                Toast.makeText(getContext(), "用药计划已修改等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已修改等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "用药计划修改成功", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划成功修改", Toast.LENGTH_LONG).show();
 
                                 final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
                                         .getInstance()
@@ -310,7 +312,7 @@ public class UpdatePlanDelegate extends LatteDelegate {
 
                             }
                             if(code==3||code==4){
-                                Toast.makeText(getContext(), "用药计划修改失败，请重新操作", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划修改失败，请重新操作", Toast.LENGTH_LONG).show();
                                 myHandler.removeCallbacks(updateThread);
 
                             }

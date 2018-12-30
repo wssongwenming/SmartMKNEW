@@ -490,6 +490,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已成功删除", Toast.LENGTH_SHORT).show();
                                 myHandler.removeCallbacks(updateThread);
                                 mData.remove(DELETEPOSITION);
                                 notifyDataSetChanged();

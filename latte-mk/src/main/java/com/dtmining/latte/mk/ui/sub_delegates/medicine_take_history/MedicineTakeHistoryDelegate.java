@@ -118,7 +118,6 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/get_history")
                 .params("tel",tel)
-                .params("tel",tel)
                 .params("page",BEAN.getPageIndex())
                 .params("count",BEAN.getPageSize())
                 .success(new ISuccess() {
@@ -154,6 +153,8 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         if(jsonString!=null) {
             String medicineName=null;
             String medicineUseTime=null;
+            int historyType=-1;
+            String medicineHistoryType=null;
             String tel=null;
             String boxId=null;
             String id=null;
@@ -167,6 +168,27 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                     JSONObject jsonobject2 = jsonarray.getJSONObject(i);
                     boxId=jsonobject2.getString("boxId");
                     medicineName=jsonobject2.getString("medicineNames");
+                    historyType=jsonobject2.getIntValue("status");
+                    switch (historyType) {
+                        case 1:
+                            medicineHistoryType = "药盒按时服用:";
+                            break;
+                        case 2:
+                            medicineHistoryType = "药箱按时服用:";
+                            break;
+                        case 3:
+                            medicineHistoryType = "药盒未按时服用:";
+                            break;
+                        case 4:
+                            medicineHistoryType = "药箱未按时服用:";
+                            break;
+                        case 5:
+                            medicineHistoryType = "药盒非服药操作";
+                            break;
+                        case 6:
+                            medicineHistoryType = "药箱非服药操作";
+                            break;
+                    }
                     medicineUseTime=jsonobject2.getString("medicineUseTime");
                     tel=jsonobject2.getString("tel");
                     id=jsonobject2.getString("id");
@@ -175,6 +197,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                             .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_HISTORY)
                             .setField(MultipleFields.MEDICINE_NAME,medicineName)
                             .setField(MultipleFields.MEDICINEUSERTIME,medicineUseTime)
+                            .setField(MultipleFields.MEDICINEHISTORYTYPE,medicineHistoryType)
                             .setField(MultipleFields.BOXID,boxId)
                             .setField(MultipleFields.TEL,tel)
                             .setField(MultipleFields.ID,id)

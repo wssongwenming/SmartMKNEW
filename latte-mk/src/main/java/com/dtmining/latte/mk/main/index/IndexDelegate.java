@@ -393,6 +393,8 @@ public class IndexDelegate extends BottomItemDelegate {
             String medicineId = null;
             String medicineName = null;
             String medicineUseTime = null;
+            int historyType=-1;
+            String medicineHistoryType=null;
             String tel = null;
             String boxId = null;
             String id = null;
@@ -406,14 +408,36 @@ public class IndexDelegate extends BottomItemDelegate {
                     boxId = jsonobject2.getString("boxId");
                     medicineName = jsonobject2.getString("medicineNames");
                     medicineUseTime = jsonobject2.getString("medicineUseTime");
+                    historyType=jsonobject2.getIntValue("status");
+                    switch (historyType) {
+                        case 1:
+                            medicineHistoryType = "药盒按时服用:";
+                            break;
+                        case 2:
+                            medicineHistoryType = "药箱按时服用:";
+                            break;
+                        case 3:
+                            medicineHistoryType = "药盒未按时服用:";
+                            break;
+                        case 4:
+                            medicineHistoryType = "药箱未按时服用:";
+                            break;
+                        case 5:
+                            medicineHistoryType = "药盒非服药操作";
+                            break;
+                        case 6:
+                            medicineHistoryType = "药箱非服药操作";
+                            break;
+                    }
                     tel = jsonobject2.getString("tel");
                     id = jsonobject2.getString("id");
                     final MultipleItemEntity entity = MultipleItemEntity.builder()
                             .setField(MultipleFields.ITEM_TYPE, ItemType.TEXT_TEXT)
                             .setField(MultipleFields.SPAN_SIZE, 3)
-                            .setField(MultipleFields.MEDICINE_NAME, medicineName)
+                            .setField(MultipleFields.MEDICINE_NAME, medicineHistoryType+" "+medicineName)
                             .setField(MultipleFields.MEDICINEUSERTIME, medicineUseTime)
                             .setField(MultipleFields.BOXID, boxId)
+                            .setField(MultipleFields.MEDICINEHISTORYTYPE,medicineHistoryType)
                             .setField(MultipleFields.TEL, tel)
                             .setField(MultipleFields.ID, id)
                             .build();

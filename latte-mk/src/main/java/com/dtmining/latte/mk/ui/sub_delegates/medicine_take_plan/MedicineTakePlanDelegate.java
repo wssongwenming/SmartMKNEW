@@ -299,8 +299,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     }
     public void synPlanWithSqlite(){
         RestClient.builder()
-                //.url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
-                .url("medicine_plan")
+                .url(UploadConfig.API_HOST + "/api/get_plan")//获取所有现有计划，成功后取得时间信息，设置闹钟
                 .params("tel", tel)
                 .params("boxId", LattePreference.getBoxId())
                 .success(new ISuccess() {
@@ -478,13 +477,12 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                         public void onSuccess(String response) {
                             JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
-                            Log.d("statuscode", code+"");
                             if(code==1){
-                                Toast.makeText(getContext(), "用药计划已经删除等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
-                                Toast.makeText(getContext(), "用药计划已经删除成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除成功", Toast.LENGTH_SHORT).show();
                                 myHandler.removeCallbacks(updateThread);
                                 list.get(GROUPPOSITION).getDatas().remove(CHILDPOSITION);
                                 if(list.get(GROUPPOSITION).getDatas().size()==0){
@@ -497,12 +495,10 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                 if (callback_medicine_plan_for_index != null) {
                                     callback_medicine_plan_for_index.executeCallback("");
                                 }
-
-
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "用药计划删除失败，请重新操作", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"用药计划删除失败，请重新操作", Toast.LENGTH_LONG).show();
                                 pop();
                             }
                         }

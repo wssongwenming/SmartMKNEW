@@ -262,8 +262,6 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     private void getMedicineList(){
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
-                //.clearParams()
-                //.url("medicine_mine")
                 .params("tel",tel)
                 .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
@@ -348,12 +346,12 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                Toast.makeText(getContext(), "用药计划已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2) {
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "用药计划已添加成功", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已成功添加", Toast.LENGTH_LONG).show();
                                 final IGlobalCallback<String> callback_medicine_plan = CallbackManager
                                         .getInstance()
                                         .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
@@ -371,7 +369,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText(getContext(), "用药计划添加失败，请重新添加", Toast.LENGTH_LONG).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划添加失败，请重新添加", Toast.LENGTH_LONG).show();
                             }
                         }
                     })
