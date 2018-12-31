@@ -155,7 +155,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 .url(UploadConfig.API_HOST+"/api/get_plan")
                 //.url("medicine_plan")
                 .params("tel",tel)
-                .params("boxId",boxId)
+                .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

@@ -93,7 +93,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         mRecyclerViewHistory.setLayoutManager(linearLayoutManager);
-        mRecyclerViewHistory.addItemDecoration(new MyDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerViewHistory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
