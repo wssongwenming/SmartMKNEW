@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
     private int medicineUsecount;
     private String cacelButtonText;
     private ClickListenerInterface clickListenerInterface;
+    private ArrayList<String>total_original_time_set=new ArrayList<>();
     private ArrayList<String> original_time_set;
     private CustomDatePicker customDatePicker;
     private ListView lv_set_time;
@@ -68,9 +70,10 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         public void doCancel();
     }
 
-    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface,int medicineUsecount,String doseUnit) {
+    public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> total_original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface,int medicineUsecount,String doseUnit) {
         super(context, R.style.Theme_MYDialog);
         this.original_time_set=original_time_set;
+        this.total_original_time_set=total_original_time_set;
         this.context = context;
         this.confirmButtonText = confirmButtonText;
         this.cacelButtonText = cacelButtonText;
@@ -79,6 +82,7 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         this.medicineUsecount=medicineUsecount;
         this.doseUnit=doseUnit;
         this.count_list=count_list;
+
     }
 
     @Override
@@ -101,29 +105,78 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
         String now = sdf.format(new Date());
         customDatePicker = new CustomDatePicker(this.context, new CustomDatePicker.ResultHandler() {
+            ArrayList<String> temp_total_original_time_set = (ArrayList<String>) total_original_time_set.clone();//clone对象
+            ArrayList<String> TEMP_total_original_time_set = (ArrayList<String>) total_original_time_set.clone();//clone对象
+            ArrayList<String> tem_time_set = (ArrayList<String>) time_list.clone();//clone对象
+            boolean ok0=tem_time_set.removeAll(original_time_set);
+            boolean ok1 =temp_total_original_time_set.removeAll(tem_time_set);//此时temp中存在的是list1中去除相同那部分的数据
+            boolean ok2=TEMP_total_original_time_set.removeAll(temp_total_original_time_set);
+            int common=TEMP_total_original_time_set.size();
+
+
+            int totalOriginalSize=total_original_time_set.size();
+
+            int totalAddedSize=time_list.size();
+            int originalSize=original_time_set.size();
+            int totalSize=totalOriginalSize+totalAddedSize-originalSize-common;//包含三部分：从服务器获得的所有药品的计划总和,某一药品原有和新加的计划总和,某一药品的原有计划数
             @Override
             public void handle(String time) { // 回调接口，获得选中的时间
-                Log.d("time",time);
-                if(time_list.contains(time))
-                {
-                    Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"该时间段已有服药计划",Toast.LENGTH_LONG).show();
-                }else if(time_list.size()>7)
-                {
-                    Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),"服药计划总数已超过上限8",Toast.LENGTH_LONG).show();
+                if((!total_original_time_set.contains(time))){
+                    if(time_list.contains(time)){
+                        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "该时间段已有服药计划", Toast.LENGTH_LONG).show();
+                    }else {
+                        totalSize+=1;
+                        if(totalSize<=8){
+                            Toast.makeText(getContext(),"totalOriginalSize="+totalOriginalSize+"",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"totalAddedSize="+totalAddedSize+"",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"originalSize="+originalSize+"",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"common="+common+"",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"totalSize="+totalSize+"",Toast.LENGTH_LONG).show();
+                            if (time_list.size() > 7) {
+                                Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "服药计划总数已超过上限8", Toast.LENGTH_LONG).show();
+                            }else{
+                                time_list.add(time);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }else{
+                            Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "服药计划总数已超过上限8", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+//                    totalSize+=1;
+//                    if(totalSize<=8){
+//                        Toast.makeText(getContext(),"totalOriginalSize="+totalOriginalSize+"",Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getContext(),"totalAddedSize="+totalAddedSize+"",Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getContext(),"originalSize="+originalSize+"",Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getContext(),"totalSize="+totalSize+"",Toast.LENGTH_LONG).show();
+//                        if(time_list.contains(time)){
+//                             Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "该时间段已有服药计划", Toast.LENGTH_LONG).show();
+//                        }else if (time_list.size() > 7) {
+//                            Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "服药计划总数已超过上限8", Toast.LENGTH_LONG).show();
+//                        }else{
+//                            time_list.add(time);
+//                            adapter.notifyDataSetChanged();
+//                        }
+//                    }else{
+//                        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "服药计划总数已超过上限8", Toast.LENGTH_LONG).show();
+//                    }
+                }else {
+                    if(time_list.contains(time)){
+                        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "该时间段已有服药计划", Toast.LENGTH_LONG).show();
+                    }else {
+                        time_list.add(time);
+                        adapter.notifyDataSetChanged();
+                    }
+
                 }
-                else {
-                    time_list.add(time);
-                    adapter.notifyDataSetChanged();
-                }
+
             }
         }, "2010-01-01 00:00",now); // 初始化日期格式请用：yyyy-MM-dd HH:mm，否则不能正常运行
         customDatePicker.showSpecificTime(true); // 显示时和分
         customDatePicker.setIsLoop(true); // 允许循环滚动
-
         TextView tvConfirm = (TextView) view.findViewById(R.id.confirm);
         TextView tvCancel = (TextView) view.findViewById(R.id.cancel);
         Button btnAdd= (Button) view.findViewById(R.id.btn_add_time);
-
 
         tvConfirm.setText(confirmButtonText);
         tvCancel.setText(cacelButtonText);

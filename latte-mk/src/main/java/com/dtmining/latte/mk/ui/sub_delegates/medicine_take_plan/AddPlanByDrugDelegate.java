@@ -44,6 +44,7 @@ import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
+import com.google.gson.JsonObject;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -64,7 +65,7 @@ import butterknife.OnItemSelected;
  * Description:
  */
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
-    int totalPlans=-1;
+
     private String musicUriStr="";
     private HandlerThread handlerThread=new HandlerThread("");
     private Handler myHandler=null;
@@ -73,7 +74,8 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     private int medicineType=-1;
     private int medicineUsecount=0;
     private MyDBOpenHelper myDBOpenHelper;
-    private ArrayList<String>original_time_set=new ArrayList<>();
+    private ArrayList<String>total_original_time_set=new ArrayList<>();//所有药品的已有plan的time集合(由于计划总数不能超过8，所以totaltotal_original_time_set的大小加上新加入的题meset不能大于8)
+    private ArrayList<String>original_time_set=new ArrayList<>();//某一药品的已有plan的time集合
     String tel=null;
     int origin_time_count_size=0;//已经添加过的的用药计划：服药时间：用量,再添加时，这部分不添加
     String boxId=null;
@@ -110,9 +112,36 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     }
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_time_set)
     void setPlanTime(){
-        //Toast.makeText(getContext(),doseUnit,Toast.LENGTH_LONG).show();
-        setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,useCountSet, "确定","取消", this,medicineUsecount,doseUnit);
-        setTimesDialog.show();
+
+        RestClient.builder()
+                .url(UploadConfig.API_HOST+"/api/get_plan")
+                .params("tel",tel)
+                .params("boxId",LattePreference.getBoxId())
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        JSONObject object= JSON.parseObject(response);
+                        int code=object.getIntValue("code");
+                        if(code==1) {
+                            total_original_time_set.clear();
+                            final JSONObject data = object.getJSONObject("detail");
+                            final JSONArray dataArray = data.getJSONArray("planlist");
+                            int size = dataArray.size();
+                            for (int i = 0; i <size ; i++) {
+                                JSONObject object1= (JSONObject) dataArray.get(i);
+                                total_original_time_set.add(object1.getString("time"));
+                            }
+                            setTimesDialog = new SetTimesDialog(getContext(),timeSet,original_time_set,total_original_time_set,useCountSet, "确定","取消", AddPlanByDrugDelegate.this,medicineUsecount,doseUnit);
+                            setTimesDialog.show();
+                        }
+                    }
+                })
+                .build()
+                .get();
+
+
+
+
     }
     //确定提交整个表单
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_confirm)
@@ -130,6 +159,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             if(code==1) {
                                 final JSONObject data = object.getJSONObject("detail");
                                 final JSONArray dataArray = data.getJSONArray("planlist");
+
                                 int size1 = dataArray.size();
                                 if(size1<8){
                                     int size=timeSet.size();
@@ -187,6 +217,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     @OnItemSelected(R2.id.sp_delegate_medicine_take_plan_add_by_drug_medicine_name)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         timeSet.clear();
+        original_time_set.clear();
         medicineModel=mAdapter.getItem(position);
         MedicinePlans medicinePlans=medicineModel.getMedicinePlans();
         medicineType=medicineModel.getMedicintType();
@@ -284,6 +315,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
         myHandler=new Handler(handlerThread.getLooper());
         myDBOpenHelper = MyDBOpenHelper.getInstance((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY));
         getMedicineList();
+        getTotalPlans();
         //myDBOpenHelper.getWritableDatabase();
     }
 
@@ -574,27 +606,29 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
             AlarmOpreation.enableAlert(getContext(),alarmid,alarmIds);
         }
     }
-    private int getTotalPlans(){
+    private void getTotalPlans(){
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/get_plan")
-                //.url("medicine_plan")
                 .params("tel",tel)
                 .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        com.alibaba.fastjson.JSONObject object= JSON.parseObject(response);
+                        JSONObject object= JSON.parseObject(response);
                         int code=object.getIntValue("code");
                         if(code==1) {
                             final JSONObject data = object.getJSONObject("detail");
                             final JSONArray dataArray = data.getJSONArray("planlist");
                             int size = dataArray.size();
-                            totalPlans=size;
+                            for (int i = 0; i <size ; i++) {
+                                JSONObject object1= (JSONObject) dataArray.get(i);
+                                total_original_time_set.add(object1.getString("time"));
+                            }
                         }
                     }
                 })
                 .build()
                 .get();
-        return totalPlans;
+
     }
 }
