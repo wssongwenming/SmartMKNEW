@@ -127,11 +127,11 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
                     }else {
                         totalSize+=1;
                         if(totalSize<=8){
-                            Toast.makeText(getContext(),"totalOriginalSize="+totalOriginalSize+"",Toast.LENGTH_LONG).show();
+                            /*Toast.makeText(getContext(),"totalOriginalSize="+totalOriginalSize+"",Toast.LENGTH_LONG).show();
                             Toast.makeText(getContext(),"totalAddedSize="+totalAddedSize+"",Toast.LENGTH_LONG).show();
                             Toast.makeText(getContext(),"originalSize="+originalSize+"",Toast.LENGTH_LONG).show();
                             Toast.makeText(getContext(),"common="+common+"",Toast.LENGTH_LONG).show();
-                            Toast.makeText(getContext(),"totalSize="+totalSize+"",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"totalSize="+totalSize+"",Toast.LENGTH_LONG).show();*/
                             if (time_list.size() > 7) {
                                 Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "服药计划总数已超过上限8", Toast.LENGTH_LONG).show();
                             }else{
