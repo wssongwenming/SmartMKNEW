@@ -49,6 +49,7 @@ public class AlarmOpreation {
                     int minute=alarm.getMinute();
                     int interval= alarm.getInterval();
                     String messsage=alarm.getMessage();
+                    String musicUri=alarm.getMusic();
 
                     Calendar mCalendar = cacluteNextAlarm(date,hour, minute, interval);//选择了一周中的哪几天，比如周一、周三、周四,可以用daydiffer
              /*       if (mCalendar.getTimeInMillis() < System.currentTimeMillis()) {
@@ -65,6 +66,7 @@ public class AlarmOpreation {
                     intent.putExtra("interval",interval);
                     intent.putExtra("id",Id);
                     intent.putExtra("message", messsage);
+                    intent.putExtra("musicUri",musicUri);
                     intent.putExtra("ids",ids);
                     intent.setClass(context, AlarmReceiver.class);
                     PendingIntent pi = PendingIntent.getBroadcast(context, type, intent,

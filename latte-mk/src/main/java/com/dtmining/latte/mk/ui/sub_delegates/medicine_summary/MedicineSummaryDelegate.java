@@ -20,6 +20,7 @@ import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueDataConverter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue.MedicineOverdueRefreshHandler;
 import com.dtmining.latte.ui.date.DateDialogUtil;
@@ -88,6 +89,7 @@ public class MedicineSummaryDelegate extends LatteDelegate{
         final LinearLayoutManager linearLayoutManager_history=new MyLayoutManager(getContext());
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {

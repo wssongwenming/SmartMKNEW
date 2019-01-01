@@ -6,14 +6,18 @@
     android:orientation="vertical"
     android:background="@color/white"
    >
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_marginLeft="20dp"
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:text="添加/删除药箱"
-        android:textSize="18sp"
-
-        android:gravity="center_vertical"
-        android:layout_height="40dp" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/Green">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="添加/删除药箱"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </android.support.v7.widget.Toolbar>
     <Button
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"

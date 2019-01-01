@@ -118,61 +118,75 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     @OnClick(R2.id.btn_delegate_medicine_take_plan_add_by_drug_confirm)
     void confirmPlan(){
         if (checkForm()) {
-            //String medicineUseCount = mMedicineUseCount.getText().toString();
-            int size=timeSet.size();
-            //MedicinePlans medicinePlans=new MedicinePlans();
-            MedicinePlan medicinePlan=new MedicinePlan();
-            Detail detail=new Detail();
-            MedicinePlanNetModel medicinePlanNetModel=new MedicinePlanNetModel();
-            for (int i = origin_time_count_size; i <size ; i++) {//添加的时候从新加入的开始
-                TimeCountPair pair=new TimeCountPair();
-                pair.setMedicine_time(timeSet.get(i));
-                pair.setMedicine_useCount(useCountSet.get(i));
-                medicinePlan.addPair(pair);
-            }
-            detail.setMedicine_plan(medicinePlan);
-            detail.setMedicineId(medicineModel.getMedicineId());
-            medicinePlanNetModel.setDetail(detail);
-            String planJson = JSON.toJSON( medicinePlanNetModel).toString();
-            Log.d("addbydrug", planJson);
             RestClient.builder()
-                    .url(UploadConfig.API_HOST+"/api/Medicine_set_time")//提交计划
-                    .clearParams()
-                    .raw(planJson)
+                    .url(UploadConfig.API_HOST+"/api/get_plan")
+                    .params("tel", tel)
+                    .params("boxId", LattePreference.getBoxId())
                     .success(new ISuccess() {
                         @Override
                         public void onSuccess(String response) {
-                            JSONObject object = JSON.parseObject(response);
-                            int code = object.getIntValue("code");
-                            if (code == 1)
-                            {
-                                msgid=object.getString("msgid");
-                                Log.d("msgid", "msgid="+msgid);
-                                if(msgid!=null) {
-                                    myHandler.postDelayed(updateThread, 1000);
+                            JSONObject object= JSON.parseObject(response);
+                            int code=object.getIntValue("code");
+                            if(code==1) {
+                                final JSONObject data = object.getJSONObject("detail");
+                                final JSONArray dataArray = data.getJSONArray("planlist");
+                                int size1 = dataArray.size();
+                                if(size1<8){
+                                    int size=timeSet.size();
+                                    if(size>origin_time_count_size) {//表示有新的计划加入避免了plans为空的情况
+                                        Log.d("sizeofplans", size+":"+origin_time_count_size);
+                                        MedicinePlan medicinePlan = new MedicinePlan();
+                                        Detail detail = new Detail();
+                                        MedicinePlanNetModel medicinePlanNetModel = new MedicinePlanNetModel();
+                                        for (int i = origin_time_count_size; i < size; i++) {//添加的时候从新加入的开始
+                                            TimeCountPair pair = new TimeCountPair();
+                                            pair.setMedicine_time(timeSet.get(i));
+                                            pair.setMedicine_useCount(useCountSet.get(i));
+                                            medicinePlan.addPair(pair);
+                                        }
+                                        detail.setMedicine_plan(medicinePlan);
+                                        detail.setMedicineId(medicineModel.getMedicineId());
+                                        medicinePlanNetModel.setDetail(detail);
+                                        String planJson = JSON.toJSON(medicinePlanNetModel).toString();
+                                        Log.d("addbydrug", planJson);
+                                        RestClient.builder()
+                                                .url(UploadConfig.API_HOST + "/api/Medicine_set_time")//提交计划
+                                                .clearParams()
+                                                .raw(planJson)
+                                                .success(new ISuccess() {
+                                                    @Override
+                                                    public void onSuccess(String response) {
+                                                        JSONObject object = JSON.parseObject(response);
+                                                        int code = object.getIntValue("code");
+                                                        if (code == 1) {
+                                                            msgid = object.getString("msgid");
+                                                            Log.d("msgid", "msgid=" + msgid);
+                                                            if (msgid != null) {
+                                                                myHandler.postDelayed(updateThread, 1000);
+                                                            }
+
+                                                        }
+                                                    }
+                                                })
+                                                .build()
+                                                .post();
+                                    }
+
+                                }else{
+                                    Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"用药计划数已超8个，无法设置新的用药计划",Toast.LENGTH_LONG).show();
                                 }
-                               /* final IGlobalCallback<String> callback_medicine_plan = CallbackManager
-                                        .getInstance()
-                                        .getCallback(CallbackType.ON_GET_MEDICINE_PLAN);
-                                if (callback_medicine_plan != null) {
-                                    callback_medicine_plan.executeCallback("");
-                                }
-                                final IGlobalCallback<String> callback_medicine_plan_for_index = CallbackManager
-                                        .getInstance()
-                                        .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
-                                if (callback_medicine_plan_for_index != null) {
-                                    callback_medicine_plan_for_index.executeCallback("");
-                                }
-                                pop();*/
+                            }
+
                         }
-                    }
                     })
                     .build()
-                    .post();
+                    .get();
+
         }
     }
     @OnItemSelected(R2.id.sp_delegate_medicine_take_plan_add_by_drug_medicine_name)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        timeSet.clear();
         medicineModel=mAdapter.getItem(position);
         MedicinePlans medicinePlans=medicineModel.getMedicinePlans();
         medicineType=medicineModel.getMedicintType();
@@ -188,7 +202,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                 doseUnit = "瓶/支";
                 break;
             case 3:
-                doseUnit = "包";
+                doseUnit = "包/袋";
                 break;
             case 4:
                 doseUnit = "克";
@@ -378,6 +392,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                 if (callback_medicine_plan_for_index != null) {
                                     callback_medicine_plan_for_index.executeCallback("");
                                 }
+                                synPlanWithSqlite();
                                 pop();
 
                             }

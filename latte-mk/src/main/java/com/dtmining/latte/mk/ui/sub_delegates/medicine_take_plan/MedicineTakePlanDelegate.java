@@ -25,6 +25,7 @@ import com.dtmining.latte.mk.R2;
 import com.dtmining.latte.mk.main.aboutme.mymedicineboxes.MedicineMineDelegateForBox;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
+import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.MedicineMineDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.Model.MedicinePlanInfo;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.alarm.AlarmOpreation;

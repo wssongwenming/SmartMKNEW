@@ -39,6 +39,7 @@ public class AlarmAlertActivity extends Activity {
 				| WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
 		wakeUpAndUnlock();int type = getIntent().getIntExtra("type",0);
 		String message=getIntent().getStringExtra("message");
+		String musicUri=getIntent().getStringExtra("musicUri");
 		String tile ="";
 		String content="";
 		tile = "吃药提醒";
@@ -55,7 +56,7 @@ public class AlarmAlertActivity extends Activity {
 					}
 				}).show();
 		notificationVibrator();
-		notificationRing();
+		notificationRing(musicUri);
 	}
 
 
@@ -90,7 +91,7 @@ public class AlarmAlertActivity extends Activity {
 	/**
 	 * 铃声通知
 	 */
-	private void notificationRing() {
+	private void notificationRing(String musicUri) {
 
 		if (mediaPlayer == null)
 			mediaPlayer = new MediaPlayer();
@@ -98,13 +99,21 @@ public class AlarmAlertActivity extends Activity {
 			return;
 
 		try {
-			// 这里是调用系统自带的铃声
-			Uri uri = RingtoneManager
-					.getDefaultUri(RingtoneManager.TYPE_ALARM);
-			mediaPlayer.stop();
-			mediaPlayer.reset();
-			mediaPlayer.setDataSource(this, uri);
-			mediaPlayer.prepare();
+			if(musicUri==null) {
+				// 这里是调用系统自带的铃声
+				Uri uri = RingtoneManager
+						.getDefaultUri(RingtoneManager.TYPE_ALARM);
+				mediaPlayer.stop();
+				mediaPlayer.reset();
+				mediaPlayer.setDataSource(this, uri);
+				mediaPlayer.prepare();
+			}else{
+				Uri uri=Uri.parse(musicUri);
+				mediaPlayer.stop();
+				mediaPlayer.reset();
+				mediaPlayer.setDataSource(this, uri);
+				mediaPlayer.prepare();
+			}
 		} catch (Exception e) {
 		}
 		mediaPlayer.start();
