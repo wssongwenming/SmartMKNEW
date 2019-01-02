@@ -1,6 +1,9 @@
 package com.dtmining.latte.wechat;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 
 import com.dtmining.latte.app.ConfigKeys;
@@ -59,6 +62,7 @@ public class LatteWeChat {
 
     //点击“微信登陆”按钮调用
     public final void signIn(){
+        //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"dddd",Toast.LENGTH_LONG).show();
         final SendAuth.Req req=new SendAuth.Req();
         //威信规定的字符串开发
         req.scope="snsapi_userinfo";

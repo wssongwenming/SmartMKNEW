@@ -176,7 +176,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
                                                 doseUnit = "瓶/支";
                                                 break;
                                             case 3:
-                                                doseUnit = "包";
+                                                doseUnit = "包/袋";
                                                 break;
                                             case 4:
                                                 doseUnit = "克";
@@ -188,7 +188,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
                                                 doseUnit = "其他";
                                                 break;
                                         }
-                                        plansbuilder.append("药盒"+boxId+"内:"+medicineName+medicineUseCount+doseUnit);
+                                        plansbuilder.append("药盒"+boxId+"内:"+medicineName+medicineUseCount+doseUnit+"; ");
                                     }
                                 }
                                 final MultipleItemEntity entity=MultipleItemEntity.builder()
@@ -230,7 +230,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
                                     int medicineCount=object1.getIntValue("medicineCount");
                                     overduebuilder.append("药箱"+boxId+":"+medicineName+"剩余量为"+medicineCount);
                                 }
-                                overduebuilder.append("请注意补充");
+                                overduebuilder.append("请注意补充; ");
                                 final MultipleItemEntity entity=MultipleItemEntity.builder()
                                         .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_SUPPLY_MESSAGE)
                                         .setField(MultipleFields.MEDICINE_SUPPLY_MESSAGE_TITLE,"药品补充")
@@ -270,7 +270,7 @@ public class UserMessageDelegate  extends LatteDelegate  {
                                     String boxId= (String) object1.getString("boxId");
                                     String medicineName=object1.getString("medicineName");
                                     overduebuilder.append("药箱"+boxId+":");
-                                    overduebuilder.append(medicineName);
+                                    overduebuilder.append(medicineName+"; ");
                                 }
                                 final MultipleItemEntity entity=MultipleItemEntity.builder()
                                         .setField(MultipleFields.ITEM_TYPE, ItemType.MEDICINE_OVERDUE_MESSAGE)

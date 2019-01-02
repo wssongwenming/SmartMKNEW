@@ -28,6 +28,7 @@ import com.dtmining.latte.mk.layoutmanager.MyLayoutManager;
 import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.tools.Icon;
+import com.dtmining.latte.mk.ui.recycler.DividerItemDecoration;
 import com.dtmining.latte.mk.ui.recycler.ItemType;
 import com.dtmining.latte.mk.ui.recycler.MultipleFields;
 import com.dtmining.latte.mk.ui.recycler.MultipleItemEntity;
@@ -291,6 +292,7 @@ public class IndexDelegate extends BottomItemDelegate {
     private void initRecyclerView(){
         final LinearLayoutManager linearLayoutManager_history=new MyLayoutManager(getContext());
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        mRecyclerViewHistory.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerViewHistory.setLayoutManager(linearLayoutManager);
     }
     @Override

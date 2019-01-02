@@ -1,6 +1,9 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -33,6 +36,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.util.ClickUtil;
+import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -56,10 +60,11 @@ import butterknife.OnClick;
 
 /**
  * author:songwenming
- * Date:2018/10/19
+ * Date:2018/10/19努力了
  * Description:
  */
 public class MedicineTakePlanDelegate extends LatteDelegate{
+    private String musicUriStr="";
     private HandlerThread handlerThread=new HandlerThread("");
     private Handler myHandler=null;
     private String msgid=null;
@@ -84,10 +89,18 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
     @OnClick(R2.id.btn_medicine_take_plan_set_alarm)
     void onClickSetAlarm(){
         if (!ClickUtil.isFastClick()) {
-            synPlanWithSqlite();
+            Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "设置通知铃声");
+            if (musicUriStr != null) {
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(musicUriStr));
+            }
+            startActivityForResult(intent, 0);
+
 
         }else{
-            Toast.makeText(getContext(), "请不要频繁点击", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(getContext(), "请不要频繁点击");
+            //Toast.makeText(getContext(), "请不要频繁点击", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -183,7 +196,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
         int length=alarmIds.length;
         for (int i = 0; i <length ; i++) {
             int alarmid=alarmIds[i];
-            AlarmOpreation.enableAlert(getContext(),alarmid,alarmIds);
+            AlarmOpreation.enableAlert((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY),alarmid,alarmIds);
         }
        }
 
@@ -347,7 +360,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                                 unitfordose = "瓶/支";
                                                 break;
                                             case 3:
-                                                unitfordose = "包";
+                                                unitfordose = "包/袋";
                                                 break;
                                             case 4:
                                                 unitfordose = "克";
@@ -419,7 +432,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                                                 int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
                                                                 int minute = Integer.parseInt(time.substring(time.indexOf(":") + 1, time.length()));
                                                                 int interval = Integer.parseInt(Interval)+1;//由于每天服用表示间隔0，但实际这在设置闹钟时还是相差1天，
-                                                                Alarm alarm = new Alarm(getDate(starttime, interval), hour, minute, interval, message, "aaa.mp3", 1);
+                                                                Alarm alarm = new Alarm(getDate(starttime, interval), hour, minute, interval, message, musicUriStr, 1);
                                                                 try {
                                                                     add(alarm);
                                                                 } catch (ParseException e) {
@@ -509,6 +522,17 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
 
         }
     };
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            Uri pickedUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            musicUriStr = pickedUri.toString();
+            synPlanWithSqlite();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

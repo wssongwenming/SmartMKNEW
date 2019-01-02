@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/Gray0"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/Green">
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="药品管理"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
     <!--最近用药-->
-    <LinearLayout
-        android:paddingTop="10dp"
+    <android.support.v7.widget.LinearLayoutCompat
+        android:paddingTop="2dp"
         android:id="@+id/recent_medicine_LO"
         android:layout_width="match_parent"
         android:background="@color/white"
-        android:paddingLeft="20dp"
+        android:paddingLeft="10dp"
         android:paddingRight="20dp"
         android:gravity="center_vertical"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,29 +34,27 @@
             android:textColor="#000"
             android:text="最近用药"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
-
-
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:background="@color/white"
-        android:layout_height="100dp">
+        android:layout_height="90dp">
         <com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview
             android:id="@+id/hl_recently_useed_medicine"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="wrap_content">
         </com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview>
-    </LinearLayout>
+    </android.support.v7.widget.LinearLayoutCompat>
 
     <TextView
         android:layout_width="match_parent"
         android:background="@color/Gray0"
-        android:layout_height="10dp" />
+        android:layout_height="5dp" />
 
-    <LinearLayout
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:paddingLeft="20dp"
@@ -88,7 +87,7 @@
             android:layout_width="match_parent"
             android:background="@color/Gray2"
             android:layout_height="1px" />
-        <LinearLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:id="@+id/manage_medicine_list"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
@@ -108,13 +107,13 @@
                 android:layout_width="15dp"
                 android:background="@drawable/right_arrow"
                 android:layout_height="15dp" />
-        </LinearLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
         <TextView
             android:layout_width="match_parent"
             android:background="@color/Gray2"
             android:layout_height="1px" />
 
-        <LinearLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:id="@+id/manage_medicine_plan"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
@@ -134,13 +133,13 @@
                 android:layout_width="15dp"
                 android:background="@drawable/right_arrow"
                 android:layout_height="15dp" />
-        </LinearLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
         <TextView
             android:layout_width="match_parent"
             android:background="@color/Gray2"
             android:layout_height="1px" />
 
-        <LinearLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:id="@+id/manage_medicine_overtime"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
@@ -160,13 +159,13 @@
                 android:layout_width="15dp"
                 android:background="@drawable/right_arrow"
                 android:layout_height="15dp" />
-        </LinearLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
         <TextView
             android:layout_width="match_parent"
             android:background="@color/Gray2"
             android:layout_height="1px" />
 
-        <LinearLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:id="@+id/manage_medicine_summary"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
@@ -186,19 +185,11 @@
                 android:layout_width="15dp"
                 android:background="@drawable/right_arrow"
                 android:layout_height="15dp" />
-        </LinearLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
         <TextView
             android:layout_width="match_parent"
             android:background="@color/Gray2"
-            android:layout_height="1px" />
+            android:layout_height="1px"/>
+    </android.support.v7.widget.LinearLayoutCompat>
 
-
-    </LinearLayout>
-
-
-
-
-
-
-
-</LinearLayout>
+</android.support.v7.widget.LinearLayoutCompat>

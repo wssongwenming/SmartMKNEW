@@ -383,7 +383,7 @@ public class MedicineMineEditDelegate extends LatteDelegate {
          }
         ArrayAdapter adap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"请选择服药间隔","每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
         mTimeSpanSpinner.setAdapter(adap);
-        com.dtmining.latte.mk.adapter.SpinnerAdapter doseunitadap = new com.dtmining.latte.mk.adapter.SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包", "克", "毫升", "其他"}));
+        com.dtmining.latte.mk.adapter.SpinnerAdapter doseunitadap = new com.dtmining.latte.mk.adapter.SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包/袋", "克", "毫升", "其他"}));
         mDoseUnitSpinner.setAdapter(doseunitadap);
         initData();
     }

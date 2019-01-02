@@ -46,6 +46,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineListDat
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
+import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -205,12 +206,14 @@ public class HandAddDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", msgid+"");
                             if(code==1){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步");
+                                //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功", Toast.LENGTH_LONG).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功");
+                                //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功", Toast.LENGTH_LONG).show();
                                 mMedicinName.setText(null);
                                 mMedicineCode.setText(null);
                                 mDoseUnitSpinner.setSelection(0);
@@ -226,7 +229,8 @@ public class HandAddDelegate extends LatteDelegate {
 
                             }
                             if(code==3||code==4){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新添加", Toast.LENGTH_LONG).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新添加");
+                                //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新添加", Toast.LENGTH_LONG).show();
                                 myHandler.removeCallbacks(updateThread);
 
                             }

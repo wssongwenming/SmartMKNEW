@@ -75,7 +75,7 @@ public class MyElvAdapterForIndex extends BaseExpandableListAdapter {
                 unitfordose = "瓶/支";
                 break;
             case 3:
-                unitfordose = "包";
+                unitfordose = "包/袋";
                 break;
             case 4:
                 unitfordose = "克";

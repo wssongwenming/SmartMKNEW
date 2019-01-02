@@ -156,7 +156,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                         doseUnit = "瓶/支";
                         break;
                     case 3:
-                        doseUnit = "包";
+                        doseUnit = "包/袋";
                         break;
                     case 4:
                         doseUnit = "克";

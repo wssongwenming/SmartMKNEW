@@ -165,7 +165,7 @@ public class MedicineTakePlanDelegate2 extends LatteDelegate{
         int length=alarmIds.length;
         for (int i = 0; i <length ; i++) {
             int alarmid=alarmIds[i];
-            AlarmOpreation.enableAlert(getContext(),alarmid,alarmIds);
+            AlarmOpreation.enableAlert((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),alarmid,alarmIds);
         }
        }
 
@@ -318,7 +318,7 @@ public class MedicineTakePlanDelegate2 extends LatteDelegate{
                                                 unitfordose = "瓶/支";
                                                 break;
                                             case 3:
-                                                unitfordose = "包";
+                                                unitfordose = "包/袋";
                                                 break;
                                             case 4:
                                                 unitfordose = "克";

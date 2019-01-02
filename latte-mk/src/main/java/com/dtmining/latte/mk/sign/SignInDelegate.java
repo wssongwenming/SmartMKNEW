@@ -24,6 +24,7 @@ import com.dtmining.latte.mk.sign.model.User;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.regex.RegexTool;
 import com.dtmining.latte.wechat.LatteWeChat;
 import com.dtmining.latte.wechat.callbacks.IWeChatGetOpenIdCallback;
@@ -125,7 +126,6 @@ public class SignInDelegate extends LatteDelegate {
     //微信登陆
     @OnClick(R2.id.icon_sign_in_wechat)
     void onClickWeChat(){
-
         LatteWeChat.getInstancee()
                 .onSignSuccess(new IWeChatSignInCallback() {
                     @Override

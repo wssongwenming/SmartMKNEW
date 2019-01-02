@@ -320,7 +320,7 @@ public class MedicineTakePlanDelegate1 extends LatteDelegate{
                                                 unitfordose = "瓶/支";
                                                 break;
                                             case 3:
-                                                unitfordose = "包";
+                                                unitfordose = "包/袋";
                                                 break;
                                             case 4:
                                                 unitfordose = "克";

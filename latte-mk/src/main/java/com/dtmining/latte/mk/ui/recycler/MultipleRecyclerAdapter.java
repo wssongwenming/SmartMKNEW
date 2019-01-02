@@ -257,7 +257,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                         doseUnit = "瓶/支";
                         break;
                     case 3:
-                        doseUnit = "包";
+                        doseUnit = "包/袋";
                         break;
                     case 4:
                         doseUnit = "克";
@@ -388,7 +388,7 @@ protected MultipleViewHolder createBaseViewHolder(View view) {
                         doseUnit = "瓶/支";
                         break;
                     case 3:
-                        doseUnit = "包";
+                        doseUnit = "包/袋";
                         break;
                     case 4:
                         doseUnit = "克";

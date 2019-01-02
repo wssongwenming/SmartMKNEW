@@ -1,6 +1,7 @@
 package com.dtmining.latte.mk.launcher;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -10,7 +11,9 @@ import android.view.View;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.dtmining.latte.app.AccountManager;
+import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.IUserChecker;
+import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.delegates.LatteDelegate;
 import com.dtmining.latte.mk.R;
 import com.dtmining.latte.ui.launcher.ILauncherListener;
@@ -55,7 +58,7 @@ public class LauncherScrollDelegate extends LatteDelegate implements ViewPager.O
     }
     @Override
     public Object setLayout() {
-        mConvenientBanner=new ConvenientBanner<>(getContext());
+        mConvenientBanner=new ConvenientBanner<>((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY));
         return mConvenientBanner;
     }
 
