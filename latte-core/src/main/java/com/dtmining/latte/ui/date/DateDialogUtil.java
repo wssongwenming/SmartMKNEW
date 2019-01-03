@@ -26,6 +26,7 @@ public class DateDialogUtil {
     }
 
     public void showDialog(Context context) {
+        final Calendar calendar = Calendar.getInstance();
         final LinearLayout ll = new LinearLayout(context);
         final DatePicker picker = new DatePicker(context);
         final LinearLayout.LayoutParams lp =
@@ -37,13 +38,9 @@ public class DateDialogUtil {
         picker.init(now.get(Calendar.YEAR), (now.get(Calendar.MONTH)), now.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                final Calendar calendar = Calendar.getInstance();
+                //final Calendar calendar = Calendar.getInstance();
                 calendar.set(year, monthOfYear, dayOfMonth);
-                final SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault());
-                final String data = format.format(calendar.getTime());
-                if(mDateListener!=null){
-                    mDateListener.onDateChange(data);
-                }
+
             }
         });
 
@@ -55,6 +52,11 @@ public class DateDialogUtil {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        final SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault());
+                        final String data = format.format(calendar.getTime());
+                        if(mDateListener!=null){
+                            mDateListener.onDateChange(data);
+                        }
 
                     }
                 })

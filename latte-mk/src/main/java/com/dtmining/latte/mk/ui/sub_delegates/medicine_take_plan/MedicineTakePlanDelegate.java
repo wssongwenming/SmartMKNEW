@@ -492,11 +492,11 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                             JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
                             if(code==1){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除等待向硬件端同步");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除成功", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除成功");
                                 myHandler.removeCallbacks(updateThread);
                                 list.get(GROUPPOSITION).getDatas().remove(CHILDPOSITION);
                                 if(list.get(GROUPPOSITION).getDatas().size()==0){
@@ -512,7 +512,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"用药计划删除失败，请重新操作", Toast.LENGTH_LONG).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"用药计划删除失败，请重新操作");
                                 pop();
                             }
                         }

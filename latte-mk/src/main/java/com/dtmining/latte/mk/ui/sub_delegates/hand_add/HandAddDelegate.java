@@ -44,8 +44,11 @@ import com.dtmining.latte.mk.ui.sub_delegates.hand_add.model.MedicineModel;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineListAdapter;
 import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineListDataConverter;
 import com.dtmining.latte.net.RestClient;
+import com.dtmining.latte.net.callback.IError;
+import com.dtmining.latte.net.callback.IFailure;
 import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
+import com.dtmining.latte.util.ResourceTool;
 import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
@@ -123,7 +126,7 @@ public class HandAddDelegate extends LatteDelegate {
     @BindView(R2.id.img_medicine_hand_add_appearance)
     AppCompatImageView mMedicineImage=null;
     //外包装图片回传路径
-    String medicineImage="";
+    String medicineImage=null;
     //药箱ID
     @BindView(R2.id.spinner_medicine_hand_add_boxid)
     AppCompatSpinner mBoxidSpinner=null;
@@ -147,48 +150,143 @@ public class HandAddDelegate extends LatteDelegate {
     @OnClick(R2.id.btn_medicine_hand_add_submit)
     void onClickSubmit(){
         if(checkForm()){
-            MedicineModel medicineModel=new MedicineModel();
-            MedicineAddModel medicineAddModel=new MedicineAddModel();
-            medicineModel.setBoxId(boxId);
-            medicineModel.setDayInterval(interval);
-            medicineModel.setMedicineType(medicineType);
-            medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
-            medicineModel.setMedicineCode(mMedicineCode.getText().toString());
-            medicineModel.setMedicineCount(Integer.parseInt(mMedicineCount.getText().toString()));
-            medicineModel.setMedicineImage(medicineImage);
-            medicineModel.setMedicineName(mMedicinName.getText().toString());
-            medicineModel.setMedicineUseCount(Integer.parseInt(mMedicineUseCount.getText().toString()));
-            medicineModel.setMedicineValidity(mBtnValidityTimeSelection.getText().toString());
-            medicineModel.setStartRemind(mBtnStartRemindTimeSelection.getText().toString());
-            medicineModel.setTel(tel);
-            medicineModel.setTimesOnDay(Integer.parseInt(mTimesOnDay.getText().toString()));
-            medicineAddModel.setDetail(medicineModel);
-            final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
-            Log.d("drugadd", medicineAddJson);
-            RestClient.builder()
-                    //.url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
-                    .url(UploadConfig.API_HOST+"/api/Medicine_add")
-                    .clearParams()
-                    .raw(medicineAddJson)
-                    .success(new ISuccess() {
-                        @Override
-                        public void onSuccess(String response) {
-                            if(response!=null) {
-                                JSONObject object=JSON.parseObject(response);
-                                int code=object.getIntValue("code");
-                                if(code==1)
-                                {
-                                    msgid=object.getString("msgid");
-                                    Log.d("msgid", "msgid="+msgid);
-                                    if(msgid!=null) {
-                                        myHandler.postDelayed(updateThread, 1000);
+            //Log.d("medicineimg", ResourceTool.getResourcesUri(R.drawable.medicinelogo));
+            //Toast.makeText(getContext(),ResourceTool.getResourcesUri(R.drawable.medicinelogo),Toast.LENGTH_LONG).show();
+            if(medicineImage==null){
+                RestClient.builder()
+                        .url(UploadConfig.API_HOST+"/api/fileupload")
+                        .loader(getContext())
+                        .file(ResourceTool.getResourcesUri(R.drawable.nomedicine))
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+                                if (response != null) {
+                                    final JSONObject responseObject = JSON.parseObject(response);
+                                    Log.d("imgurl", responseObject.toJSONString());
+                                    int code = responseObject.getIntValue("code");
+                                    if (code == 1) {
+                                        //获得图片保存路径
+                                        medicineImage=responseObject.getString("url");
+
+                                        MedicineModel medicineModel=new MedicineModel();
+                                        MedicineAddModel medicineAddModel=new MedicineAddModel();
+                                        medicineModel.setBoxId(boxId);
+                                        medicineModel.setDayInterval(interval);
+                                        medicineModel.setMedicineType(medicineType);
+                                        medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
+                                        medicineModel.setMedicineCode(mMedicineCode.getText().toString());
+                                        medicineModel.setMedicineCount(Integer.parseInt(mMedicineCount.getText().toString()));
+                                        medicineModel.setMedicineImage(medicineImage);
+                                        medicineModel.setMedicineName(mMedicinName.getText().toString());
+                                        medicineModel.setMedicineUseCount(Integer.parseInt(mMedicineUseCount.getText().toString()));
+                                        medicineModel.setMedicineValidity(mBtnValidityTimeSelection.getText().toString());
+                                        medicineModel.setStartRemind(mBtnStartRemindTimeSelection.getText().toString());
+                                        medicineModel.setTel(tel);
+                                        medicineModel.setTimesOnDay(Integer.parseInt(mTimesOnDay.getText().toString()));
+                                        medicineAddModel.setDetail(medicineModel);
+                                        final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
+                                        Log.d("drugadd", medicineAddJson);
+                                        RestClient.builder()
+                                                //.url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
+                                                .url(UploadConfig.API_HOST+"/api/Medicine_add")
+                                                .clearParams()
+                                                .raw(medicineAddJson)
+                                                .success(new ISuccess() {
+                                                    @Override
+                                                    public void onSuccess(String response) {
+                                                        if(response!=null) {
+                                                            JSONObject object=JSON.parseObject(response);
+                                                            int code=object.getIntValue("code");
+                                                            if(code==1)
+                                                            {
+                                                                msgid=object.getString("msgid");
+                                                                Log.d("msgid", "msgid="+msgid);
+                                                                if(msgid!=null) {
+                                                                    myHandler.postDelayed(updateThread, 1000);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                })
+                                                .error(new IError() {
+                                                    @Override
+                                                    public void onError(int code, String msg) {
+                                                        Log.d("cuowu", "onError: ");
+                                                        Toast.makeText(getContext(),code+"错误",Toast.LENGTH_LONG).show();
+                                                    }
+                                                })
+                                                .failure(new IFailure() {
+                                                    @Override
+                                                    public void onFailure() {
+                                                        Log.d("failure", "onFailure: ");
+                                                    }
+                                                })
+                                                .build()
+                                                .post();
+
                                     }
                                 }
                             }
-                        }
-                    })
-                    .build()
-                    .post();
+                        })
+                        .build()
+                        .upload();
+            }else {
+                MedicineModel medicineModel=new MedicineModel();
+                MedicineAddModel medicineAddModel=new MedicineAddModel();
+                medicineModel.setBoxId(boxId);
+                medicineModel.setDayInterval(interval);
+                medicineModel.setMedicineType(medicineType);
+                medicineModel.setEndRemind(mBtnEndRemindTimeSelection.getText().toString());
+                medicineModel.setMedicineCode(mMedicineCode.getText().toString());
+                medicineModel.setMedicineCount(Integer.parseInt(mMedicineCount.getText().toString()));
+                medicineModel.setMedicineImage(medicineImage);
+                medicineModel.setMedicineName(mMedicinName.getText().toString());
+                medicineModel.setMedicineUseCount(Integer.parseInt(mMedicineUseCount.getText().toString()));
+                medicineModel.setMedicineValidity(mBtnValidityTimeSelection.getText().toString());
+                medicineModel.setStartRemind(mBtnStartRemindTimeSelection.getText().toString());
+                medicineModel.setTel(tel);
+                medicineModel.setTimesOnDay(Integer.parseInt(mTimesOnDay.getText().toString()));
+                medicineAddModel.setDetail(medicineModel);
+                final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
+                Log.d("drugadd", medicineAddJson);
+                RestClient.builder()
+                        //.url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
+                        .url(UploadConfig.API_HOST+"/api/Medicine_add")
+                        .clearParams()
+                        .raw(medicineAddJson)
+                        .success(new ISuccess() {
+                            @Override
+                            public void onSuccess(String response) {
+                                if(response!=null) {
+                                    JSONObject object=JSON.parseObject(response);
+                                    int code=object.getIntValue("code");
+                                    if(code==1)
+                                    {
+                                        msgid=object.getString("msgid");
+                                        Log.d("msgid", "msgid="+msgid);
+                                        if(msgid!=null) {
+                                            myHandler.postDelayed(updateThread, 1000);
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                        .error(new IError() {
+                            @Override
+                            public void onError(int code, String msg) {
+                                Log.d("cuowu", "onError: ");
+                                Toast.makeText(getContext(),code+"错误",Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .failure(new IFailure() {
+                            @Override
+                            public void onFailure() {
+                                Log.d("failure", "onFailure: ");
+                            }
+                        })
+                        .build()
+                        .post();
+            }
         }
     }
     Runnable updateThread=new Runnable() {
@@ -216,17 +314,17 @@ public class HandAddDelegate extends LatteDelegate {
                                 //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功", Toast.LENGTH_LONG).show();
                                 mMedicinName.setText(null);
                                 mMedicineCode.setText(null);
-                                mDoseUnitSpinner.setSelection(0);
                                 mBtnValidityTimeSelection.setText("请选择有效期");
+                                mDoseUnitSpinner.setSelection(0);
                                 mMedicineCount.setText(null);
                                 mBtnStartRemindTimeSelection.setText("请选择开始提醒时间");
                                 mBtnEndRemindTimeSelection.setText("请选择结束提醒时间");
-                                mMedicineUseCount.setText(null);
+                                mTimeSpanSpinner.setSelection(0);
                                 mTimesOnDay.setText(null);
+                                mMedicineUseCount.setText(null);
                                 Glide.with(getContext())
                                         .load(null)
                                         .into(mMedicineImage);
-
                             }
                             if(code==3||code==4){
                                 ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新添加");
@@ -313,12 +411,13 @@ public class HandAddDelegate extends LatteDelegate {
             mMedicineCount.setError(null);
         }
         //图片校验
-        if(medicineImage.isEmpty()||medicineImage==null){
-            mMedicineImage.setImageResource(R.drawable.warn);
-            isPass=false;
-        }else{
+        //if(medicineImage.isEmpty()||medicineImage==null){
+            //mMedicineImage.setImageResource(R.drawable.medicinelogo);
+            //medicineImage="示例图片";
+            //isPass=false;
+        //}else{
             //mMedicineImage.setError(null);
-        }
+        //}
 
         if(medicineStartTime.isEmpty()||medicineStartTime.equalsIgnoreCase("请选择开始提醒时间")){
             mBtnStartRemindTimeSelection.setError("请选择开始提醒时间！");
@@ -475,7 +574,7 @@ public class HandAddDelegate extends LatteDelegate {
         ArrayAdapter timespanadap = new ArrayAdapter<String>(getContext(), R.layout.single_item_tv, new String[]{"请选择服药间隔","每天", "间隔1天","间隔2天","间隔3天","间隔4天","间隔5天","间隔6天","间隔7天"});
         mTimeSpanSpinner.setAdapter(timespanadap);
 
-        SpinnerAdapter doseunitadap = new SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包", "克", "毫升", "其他"}));
+        SpinnerAdapter doseunitadap = new SpinnerAdapter<String>(getContext(), R.layout.single_item_tv, Arrays.asList(new String[]{"请选择剂量单位","片", "粒/颗", "瓶/支", "包/袋", "克", "毫升", "其他"}));
         mDoseUnitSpinner.setAdapter(doseunitadap);
 
     }

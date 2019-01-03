@@ -157,6 +157,9 @@ public class IndexDelegate extends BottomItemDelegate {
                                             HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString().trim(),medicineName);
                                             getParentDelegate().start(delegate);
                                             //Log.d("medicinename", "name="+medicineName);
+                                        }else {
+                                            HandAddDelegate delegate=HandAddDelegate.newInstance(args.toString().trim(),"");
+                                            getParentDelegate().start(delegate);
                                         }
                                     }
                                 })

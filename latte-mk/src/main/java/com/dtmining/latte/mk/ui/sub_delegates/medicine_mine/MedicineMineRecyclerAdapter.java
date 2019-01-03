@@ -38,6 +38,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_mine.model.MedicineStateM
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.IError;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -486,11 +487,11 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已删除等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已删除等待向硬件端同步");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已成功删除", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已成功删除");
                                 myHandler.removeCallbacks(updateThread);
                                 mData.remove(DELETEPOSITION);
                                 notifyDataSetChanged();

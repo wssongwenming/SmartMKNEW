@@ -40,6 +40,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.mk.ui.sub_delegates.views.SetTimesDialog;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -406,7 +407,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已添加等待向硬件端同步");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2) {
@@ -430,7 +431,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划添加失败，请重新添加", Toast.LENGTH_LONG).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划添加失败，请重新添加");
                             }
                         }
                     })

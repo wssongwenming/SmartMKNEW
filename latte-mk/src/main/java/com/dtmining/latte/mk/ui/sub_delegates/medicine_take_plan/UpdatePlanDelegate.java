@@ -32,6 +32,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.hand_add.HandAddDelegate;
 import com.dtmining.latte.mk.ui.sub_delegates.views.CustomDatePicker;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.ToastUtil;
 import com.dtmining.latte.util.callback.CallbackManager;
 import com.dtmining.latte.util.callback.CallbackType;
 import com.dtmining.latte.util.callback.IGlobalCallback;
@@ -289,12 +290,12 @@ public class UpdatePlanDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", msgid+"");
                             if(code==1){
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已修改等待向硬件端同步", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已修改等待向硬件端同步");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划成功修改", Toast.LENGTH_LONG).show();
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划成功修改");
 
                                 final IGlobalCallback<String> UpdatePlanCallback_for_index = CallbackManager
                                         .getInstance()
