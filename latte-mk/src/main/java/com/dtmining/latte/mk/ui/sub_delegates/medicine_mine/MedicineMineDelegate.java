@@ -42,6 +42,7 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicinePlanExp
 import com.dtmining.latte.mk.ui.sub_delegates.views.SwipeListLayout;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.storage.LattePreference;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -119,7 +120,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         initRecyclerView();
         //getMedicineMine(UploadConfig.API_HOST+"/api/get_medicine");
         //mRefreshHandler.firstPage_medicine_mine(UploadConfig.API_HOST+"/api/get_medicine",tel,MedicineMineDelegate.this);
-        getMedicineMineAll(UploadConfig.API_HOST+"/api/get_medicine",tel);
+        getMedicineMineAll(UploadConfig.API_HOST+"/api/get_medicine_of_box",tel, LattePreference.getBoxId());
     }
     private void getMedicineMine(String url,String tel,String medicineName){
          RestClient.builder()
@@ -298,10 +299,11 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
         }
         return mDatas;
     }
-    private void getMedicineMineAll(String url,String tel){
+    private void getMedicineMineAll(String url,String tel,String boxId){
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
+                .params("boxId",boxId)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -330,7 +332,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
     }
     @Override
     public void onRefresh() {
-        getMedicineMineAll(UploadConfig.API_HOST+"/api/get_medicine",tel);
+        getMedicineMineAll(UploadConfig.API_HOST+"/api/get_medicine_of_box",tel,LattePreference.getBoxId());
 
     }
 }

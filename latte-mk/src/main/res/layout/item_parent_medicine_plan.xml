@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
-        android:textSize="18sp"
+        android:textSize="13sp"
         android:textColor="@color/Green"
         android:gravity="center_vertical"
         android:text="" />
@@ -21,7 +21,7 @@
         android:text="服药时间"
         android:textColor="@color/Energized"
         android:gravity="center_vertical"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:layout_width="wrap_content"
         android:layout_height="40dp" />
     <TextView

@@ -493,12 +493,12 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已修改等待向硬件端同步");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "正在修改药品信息......");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已成功修改");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品信息修改成功");
                                 LatteDelegate delegate= Latte.getConfiguration(ConfigKeys.MEDICINEMINEDELEGATE);
                                 if(delegate instanceof MedicineMineDelegate)
                                 {

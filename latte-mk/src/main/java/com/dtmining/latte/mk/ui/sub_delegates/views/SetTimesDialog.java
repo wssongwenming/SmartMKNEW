@@ -72,8 +72,8 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
 
     public SetTimesDialog(Context context,ArrayList<String> time_list,ArrayList<String> original_time_set,ArrayList<String> total_original_time_set,ArrayList<String> count_list, String confirmButtonText, String cacelButtonText, ClickListenerInterface clicklistenerinterface,int medicineUsecount,String doseUnit) {
         super(context, R.style.Theme_MYDialog);
-        this.original_time_set=original_time_set;
-        this.total_original_time_set=total_original_time_set;
+        this.original_time_set=original_time_set;//当前正在添加计划药品已有计划
+        this.total_original_time_set=total_original_time_set;//所有药品已有计划
         this.context = context;
         this.confirmButtonText = confirmButtonText;
         this.cacelButtonText = cacelButtonText;
@@ -112,8 +112,6 @@ public class SetTimesDialog extends Dialog  implements View.OnClickListener,Medi
             boolean ok1 =temp_total_original_time_set.removeAll(tem_time_set);//此时temp中存在的是list1中去除相同那部分的数据
             boolean ok2=TEMP_total_original_time_set.removeAll(temp_total_original_time_set);
             int common=TEMP_total_original_time_set.size();
-
-
             int totalOriginalSize=total_original_time_set.size();
 
             int totalAddedSize=time_list.size();

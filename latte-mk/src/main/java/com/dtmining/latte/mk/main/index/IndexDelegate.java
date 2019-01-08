@@ -179,7 +179,6 @@ public class IndexDelegate extends BottomItemDelegate {
         }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
-
                 getMedicinePlan();
 /*                RestClient.builder()
                         .clearParams()
@@ -403,7 +402,9 @@ public class IndexDelegate extends BottomItemDelegate {
         }
     }
     private void convert_response_to_history(String jsonString){
+        medicineHistoryList.clear();
         if(jsonString!=null) {
+
             String medicineId = null;
             String medicineName = null;
             String medicineUseTime = null;
@@ -460,7 +461,9 @@ public class IndexDelegate extends BottomItemDelegate {
             }
         }
     }
-     @Override
+
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //medicinePlanExpandableListViewAdapter = new MedicinePlanExpandableListViewAdapter( dataset,parentList,null, IndexDelegate.this);
@@ -522,4 +525,5 @@ public class IndexDelegate extends BottomItemDelegate {
         }
 
     }
+
 }

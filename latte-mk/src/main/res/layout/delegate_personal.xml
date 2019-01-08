@@ -14,7 +14,7 @@
         <!--头像部分-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="130dp"
             android:background="@color/Green">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -22,7 +22,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:src="@mipmap/avatar" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="测试用户"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
@@ -42,7 +42,7 @@
             android:id="@+id/rv_personal_setting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="10dp" />
     </android.support.v7.widget.LinearLayoutCompat>
 
 </ScrollView>

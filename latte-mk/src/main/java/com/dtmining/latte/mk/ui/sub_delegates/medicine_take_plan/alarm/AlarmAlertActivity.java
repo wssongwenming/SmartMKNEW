@@ -24,6 +24,8 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.dtmining.latte.util.ToastUtil;
+
 public class AlarmAlertActivity extends Activity {
 
 	@Override
@@ -39,7 +41,8 @@ public class AlarmAlertActivity extends Activity {
 				| WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
 		wakeUpAndUnlock();int type = getIntent().getIntExtra("type",0);
 		String message=getIntent().getStringExtra("message");
-		String musicUri=getIntent().getStringExtra("musicUri");
+		final String musicUri=getIntent().getStringExtra("musicUri");
+
 		String tile ="";
 		String content="";
 		tile = "吃药提醒";
@@ -50,13 +53,22 @@ public class AlarmAlertActivity extends Activity {
 				.setPositiveButton("好的，知道了", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						finish();
+						vibrator.cancel();
 //						System.exit(0);
 //						android.os.Process.killProcess(android.os.Process
 //								.myPid());
 					}
 				}).show();
 		notificationVibrator();
-		notificationRing(musicUri);
+
+		new Thread(new Runnable() {
+			@Override
+            public void run()
+			{
+				notificationRing(musicUri);
+			}
+	        }).start();
+
 	}
 
 
@@ -85,14 +97,15 @@ public class AlarmAlertActivity extends Activity {
 			if (vibrator == null) {
 				vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
 			}
-			vibrator.vibrate(new long[]{500, 50, 50, 1000, 50}, -1);
+			vibrator.vibrate(new long[]{500, 500, 50, 1000, 50}, 1);
 	}
 
 	/**
 	 * 铃声通知
 	 */
 	private void notificationRing(String musicUri) {
-
+		System.out.print("musicuri1="+musicUri);
+		//ToastUtil.showToast(this,"yingyuexiangqilai");
 		if (mediaPlayer == null)
 			mediaPlayer = new MediaPlayer();
 		if (mediaPlayer.isPlaying())
@@ -100,6 +113,7 @@ public class AlarmAlertActivity extends Activity {
 
 		try {
 			if(musicUri.isEmpty()||musicUri==null) {
+				System.out.print("musicuri2="+musicUri);
 				// 这里是调用系统自带的铃声
 				Uri uri = RingtoneManager
 						.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -108,6 +122,7 @@ public class AlarmAlertActivity extends Activity {
 				mediaPlayer.setDataSource(this, uri);
 				mediaPlayer.prepare();
 			}else{
+
 				Uri uri=Uri.parse(musicUri);
 				mediaPlayer.stop();
 				mediaPlayer.reset();

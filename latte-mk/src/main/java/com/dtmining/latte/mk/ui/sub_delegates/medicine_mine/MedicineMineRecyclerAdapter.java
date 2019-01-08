@@ -487,11 +487,11 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已删除等待向硬件端同步");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "正在删除药品信息......");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已成功删除");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品信息删除成功");
                                 myHandler.removeCallbacks(updateThread);
                                 mData.remove(DELETEPOSITION);
                                 notifyDataSetChanged();
@@ -511,7 +511,7 @@ public class MedicineMineRecyclerAdapter extends BaseMultiItemQuickAdapter<Multi
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品已删除失败请稍后重试", Toast.LENGTH_SHORT).show();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品信息删除失败，请稍后重试", Toast.LENGTH_SHORT).show();
                             }
                         }
                     })

@@ -118,6 +118,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/get_history")
                 .params("tel",tel)
+                .params("boxId",LattePreference.getBoxId())
                 .params("page",BEAN.getPageIndex())
                 .params("count",BEAN.getPageSize())
                 .success(new ISuccess() {
@@ -225,6 +226,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                     RestClient.builder()
                             .url(url)
                             .params("tel",tel)
+                            .params("boxId",LattePreference.getBoxId())
                             .params("page",BEAN.getPageIndex())
                             .params("count",BEAN.getPageSize())
                             .success(new ISuccess() {

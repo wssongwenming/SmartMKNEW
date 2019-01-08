@@ -67,6 +67,7 @@ import butterknife.OnItemSelected;
  */
 public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDialog.ClickListenerInterface {
 
+    private ArrayList<String>time_list=new ArrayList<>();
     private String musicUriStr="";
     private HandlerThread handlerThread=new HandlerThread("");
     private Handler myHandler=null;
@@ -162,12 +163,17 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             if(code==1) {
                                 final JSONObject data = object.getJSONObject("detail");
                                 final JSONArray dataArray = data.getJSONArray("planlist");
-
+                                Log.d("jsonarray", dataArray+"");
                                 int size1 = dataArray.size();
+                                for (int i = 0; i <size1 ; i++) {
+                                    JSONObject plan= (JSONObject) dataArray.get(i);
+                                    String time=plan.getString("time");
+                                    time_list.add(time);
+                                }
                                 if(size1<8){
                                     int size=timeSet.size();
-                                    if(size>origin_time_count_size) {//表示有新的计划加入避免了plans为空的情况
-                                        Log.d("sizeofplans", size+":"+origin_time_count_size);
+                                    if(size>origin_time_count_size) { //表示有新的计划加入避免了plans为空的情况
+                                      // Log.d("sizeofplans", size+":"+origin_time_count_size);
                                         MedicinePlan medicinePlan = new MedicinePlan();
                                         Detail detail = new Detail();
                                         MedicinePlanNetModel medicinePlanNetModel = new MedicinePlanNetModel();
@@ -203,10 +209,56 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                 })
                                                 .build()
                                                 .post();
+                                    }else{
+                                        ToastUtil.showToast(getContext(),"请设置服药时间和剂量");
                                     }
 
-                                }else{
-                                    Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"用药计划数已超8个，无法设置新的用药计划",Toast.LENGTH_LONG).show();
+                                }else {
+                                    if (!containAll(time_list, timeSet)) {
+                                        Toast.makeText((Context) Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划数已超8个，无法设置新的用药计划", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        int size = timeSet.size();
+                                        if (size > origin_time_count_size) {//表示有新的计划加入避免了plans为空的情况
+                                            Log.d("sizeofplans", size + ":" + origin_time_count_size);
+                                            MedicinePlan medicinePlan = new MedicinePlan();
+                                            Detail detail = new Detail();
+                                            MedicinePlanNetModel medicinePlanNetModel = new MedicinePlanNetModel();
+                                            for (int i = origin_time_count_size; i < size; i++) {//添加的时候从新加入的开始
+                                                TimeCountPair pair = new TimeCountPair();
+                                                pair.setMedicine_time(timeSet.get(i));
+                                                pair.setMedicine_useCount(useCountSet.get(i));
+                                                medicinePlan.addPair(pair);
+                                            }
+                                            detail.setMedicine_plan(medicinePlan);
+                                            detail.setMedicineId(medicineModel.getMedicineId());
+                                            medicinePlanNetModel.setDetail(detail);
+                                            String planJson = JSON.toJSON(medicinePlanNetModel).toString();
+                                            Log.d("addbydrug", planJson);
+                                            RestClient.builder()
+                                                    .clearParams()
+                                                    .url(UploadConfig.API_HOST + "/api/Medicine_set_time")//提交计划
+                                                    .raw(planJson)
+                                                    .success(new ISuccess() {
+                                                        @Override
+                                                        public void onSuccess(String response) {
+                                                            JSONObject object = JSON.parseObject(response);
+                                                            int code = object.getIntValue("code");
+                                                            if (code == 1) {
+                                                                msgid = object.getString("msgid");
+                                                                Log.d("msgid", "msgid=" + msgid);
+                                                                if (msgid != null) {
+                                                                    myHandler.postDelayed(updateThread, 1000);
+                                                                }
+
+                                                            }
+                                                        }
+                                                    })
+                                                    .build()
+                                                    .post();
+                                        } else {
+                                            ToastUtil.showToast(getContext(), "请设置服药时间和剂量");
+                                        }
+                                    }
                                 }
                             }
 
@@ -216,7 +268,9 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                     .get();
 
         }
+
     }
+
     @OnItemSelected(R2.id.sp_delegate_medicine_take_plan_add_by_drug_medicine_name)
     void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         timeSet.clear();
@@ -409,7 +463,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                             int code=object.getIntValue("code");
                             Log.d("statuscode", code+"");
                             if(code==1){
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已添加等待向硬件端同步");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "正在添加用药计划......");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2) {
@@ -632,6 +686,25 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                 })
                 .build()
                 .get();
+
+    }
+    private boolean containAll(ArrayList<String> timeList,ArrayList<String> timeSet){
+        boolean contains=true;
+        int size=timeSet.size();
+        for (int i = 0; i <size ; i++) {
+            String time=timeSet.get(i);
+            if(!timeList.contains(time))
+            {
+                contains=false;
+                break;
+            }
+        }
+        return contains;
+    }
+    private Uri getDefultRingtoneUri() {
+        Log.d("myring", RingtoneManager.getActualDefaultRingtoneUri(getContext(),RingtoneManager.TYPE_RINGTONE).toString());
+        return RingtoneManager.getActualDefaultRingtoneUri(getContext(),
+                RingtoneManager.TYPE_RINGTONE);
 
     }
 }

@@ -98,8 +98,6 @@ public class BodySituationDelegate extends LatteDelegate {
         return bodySituationConverter.convert();
     }
 
-
-
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);

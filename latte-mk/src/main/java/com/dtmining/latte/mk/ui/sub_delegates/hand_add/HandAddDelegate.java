@@ -67,6 +67,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
+import qiu.niorgai.StatusBarCompat;
 
 
 /**
@@ -306,13 +307,13 @@ public class HandAddDelegate extends LatteDelegate {
                             Log.d("statuscode", msgid+"");
                             if(code==1){
 
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "正在添加药品......");
                                 //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
                                 myHandler.removeCallbacks(updateThread);
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加成功");
                                 //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加成功", Toast.LENGTH_LONG).show();
                                 mMedicinName.setText(null);
                                 mMedicineCode.setText(null);
@@ -628,5 +629,12 @@ public class HandAddDelegate extends LatteDelegate {
             }
         }
         return isPresent;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int color = getResources().getColor(R.color.Green);
+        StatusBarCompat.setStatusBarColor(getActivity(),color);
     }
 }

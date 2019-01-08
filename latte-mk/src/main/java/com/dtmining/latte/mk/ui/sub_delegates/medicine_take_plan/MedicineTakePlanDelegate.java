@@ -493,11 +493,11 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                             JSONObject object=JSON.parseObject(response);
                             int code=object.getIntValue("code");
                             if(code==1){
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除等待向硬件端同步");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "正在删除用药计划......");
                                 myHandler.postDelayed(updateThread,1000);
                             }
                             if(code==2){
-                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划已经删除成功");
+                                ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "用药计划删除成功");
                                 myHandler.removeCallbacks(updateThread);
                                 list.get(GROUPPOSITION).getDatas().remove(CHILDPOSITION);
                                 if(list.get(GROUPPOSITION).getDatas().size()==0){
