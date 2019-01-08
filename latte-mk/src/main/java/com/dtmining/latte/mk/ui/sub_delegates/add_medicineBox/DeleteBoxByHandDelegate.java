@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -71,10 +72,24 @@ public class DeleteBoxByHandDelegate extends LatteDelegate{
                             int code=object1.getIntValue("code");
                             if(code==1){
                                 getBoxId();
-                                if(boxId==LattePreference.getBoxId())
+
+                                if(boxId.equalsIgnoreCase(LattePreference.getBoxId()))
                                 {
+                                    Log.d("boxId", "boxid="+boxId+":"+LattePreference.getBoxId());
                                     LattePreference.setBoxID(null);
                                     Toast.makeText(getContext(),"您删除了默认药箱",Toast.LENGTH_LONG).show();
+                                    final IGlobalCallback<String> change_boxId_for_history = CallbackManager
+                                            .getInstance()
+                                            .getCallback(CallbackType. ON_CHANGE_BOXID_FOR_HISTORY);
+                                    if (change_boxId_for_history != null) {
+                                        change_boxId_for_history.executeCallback("");
+                                    }
+                                    final IGlobalCallback<String> change_boxId_for_plan = CallbackManager
+                                            .getInstance()
+                                            .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
+                                    if (change_boxId_for_plan != null) {
+                                        change_boxId_for_plan.executeCallback("");
+                                    }
                                 }
                             }
                         }

@@ -33,7 +33,7 @@ public class OrderListDataConverter extends DataConverter {
             final  JSONObject data=array.getJSONObject(i);
             final String thumb=data.getString("Thumb");
             final String title=data.getString("title");
-            final int id=data.getInteger("id");
+            final int id=data.getIntValue("id");
             final Double price=data.getDouble("price");
             final MultipleItemEntity entity=MultipleItemEntity.builder()
                     .setItemType(OrderListItemType.ITEM_ORDER_LIST)

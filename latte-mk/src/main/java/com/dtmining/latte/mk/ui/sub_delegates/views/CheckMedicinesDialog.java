@@ -126,8 +126,8 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
 
     private void initDatas(){
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 .clearParams()
+                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 .params("tel",tel)
                 .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
@@ -141,12 +141,12 @@ public class CheckMedicinesDialog extends Dialog implements CheckAdapter.CheckIt
                             for (int i = 0; i < size; i++) {
                                 JSONObject data = (JSONObject) dataArray.get(i);
                                 final String medicineId = data.getString("medicineId");
-                                final int medicineCount = data.getInteger("medicineCount");
+                                final int medicineCount = data.getIntValue("medicineCount");
                                 final int medicineType  =data.getIntValue("medicineType");
                                 final String medicineName = data.getString("medicineName");
                                 final String medicine_img_url = data.getString("medicine_img_url");
                                 final String boxId = data.getString("boxId");
-                                final int medicinePause = data.getInteger("medicinePause");
+                                final int medicinePause = data.getIntValue("medicinePause");
                                 String doseUnit="";
                                 switch (medicineType) {
                                     case 0:

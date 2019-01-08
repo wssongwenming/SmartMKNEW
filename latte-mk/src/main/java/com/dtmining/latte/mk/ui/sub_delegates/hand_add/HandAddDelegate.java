@@ -187,9 +187,9 @@ public class HandAddDelegate extends LatteDelegate {
                                         final String medicineAddJson = JSON.toJSON(medicineAddModel).toString();
                                         Log.d("drugadd", medicineAddJson);
                                         RestClient.builder()
+                                                .clearParams()
                                                 //.url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
                                                 .url(UploadConfig.API_HOST+"/api/Medicine_add")
-                                                .clearParams()
                                                 .raw(medicineAddJson)
                                                 .success(new ISuccess() {
                                                     @Override
@@ -251,12 +251,13 @@ public class HandAddDelegate extends LatteDelegate {
                 Log.d("drugadd", medicineAddJson);
                 RestClient.builder()
                         //.url("http://192.168.1.3:8081/Web01_exec/MedicineAdd")
-                        .url(UploadConfig.API_HOST+"/api/Medicine_add")
                         .clearParams()
+                        .url(UploadConfig.API_HOST+"/api/Medicine_add")
                         .raw(medicineAddJson)
                         .success(new ISuccess() {
                             @Override
                             public void onSuccess(String response) {
+                                Log.d("wanyao", response);
                                 if(response!=null) {
                                     JSONObject object=JSON.parseObject(response);
                                     int code=object.getIntValue("code");
@@ -304,6 +305,7 @@ public class HandAddDelegate extends LatteDelegate {
                             int code=object.getIntValue("code");
                             Log.d("statuscode", msgid+"");
                             if(code==1){
+
                                 ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步");
                                 //Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品数据已添加等待向硬件端同步", Toast.LENGTH_SHORT).show();
                                 myHandler.postDelayed(updateThread,1000);
@@ -385,7 +387,7 @@ public class HandAddDelegate extends LatteDelegate {
         if(medicineName.isEmpty()||medicineName==null){
             mMedicinName.setError("请填写药品名！");
             isPass=false;
-        }else if(medicineNameList.contains(medicineName)){
+        }else if(isMedicinePresent(medicineName)){
             mMedicinName.setError("药箱中已有该药品");
             isPass=false;
         }
@@ -581,6 +583,7 @@ public class HandAddDelegate extends LatteDelegate {
 
     private void getBoxIdList(){
         RestClient.builder()
+                .clearParams()
                 .url(UploadConfig.API_HOST+"/api/get_boxes")
                 .params("tel",tel)
                 .success(new ISuccess() {
@@ -597,6 +600,7 @@ public class HandAddDelegate extends LatteDelegate {
     }
     private void getMedicineList(String boxId){
         RestClient.builder()
+                .clearParams()
                 .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 //.url("medicine_mine")
                 .params("tel",tel)
@@ -612,5 +616,17 @@ public class HandAddDelegate extends LatteDelegate {
                 .build()
                 .get();
 
+    }
+    private boolean isMedicinePresent(String medicineName)
+    {
+        boolean isPresent=false;
+        int size=medicineNameList.size();
+        for (int i = 0; i <size ; i++) {
+            if(medicineNameList.get(i).equalsIgnoreCase(medicineName))
+            {
+                isPresent=true;
+            }
+        }
+        return isPresent;
     }
 }

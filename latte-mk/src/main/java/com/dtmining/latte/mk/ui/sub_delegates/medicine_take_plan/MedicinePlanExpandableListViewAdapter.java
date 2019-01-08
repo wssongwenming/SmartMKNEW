@@ -81,7 +81,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
                 medicinePlanModel.setAtime(jsonObject1.getString("atime"));
                 medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
                 medicinePlanModel.setId(jsonObject1.getString("id"));
-                medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                medicinePlanModel.setMedicineUseCount(jsonObject1.getIntValue("medicineUseCount"));
                 //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                 medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
                 medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
@@ -184,7 +184,7 @@ public class MedicinePlanExpandableListViewAdapter extends BaseExpandableListAda
 
                 RestClient.builder()
                         .url(UploadConfig.API_HOST+"/api/delete_plan")
-                        .clearParams()
+
                         .raw(jsonForDelete.toString())//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
                         .success(new ISuccess() {
                             @Override

@@ -143,6 +143,7 @@ public class IndexDelegate extends BottomItemDelegate {
 
                         //Toast.makeText(getContext(),"扫描到的二维码"+args,Toast.LENGTH_LONG).show();
                         RestClient.builder()
+                                .clearParams()
                                 .url(UploadConfig.API_HOST+"/api/get_drugs_by_code")
                                 .params("code",args.toString().trim())
                                 .success(new ISuccess() {
@@ -178,7 +179,10 @@ public class IndexDelegate extends BottomItemDelegate {
         }).addCallback(CallbackType.ON_GET_MEDICINE_PLAN_INDEX, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
-                RestClient.builder()
+
+                getMedicinePlan();
+/*                RestClient.builder()
+                        .clearParams()
                         .url(UploadConfig.API_HOST+"/api/get_plan")
                         //.url("medicine_plan")
                         .params("tel",tel)
@@ -196,12 +200,14 @@ public class IndexDelegate extends BottomItemDelegate {
                             }
                         })
                         .build()
-                        .get();
+                        .get();*/
             }
-        }).addCallback(CallbackType.ON_DELETE_BOXID, new IGlobalCallback() {
+        }).addCallback(CallbackType.ON_CHANGE_BOXID_FOR_HISTORY, new IGlobalCallback() {
             @Override
             public void executeCallback(@Nullable Object args) {
-                RestClient.builder()
+                getMedicineHistory();
+/*                RestClient.builder()
+                        .clearParams()
                         .url(UploadConfig.API_HOST+"/api/get_plan")
                         //.url("medicine_plan")
                         .params("tel",tel)
@@ -218,7 +224,7 @@ public class IndexDelegate extends BottomItemDelegate {
                             }
                         })
                         .build()
-                        .get();
+                        .get();*/
             }
         });
 
@@ -317,7 +323,9 @@ public class IndexDelegate extends BottomItemDelegate {
     }
 
     private void getMedicinePlan(){
+        Log.d("Latteboxid", LattePreference.getBoxId());
         RestClient.builder()
+                .clearParams()
                 .url(UploadConfig.API_HOST+"/api/get_plan")
                 //.url("medicine_plan")
                 .params("tel",tel)
@@ -339,10 +347,11 @@ public class IndexDelegate extends BottomItemDelegate {
     private void getMedicineHistory()
     {
         RestClient.builder()
+                .clearParams()
                 .url(UploadConfig.API_HOST+"/api/get_history")
                 //.url("medicine_plan")
                 .params("tel",tel)
-                .params("boxId",boxId)
+                .params("boxId",LattePreference.getBoxId())
                 .params("page",0)
                 .params("count",5)
                 .success(new ISuccess() {
@@ -382,7 +391,7 @@ public class IndexDelegate extends BottomItemDelegate {
                     medicinePlanModel.setAtime(jsonObject1.getString("atime"));
                     medicinePlanModel.setEndRemind(jsonObject1.getString("endRemind"));
                     medicinePlanModel.setId(jsonObject1.getString("id"));
-                    medicinePlanModel.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                    medicinePlanModel.setMedicineUseCount(jsonObject1.getIntValue("medicineUseCount"));
                     //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                     medicinePlanModel.setStartRemind(jsonObject1.getString("startRemind"));
                     medicinePlanModel.setMedicineName(jsonObject1.getString("medicineName"));
@@ -500,7 +509,7 @@ public class IndexDelegate extends BottomItemDelegate {
                 medicinePlan.setAtime(jsonObject1.getString("atime"));
                 medicinePlan.setEndRemind(jsonObject1.getString("endRemind"));
                 medicinePlan.setId(jsonObject1.getString("id"));
-                medicinePlan.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                medicinePlan.setMedicineUseCount(jsonObject1.getIntValue("medicineUseCount"));
                 medicinePlan.setMedicineType(jsonObject1.getIntValue("medicineType"));
                 medicinePlan.setStartRemind(jsonObject1.getString("startRemind"));
                 medicinePlan.setMedicineName(jsonObject1.getString("medicineName"));

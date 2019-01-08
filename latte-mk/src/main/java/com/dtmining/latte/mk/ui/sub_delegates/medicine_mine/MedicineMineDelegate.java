@@ -213,7 +213,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                 final String medicineValidity=data.getString("medicine_validity");
                 final String medicineId=data.getString("medicine_id");
                 final int medicineType=data.getIntValue("medicine_type");
-                final int medicineCount = data.getInteger("medicine_count");
+                final int medicineCount = data.getIntValue("medicine_count");
                 final int medicineUseCount=data.getIntValue("medicine_useCount");
                 final int timesonday=data.getIntValue("timesOnDay");
                 final int dayInterval=data.getIntValue("day_interval");
@@ -221,7 +221,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                 final String medicineName = data.getString("medicine_name");
                 final String medicine_img_url = data.getString("medicine_url");
                 final String boxId = data.getString("box_id");
-                final int medicinePause = data.getInteger("medicine_pause");
+                final int medicinePause = data.getIntValue("medicine_pause");
 
                 int type = ItemType.MEDICINE_MINE;
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
@@ -264,7 +264,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                 final String medicineCode=data.getString("medicineCode");
                 final String medicineValidity=data.getString("medicineValidity");
                 final String medicineId=data.getString("medicineId");
-                final int medicineCount = data.getInteger("medicineCount");
+                final int medicineCount = data.getIntValue("medicineCount");
                 final int medicineType=data.getIntValue("medicineType");
                 final int medicineUseCount=data.getIntValue("medicineUsecount");
                 final int timesonday=data.getIntValue("timesonday");
@@ -273,7 +273,7 @@ public class MedicineMineDelegate extends LatteDelegate implements View.OnClickL
                 final String medicineName = data.getString("medicineName");
                 final String medicine_img_url = data.getString("medicineUrl");
                 final String boxId = data.getString("boxId");
-                final int medicinePause = data.getInteger("medicinePause");
+                final int medicinePause = data.getIntValue("medicinePause");
                 int type = ItemType.MEDICINE_MINE;
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, type)

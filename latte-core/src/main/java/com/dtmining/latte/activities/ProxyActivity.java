@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.ContentFrameLayout;
+import android.view.LayoutInflater;
+import android.widget.FrameLayout;
 
 import com.dtmining.latte.R;
 import com.dtmining.latte.delegates.LatteDelegate;
@@ -12,6 +14,7 @@ import com.dtmining.latte.util.ActivityManager;
 import java.lang.ref.WeakReference;
 
 import me.yokeyword.fragmentation.SupportActivity;
+import notchtools.geek.com.notchtools.NotchTools;
 
 /**
  * author:songwenming

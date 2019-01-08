@@ -22,6 +22,9 @@ import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.model.MedicineBox;
 import com.dtmining.latte.mk.ui.sub_delegates.add_medicineBox.model.MedicineBoxModel;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.regex.RegexTool;
 import com.dtmining.latte.util.storage.LattePreference;
 
@@ -56,6 +59,18 @@ public class AddMedicineBoxByHandDelegate extends LatteDelegate {
                         public void onSuccess(String response) {
                             LattePreference.setBoxID(boxId);
                             Toast.makeText(getContext(),"药箱绑定成功",Toast.LENGTH_LONG).show();
+                            final IGlobalCallback<String> change_boxId_for_history = CallbackManager
+                                    .getInstance()
+                                    .getCallback(CallbackType. ON_CHANGE_BOXID_FOR_HISTORY);
+                            if (change_boxId_for_history != null) {
+                                change_boxId_for_history.executeCallback("");
+                            }
+                            final IGlobalCallback<String> change_boxId_for_plan = CallbackManager
+                                    .getInstance()
+                                    .getCallback(CallbackType. ON_GET_MEDICINE_PLAN_INDEX);
+                            if (change_boxId_for_plan != null) {
+                                change_boxId_for_plan.executeCallback("");
+                            }
                             pop();
                         }
                     })
@@ -84,7 +99,7 @@ public class AddMedicineBoxByHandDelegate extends LatteDelegate {
         final String boxId=mBoxId.getText().toString();
         boolean isPass=true;
         if(boxId.isEmpty()){
-            mBoxId.setError("请填写正确的电话号码！");
+            mBoxId.setError("请填写正确的药箱编码！");
             isPass=false;
         }else{
             mBoxId.setError(null);

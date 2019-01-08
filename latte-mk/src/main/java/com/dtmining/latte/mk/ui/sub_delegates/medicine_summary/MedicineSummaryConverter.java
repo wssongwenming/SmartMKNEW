@@ -42,7 +42,7 @@ public class MedicineSummaryConverter extends DataConverter {
             int size=jsonArray.size();
             for (int i = 0; i <size ; i++) {
                 JSONObject jsonObject=jsonArray.getJSONObject(i);
-                int medicine_userCount=jsonObject.getInteger("useCount");
+                int medicine_userCount=jsonObject.getIntValue("useCount");
                 int medicineType=jsonObject.getIntValue("medicine_type");
                 //long medicine_userTime=jsonObject.getLong("medicine_userTime");
                 int days=jsonObject.getIntValue("days");

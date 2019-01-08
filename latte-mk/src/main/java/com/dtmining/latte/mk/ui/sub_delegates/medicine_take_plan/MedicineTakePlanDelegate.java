@@ -219,9 +219,10 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 detail.addProperty("planId",planId);
                 JsonObject jsonForDelete=new JsonObject();
                 jsonForDelete.add("detail",detail);
+                Log.d("jsonForDelete", jsonForDelete.toString());
                 RestClient.builder()
-                        .url(UploadConfig.API_HOST+"/api/delete_plan")
                         .clearParams()
+                        .url(UploadConfig.API_HOST+"/api/delete_plan")
                         .raw(jsonForDelete.toString())//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
                         .success(new ISuccess() {
                             @Override
@@ -269,7 +270,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                 detail.addProperty("medicineUseCount",medicneUsecount);
                 detail.addProperty("atime",atime);
                 detail.addProperty("medicineName",medicinename);
-                detail.addProperty("boxId",boxId);
+                detail.addProperty("boxId",LattePreference.getBoxId());
                 JsonObject jsonForChange=new JsonObject();
                 jsonForChange.add("detail",detail);
                 UpdatePlanDelegate delegate=UpdatePlanDelegate.newInstance(jsonForChange.toString());
@@ -300,7 +301,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                         medicinePlan.setEndRemind(jsonObject1.getString("endRemind"));
                         medicinePlan.setId(jsonObject1.getString("id"));
                         medicinePlan.setMedicineType(jsonObject1.getIntValue("medicineType"));
-                        medicinePlan.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                        medicinePlan.setMedicineUseCount(jsonObject1.getIntValue("medicineUseCount"));
                         //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                         medicinePlan.setStartRemind(jsonObject1.getString("startRemind"));
                         medicinePlan.setMedicineName(jsonObject1.getString("medicineName"));
@@ -372,7 +373,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                                                 unitfordose = "其他";
                                                 break;
                                         }
-                                        String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
+                                        String medicineUseCount = String.valueOf(plan.getIntValue("medicineUseCount"));
                                         String medicineName = plan.getString("medicineName");
                                         //先以interval判断，如果
                                         if (map_interval.get(interval) == null) {
@@ -513,7 +514,7 @@ public class MedicineTakePlanDelegate extends LatteDelegate{
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
                                 ToastUtil.showToast((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY),"用药计划删除失败，请重新操作");
-                                pop();
+                                //pop();
                             }
                         }
                     })

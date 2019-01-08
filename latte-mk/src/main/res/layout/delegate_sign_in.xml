@@ -7,9 +7,9 @@
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/sign_in_tool_bar"
+        android:layout_height="30dp"
         android:background="@color/Green">
-
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

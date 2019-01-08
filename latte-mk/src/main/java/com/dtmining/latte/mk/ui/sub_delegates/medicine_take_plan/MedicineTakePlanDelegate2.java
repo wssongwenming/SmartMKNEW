@@ -188,8 +188,8 @@ public class MedicineTakePlanDelegate2 extends LatteDelegate{
                 jsonForDelete.add("detail",detail);
 
                 RestClient.builder()
-                        .url(UploadConfig.API_HOST+"/api/delete_plan")
                         .clearParams()
+                        .url(UploadConfig.API_HOST+"/api/delete_plan")
                         .raw(jsonForDelete.toString())//应该传参数medicineId，这里由于medicineId为空,所以暂用medicinename代替
                         .success(new ISuccess() {
                             @Override
@@ -258,7 +258,7 @@ public class MedicineTakePlanDelegate2 extends LatteDelegate{
                         medicinePlan.setEndRemind(jsonObject1.getString("endRemind"));
                         medicinePlan.setId(jsonObject1.getString("id"));
                         medicinePlan.setMedicineType(jsonObject1.getIntValue("medicineType"));
-                        medicinePlan.setMedicineUseCount(jsonObject1.getInteger("medicineUseCount"));
+                        medicinePlan.setMedicineUseCount(jsonObject1.getIntValue("medicineUseCount"));
                         //medicinePlanModel.setDayInterval(jsonObject1.getInteger("dayInterval"));
                         medicinePlan.setStartRemind(jsonObject1.getString("startRemind"));
                         medicinePlan.setMedicineName(jsonObject1.getString("medicineName"));
@@ -330,7 +330,7 @@ public class MedicineTakePlanDelegate2 extends LatteDelegate{
                                                 unitfordose = "其他";
                                                 break;
                                         }
-                                        String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
+                                        String medicineUseCount = String.valueOf(plan.getIntValue("medicineUseCount"));
                                         String medicineName = plan.getString("medicineName");
                                         //先以interval判断，如果
                                         if (map_interval.get(interval) == null) {

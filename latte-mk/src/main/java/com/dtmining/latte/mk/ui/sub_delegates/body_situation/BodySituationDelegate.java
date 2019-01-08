@@ -25,7 +25,11 @@ import com.dtmining.latte.util.Reaction;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -99,9 +103,15 @@ public class BodySituationDelegate extends LatteDelegate {
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        String end_time= df.format(new Date());// new Date()为获取当前系统时间;
+        String begin_time=getDate(end_time,30).toString();
+        Log.d("body", "tel: "+tel+"begin="+begin_time+"end:"+end_time);
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
+                .params("begin_time",begin_time)
+                .params("end_time",end_time)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -162,7 +172,7 @@ public class BodySituationDelegate extends LatteDelegate {
         //getBodySituation(tel,begin_time,end_time);
     }
     private void getBodySituation(String tel,String begin_time,String end_time){
-        Log.d("body", "tel: "+tel+"begin="+begin_time+"end:"+end_time);
+
         RestClient.builder()
                 .clearParams()
                 .url(UploadConfig.API_HOST+"/api/body_stuation")
@@ -232,9 +242,15 @@ public class BodySituationDelegate extends LatteDelegate {
     @Override
     public void onResume() {
         super.onResume();
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        String end_time= df.format(new Date());// new Date()为获取当前系统时间;
+        String begin_time=getDate(end_time,30).toString();
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
+                .params("begin_time",begin_time)
+                .params("end_time",end_time)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -292,5 +308,22 @@ public class BodySituationDelegate extends LatteDelegate {
                 })
                 .build()
                 .get();
+    }
+    private java.sql.Date getDate(String time, int interval) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        java.sql.Date date2 = null;
+        if (time != null && !time.equals("")) {
+            java.util.Date date1 = null;
+            try {
+                date1 = sdf.parse(time);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date1);
+                cal.add(Calendar.DATE, -interval);
+                date2 =new java.sql.Date ((sdf.parse(sdf.format(cal.getTime()))).getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return date2;
     }
 }

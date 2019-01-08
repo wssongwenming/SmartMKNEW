@@ -105,8 +105,8 @@ public class AddPlanByTimeDelegate extends LatteDelegate implements View.OnClick
             medicinePlanSubModelbyTime.add("detail",detail);
             Log.d("addbytime", medicinePlanSubModelbyTime.toString());
             RestClient.builder()
-                    .url(UploadConfig.API_HOST+"/api/Medicine_update_plan_by_time")
                     .clearParams()
+                    .url(UploadConfig.API_HOST+"/api/Medicine_update_plan_by_time")
                     .raw(medicinePlanSubModelbyTime.toString())
                     .success(new ISuccess() {
                         @Override

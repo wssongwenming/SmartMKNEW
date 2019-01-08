@@ -41,8 +41,8 @@ public class MedicineReactionDelegate extends LatteDelegate {
         JsonObject reactionSubModel=new JsonObject();
         reactionSubModel.add("detail",detail);
         RestClient.builder()
-                .url(UploadConfig.API_HOST+"/api/reaction")
                 .clearParams()
+                .url(UploadConfig.API_HOST+"/api/reaction")
                 .raw(reactionSubModel.toString())
                 .success(new ISuccess() {
                     @Override

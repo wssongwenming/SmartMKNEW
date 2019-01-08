@@ -41,7 +41,7 @@ public class MedincineMineDataConverter extends DataConverter {
                 final String medicineCode=data.getString("medicineCode");
                 final String medicineValidity=data.getString("medicineValidity");
                 final String medicineId=data.getString("medicineId");
-                final int medicineCount = data.getInteger("medicineCount");
+                final int medicineCount = data.getIntValue("medicineCount");
                 final int medicineUseCount=data.getIntValue("medicineUsecount");
                 final int timesonday=data.getIntValue("timesonday");
                 final int dayInterval=data.getIntValue("dayInterval");
@@ -49,7 +49,7 @@ public class MedincineMineDataConverter extends DataConverter {
                 final String medicineName = data.getString("medicineName");
                 final String medicine_img_url = data.getString("medicineUrl");
                 final String boxId = data.getString("boxId");
-                final int medicinePause = data.getInteger("medicinePause");
+                final int medicinePause = data.getIntValue("medicinePause");
                 int type = ItemType.MEDICINE_MINE;
                 final MultipleItemEntity entity = MultipleItemEntity.builder()
                         .setField(MultipleFields.ITEM_TYPE, type)

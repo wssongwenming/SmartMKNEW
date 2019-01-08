@@ -56,7 +56,7 @@ public class BoxBindDelegate extends LatteDelegate {
             Toast.makeText(getContext(),"成功绑定当前药箱ID:"+LattePreference.getBoxId(),Toast.LENGTH_LONG).show();
             final IGlobalCallback<String> callback = CallbackManager
                     .getInstance()
-                    .getCallback(CallbackType.ON_BIND_BOXID);
+                    .getCallback(CallbackType.ON_CHANGE_BOXID_FOR_HISTORY);
             if (callback != null) {
                 callback.executeCallback(boxId);
             }

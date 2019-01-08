@@ -1,1 +1,1 @@
-include ':example', ':latte-annotations', ':latte-compiler', ':latte-core', ':latte-mk', ':latte-mk',':library'
+include ':example', ':latte-annotations', ':latte-compiler', ':latte-core', ':latte-mk', ':latte-mk',':library',':notchtools'

@@ -115,6 +115,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     void setPlanTime(){
 
         RestClient.builder()
+                .clearParams()
                 .url(UploadConfig.API_HOST+"/api/get_plan")
                 .params("tel",tel)
                 .params("boxId",LattePreference.getBoxId())
@@ -149,6 +150,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
     void confirmPlan(){
         if (checkForm()) {
             RestClient.builder()
+                    .clearParams()
                     .url(UploadConfig.API_HOST+"/api/get_plan")
                     .params("tel", tel)
                     .params("boxId", LattePreference.getBoxId())
@@ -181,8 +183,8 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                         String planJson = JSON.toJSON(medicinePlanNetModel).toString();
                                         Log.d("addbydrug", planJson);
                                         RestClient.builder()
-                                                .url(UploadConfig.API_HOST + "/api/Medicine_set_time")//提交计划
                                                 .clearParams()
+                                                .url(UploadConfig.API_HOST + "/api/Medicine_set_time")//提交计划
                                                 .raw(planJson)
                                                 .success(new ISuccess() {
                                                     @Override
@@ -511,7 +513,7 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
                                                 unitfordose = "其他";
                                                 break;
                                         }
-                                        String medicineUseCount = String.valueOf(plan.getInteger("medicineUseCount"));
+                                        String medicineUseCount = String.valueOf(plan.getIntValue("medicineUseCount"));
                                         String medicineName = plan.getString("medicineName");
                                         //先以interval判断，如果
                                         if (map_interval.get(interval) == null) {

@@ -99,7 +99,7 @@ public class AlarmAlertActivity extends Activity {
 			return;
 
 		try {
-			if(musicUri==null) {
+			if(musicUri.isEmpty()||musicUri==null) {
 				// 这里是调用系统自带的铃声
 				Uri uri = RingtoneManager
 						.getDefaultUri(RingtoneManager.TYPE_ALARM);

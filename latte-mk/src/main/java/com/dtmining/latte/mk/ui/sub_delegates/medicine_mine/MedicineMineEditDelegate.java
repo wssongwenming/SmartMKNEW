@@ -513,8 +513,8 @@ public class MedicineMineEditDelegate extends LatteDelegate {
                             }
                             if(code==3||code==4){
                                 myHandler.removeCallbacks(updateThread);
-                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品添加失败，请重新编辑", Toast.LENGTH_LONG).show();
-                                pop();
+                                Toast.makeText((Context)Latte.getConfiguration(ConfigKeys.ACTIVITY), "药品信息修改失败，请重新编辑", Toast.LENGTH_LONG).show();
+                                //pop();
                             }
                         }
                     })

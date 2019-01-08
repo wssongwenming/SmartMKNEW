@@ -111,5 +111,7 @@ dependencies {
     compile 'top.zibin:Luban:1.1.8'
     compile files('libs/mpandroidchartlibrary-2-1-6.jar')
     compile project(path: ':library')
+    compile project(path: ':notchtools')
+    //compile 'com.githang:status-bar-compat:0.3'
 
 }

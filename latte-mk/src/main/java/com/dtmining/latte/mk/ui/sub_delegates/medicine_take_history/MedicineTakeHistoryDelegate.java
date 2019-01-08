@@ -129,7 +129,7 @@ public class MedicineTakeHistoryDelegate extends LatteDelegate {
                         if(code==1)
                         {
                             final JSONObject detail=object.getJSONObject("detail");
-                            final int total=detail.getInteger("total");//现在接口中为count
+                            final int total=detail.getIntValue("total");//现在接口中为count
                             BEAN.setTotal(total);
                             //medicineHistoryList.addAll(convert_response_to_history(response));
                             medicineHistoryRecyclerViewAdapter.addData(convert_response_to_history(response));

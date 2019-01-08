@@ -141,7 +141,7 @@ public class RefreshHandler implements SwipeRefreshLayout.OnRefreshListener{
                     public void onSuccess(String response) {
                         final JSONObject object=JSON.parseObject(response);
                         final JSONObject detail=object.getJSONObject("detail");
-                        final int total=detail.getInteger("total");//现在接口中为count
+                        final int total=detail.getIntValue("total");//现在接口中为count
                         BEAN.setTotal(total);
                         //设置Adapter
                         mAdapter=MultipleRecyclerAdapter.getMedicineHistoryForDetail(CONVERTER.setJsonData(response),DELEGATE);

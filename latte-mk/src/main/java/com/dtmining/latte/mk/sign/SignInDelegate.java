@@ -7,11 +7,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+
 import com.alibaba.fastjson.JSON;
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
@@ -41,19 +46,22 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
+import notchtools.geek.com.notchtools.NotchTools;
+import notchtools.geek.com.notchtools.core.NotchProperty;
+import notchtools.geek.com.notchtools.core.OnNotchCallBack;
 
 /**
  * author:songwenming
  * Date:2018/9/28
  * Description:
  */
-public class SignInDelegate extends LatteDelegate {
-
+public class SignInDelegate extends LatteDelegate  {
     @BindView(R2.id.edit_sign_in_phone)
     EditText mPhone=null;
     @BindView(R2.id.edit_sign_in_password)
     EditText mPassword=null;
+    @BindView(R2.id.sign_in_tool_bar)
+    Toolbar sign_in_tool_bar=null;
     private Tencent mTencent;
     private String QQ_uid;//qq_openid
     private UserInfo userInfo;
@@ -85,7 +93,7 @@ public class SignInDelegate extends LatteDelegate {
             String singInJson = JSON.toJSON(signModel).toString();
             System.out.print(singInJson);
             RestClient.builder()
-
+                    .clearParams()
                     //.url("http://10.0.2.2:8081/Web01_exec/UserLogin")
                     .url(UploadConfig.API_HOST+"/api/UserLogin")
                     //.url("http://192.168.1.3:8081/Web01_exec/UserLogin")
@@ -129,14 +137,10 @@ public class SignInDelegate extends LatteDelegate {
         LatteWeChat.getInstancee()
                 .onSignSuccess(new IWeChatSignInCallback() {
                     @Override
-                    public void onSignInSuccess(String userInfo) {
-                        //Toast.makeText(getContext(),"8888888"+userInfo,Toast.LENGTH_LONG).show();
-                        }
-                        })
+                    public void onSignInSuccess(String userInfo) {   } })
                 .onGetOpenIdSuccess(new IWeChatGetOpenIdCallback() {
                     @Override
                     public void onGetOpenIdSuccess(final String openId) {
-                        //Toast.makeText(getContext(),openId,Toast.LENGTH_LONG).show();
                         JsonObject detail=new JsonObject();
                         detail.addProperty("entry_way", EntryType.WECHAT.getEntryType());
                         detail.addProperty("weixinOpenid",openId);
@@ -219,6 +223,9 @@ public class SignInDelegate extends LatteDelegate {
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
      }
+
+
+
     class BaseUiListener implements IUiListener {
         @Override
         public void onComplete(Object o) {
@@ -246,10 +253,12 @@ public class SignInDelegate extends LatteDelegate {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         String qq_app_id=Latte.getConfiguration(ConfigKeys.QQ_APP_ID).toString();
         Context applicationContext=(Context)Latte.getConfigurations().get(ConfigKeys.APPLICATION_CONTEXT);
         mTencent = Tencent.createInstance(qq_app_id,applicationContext);
     }
+
 
     /**
      * 获取登录QQ腾讯平台的权限信息(用于访问QQ用户信息)
@@ -297,4 +306,5 @@ public class SignInDelegate extends LatteDelegate {
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {}
     };
+
 }
