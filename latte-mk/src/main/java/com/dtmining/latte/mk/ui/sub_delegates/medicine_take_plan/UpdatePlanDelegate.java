@@ -248,11 +248,12 @@ public class UpdatePlanDelegate extends LatteDelegate {
             mMedicineUseTime.setText(atime);
         }
     }
+
     private void getMedicineList(){
         RestClient.builder()
-                .clearParams()
-                .url(UploadConfig.API_HOST+"/api/get_medicine")
+                .url(UploadConfig.API_HOST+"/api/get_medicine_of_box")
                 .params("tel",tel)
+                .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
@@ -264,7 +265,9 @@ public class UpdatePlanDelegate extends LatteDelegate {
                 })
                 .build()
                 .get();
+
     }
+
     public  void setSpinnerItemSelectedByValue(Spinner spinner,String value){
         SpinnerAdapter apsAdapter= spinner.getAdapter(); //得到SpinnerAdapter对象
         int k= apsAdapter.getCount();

@@ -27,7 +27,6 @@
     <TextView
         android:id="@+id/parent_title"
         android:text="--:--"
-        android:paddingLeft="10dp"
         android:textColor="@color/Energized"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"

@@ -144,6 +144,7 @@ public class MyElvAdapterForIndex extends BaseExpandableListAdapter {
             viewHolder=(ViewHolder)convertView.getTag();
         }
         viewHolder.textView.setText(":"+list.get(groupPosition).getTimeString());
+        viewHolder.planGroup.setText("计划"+(groupPosition+1));
        /* viewHolder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,8 +170,10 @@ public class MyElvAdapterForIndex extends BaseExpandableListAdapter {
 
     class ViewHolder {
         TextView textView;
+        TextView planGroup;
         public ViewHolder(View view){
             textView= (TextView) view.findViewById(R.id.parent_title);
+            planGroup=(TextView) view.findViewById(R.id.tv_group);
         }
     }
 }

@@ -701,10 +701,4 @@ public class AddPlanByDrugDelegate extends LatteDelegate implements SetTimesDial
         }
         return contains;
     }
-    private Uri getDefultRingtoneUri() {
-        Log.d("myring", RingtoneManager.getActualDefaultRingtoneUri(getContext(),RingtoneManager.TYPE_RINGTONE).toString());
-        return RingtoneManager.getActualDefaultRingtoneUri(getContext(),
-                RingtoneManager.TYPE_RINGTONE);
-
-    }
 }
