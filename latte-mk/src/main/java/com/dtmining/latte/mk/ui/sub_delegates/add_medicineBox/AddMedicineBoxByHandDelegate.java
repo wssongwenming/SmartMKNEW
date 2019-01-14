@@ -71,6 +71,12 @@ public class AddMedicineBoxByHandDelegate extends LatteDelegate {
                             if (change_boxId_for_plan != null) {
                                 change_boxId_for_plan.executeCallback("");
                             }
+                            final IGlobalCallback<String> UpdateRecentUseCallback = CallbackManager
+                                    .getInstance()
+                                    .getCallback(CallbackType.ON_CHANGE_BOXID_FOR_RECENT_USE);
+                            if (UpdateRecentUseCallback != null) {
+                                UpdateRecentUseCallback.executeCallback("");
+                            }
                             pop();
                         }
                     })

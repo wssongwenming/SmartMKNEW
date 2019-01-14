@@ -1,12 +1,10 @@
 package com.dtmining.latte.mk.ui.sub_delegates.medicine_overdue;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
 import com.dtmining.latte.app.ConfigKeys;
 import com.dtmining.latte.app.Latte;
 import com.dtmining.latte.database.UserProfile;
@@ -18,10 +16,11 @@ import com.dtmining.latte.mk.main.aboutme.profile.UploadConfig;
 import com.dtmining.latte.mk.main.index.IndexDataConverter;
 import com.dtmining.latte.mk.sign.SignInDelegate;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
-
 import butterknife.BindView;
-
 /**
  * author:songwenming
  * Date:2018/11/19
@@ -48,8 +47,8 @@ public class MedicineOverdueDelegate extends LatteDelegate {
             startWithPop(new SignInDelegate());
         }else {
             tel=Long.toString(userProfile.getTel());
-
         }
+
         mRefreshHandler= MedicineOverdueRefreshHandler.create(mRefreshLayout,mRecyclerView,new MedicineOverdueDataConverter(),this.getParentDelegate());
     }
     private void initRecyclerView() {
@@ -70,6 +69,8 @@ public class MedicineOverdueDelegate extends LatteDelegate {
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
         initRefreshLayout();
-        mRefreshHandler.getMedicineOverdue(UploadConfig.API_HOST+"/api/get_medicine_overdue",tel);
+        mRefreshHandler.getMedicineOverdue(UploadConfig.API_HOST+"/api/get_medicine_overdue",tel,LattePreference.getBoxId());
     }
+
+
 }

@@ -35,12 +35,13 @@ public class MedicineSummaryRefreshHandler implements SwipeRefreshLayout.OnRefre
         return new MedicineSummaryRefreshHandler(swipeRefreshLayout,recyclerView,dataConverter);
     }
 
-    public void getMedicineSummary(String url,String tel,String begin,String end){
+    public void getMedicineSummary(String url,String tel,String begin,String end,String boxId){
         //BEAN.setDelayed(1000);
 
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
+                .params("boxId",boxId)
                 .params("begin_time",begin)
                 .params("end_time",end)
                 .success(new ISuccess() {
@@ -48,7 +49,6 @@ public class MedicineSummaryRefreshHandler implements SwipeRefreshLayout.OnRefre
                     public void onSuccess(String response) {
                         mAdapter= MultipleRecyclerAdapter.getMedicineSummary(CONVERTER.setJsonData(response),null);
                         RECYCLERVIEW.setAdapter(mAdapter);
-
                     }
                 })
                 .build()

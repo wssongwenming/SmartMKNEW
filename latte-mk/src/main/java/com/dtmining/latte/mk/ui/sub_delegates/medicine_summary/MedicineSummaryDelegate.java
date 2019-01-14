@@ -79,7 +79,7 @@ public class MedicineSummaryDelegate extends LatteDelegate{
       }
     @OnClick(R2.id.btn_summary_confirm)
     void summaryByTimeSpan(){
-        mRefreshHandler.getMedicineSummary(UploadConfig.API_HOST+"/api/medicine_collection",tel,begin_time,end_time);
+        mRefreshHandler.getMedicineSummary(UploadConfig.API_HOST+"/api/medicine_collection",tel,begin_time,end_time,LattePreference.getBoxId());
     }
     @Override
     public Object setLayout() {
@@ -106,6 +106,6 @@ public class MedicineSummaryDelegate extends LatteDelegate{
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         initRecyclerView();
-        mRefreshHandler.getMedicineSummary(UploadConfig.API_HOST+"/api/medicine_collection",tel,begin_time,end_time);
+        mRefreshHandler.getMedicineSummary(UploadConfig.API_HOST+"/api/medicine_collection",tel,begin_time,end_time,LattePreference.getBoxId());
     }
 }

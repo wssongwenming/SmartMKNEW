@@ -23,6 +23,9 @@ import com.dtmining.latte.mk.ui.sub_delegates.medicine_take_plan.MedicineTakePla
 import com.dtmining.latte.mk.ui.sub_delegates.views.HorizontalListview;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.callback.CallbackManager;
+import com.dtmining.latte.util.callback.CallbackType;
+import com.dtmining.latte.util.callback.IGlobalCallback;
 import com.dtmining.latte.util.storage.LattePreference;
 
 import org.json.JSONObject;
@@ -77,6 +80,28 @@ public class ManageDelegate extends BottomItemDelegate {
                 Toast.makeText(getContext(),"App未绑定当前药箱",Toast.LENGTH_LONG).show();
             }
         }
+        CallbackManager.getInstance()
+                .addCallback(CallbackType.ON_CHANGE_BOXID_FOR_RECENT_USE, new IGlobalCallback() {
+                    @Override
+                    public void executeCallback(@Nullable final Object args) {
+                        RestClient.builder()
+                                .url(UploadConfig.API_HOST+"/api/get_recently_use")
+                                .params("tel",tel)
+                                .params("boxId",LattePreference.getBoxId())
+                                .success(new ISuccess() {
+                                    @Override
+                                    public void onSuccess(String response) {
+                                        com.alibaba.fastjson.JSONObject object=JSON.parseObject(response);
+                                        int code=object.getIntValue("code");
+                                        ManagerDataConverter managerDataConverter=new ManagerDataConverter(response);
+                                        HorizontalAdapter horizontalAdapter = new HorizontalAdapter(managerDataConverter.convert(), getContext());
+                                        horizontalListview.setAdapter(horizontalAdapter);
+                                    }
+                                })
+                                .build()
+                                .get();
+                    }
+                });
     }
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
@@ -84,7 +109,7 @@ public class ManageDelegate extends BottomItemDelegate {
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/get_recently_use")
                 .params("tel",tel)
-                .params("boxId",boxId)
+                .params("boxId",LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

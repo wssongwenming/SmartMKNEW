@@ -22,6 +22,7 @@ import com.dtmining.latte.net.callback.ISuccess;
 import com.dtmining.latte.ui.date.DateDialogUtil;
 import com.dtmining.latte.util.ChartUtil;
 import com.dtmining.latte.util.Reaction;
+import com.dtmining.latte.util.storage.LattePreference;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 
@@ -108,6 +109,7 @@ public class BodySituationDelegate extends LatteDelegate {
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
+                .params("boxId", LattePreference.getBoxId())
                 .params("begin_time",begin_time)
                 .params("end_time",end_time)
                 .success(new ISuccess() {
@@ -175,6 +177,7 @@ public class BodySituationDelegate extends LatteDelegate {
                 .clearParams()
                 .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
+                .params("boxId", LattePreference.getBoxId())
                 .params("begin_time",begin_time)
                 .params("end_time",end_time)
                 .success(new ISuccess() {
@@ -247,6 +250,7 @@ public class BodySituationDelegate extends LatteDelegate {
         RestClient.builder()
                 .url(UploadConfig.API_HOST+"/api/body_stuation")
                 .params("tel",tel)
+                .params("boxId", LattePreference.getBoxId())
                 .params("begin_time",begin_time)
                 .params("end_time",end_time)
                 .success(new ISuccess() {

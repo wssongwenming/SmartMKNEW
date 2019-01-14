@@ -14,6 +14,7 @@ import com.dtmining.latte.mk.ui.refresh.PagingBean;
 import com.dtmining.latte.mk.ui.refresh.RefreshHandler;
 import com.dtmining.latte.net.RestClient;
 import com.dtmining.latte.net.callback.ISuccess;
+import com.dtmining.latte.util.storage.LattePreference;
 
 /**
  * author:songwenming
@@ -49,11 +50,12 @@ public class MedicineOverdueRefreshHandler implements SwipeRefreshLayout.OnRefre
             }
         },2000);
     }
-    public void getMedicineOverdue(String url,String tel){
+    public void getMedicineOverdue(String url,String tel,String boxId){
         //BEAN.setDelayed(1000);
         RestClient.builder()
                 .url(url)
                 .params("tel",tel)
+                .params("boxId", LattePreference.getBoxId())
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {

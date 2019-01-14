@@ -72,6 +72,12 @@ public class BoxBindDelegate extends LatteDelegate {
             if (UpdatePlanCallback != null) {
                 UpdatePlanCallback.executeCallback("");
             }
+            final IGlobalCallback<String> UpdateRecentUseCallback = CallbackManager
+                    .getInstance()
+                    .getCallback(CallbackType.ON_CHANGE_BOXID_FOR_RECENT_USE);
+            if (UpdateRecentUseCallback != null) {
+                UpdateRecentUseCallback.executeCallback("");
+            }
             pop();
         }
     }
