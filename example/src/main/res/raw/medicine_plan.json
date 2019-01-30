@@ -1,0 +1,79 @@
+﻿/*{
+  "code": 1,
+  "detail": {
+    "planlist": [
+      {
+        "plans": [
+          {
+            "endRemind": "2018-8-20",
+            "atime": "03:00",
+            "id": "1",
+            "medicineUseCount": 3,
+            "dayInterval": 5,
+            "startRemind": "2018-7-20",
+            "medicineName": "感冒冲剂",
+            "boxId": "102"
+          },
+          {
+            "endRemind": "2018-8-20",
+            "atime": "08:00",
+            "id": "3",
+            "medicineUseCount": 2,
+            "dayInterval": 5,
+            "startRemind": "2018-7-20",
+            "medicineName": "牛黄上清片",
+            "boxId": "102"
+          },
+          {
+            "endRemind": "2018-8-20",
+            "atime": "08:00",
+            "id": "3",
+            "medicineUseCount": 2,
+            "dayInterval": 2,
+            "startRemind": "2018-7-20",
+            "medicineName": "牛黄解毒片",
+            "boxId": "102"
+          }
+        ],
+        "time": "08:00"
+      },
+      {
+        "plans": [
+          {
+            "endRemind": "2018-8-20",
+            "atime": "12:00",
+            "id": "2",
+            "medicineUseCount": 5,
+            "dayInterval": 1,
+            "startRemind": "2018-7-20",
+            "medicineName": "感冒片",
+            "boxId": "102"
+          },
+          {
+            "endRemind": "2018-8-20",
+            "atime": "12:00",
+            "id": "4",
+            "medicineUseCount": 2,
+            "dayInterval": 1,
+            "startRemind": "2018-7-20",
+            "medicineName": "牛黄上清片",
+            "boxId": "102"
+          },
+          {
+            "endRemind": "2018-8-21",
+            "atime": "12:00",
+            "id": "4",
+            "medicineUseCount": 2,
+            "dayInterval": 1,
+            "startRemind": "2018-7-22",
+            "medicineName": "牛黄上清片",
+            "boxId": "102"
+          }
+        ],
+        "time": "12:00"
+      }
+    ]
+  },
+  "message": "success"
+}*/
+{"planlist":[{"plans":[{"atime":"07:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-01-31","id":"3a9d7f8c39ae4debb5b26c7749ea0bd8","medicineName":"感冒冲剂","medicineType":0,"medicineUseCount":9,"startRemind":"2019-01-30"}],"time":"07:00"},{"plans":[{"atime":"00:00","boxId":"B4E62D8770B5","dayInterval":1,"endRemind":"2019-03-01","id":"7c6dc2fab3294ba99548b21cc8f727c5","medicineName":"1548777007","medicineUseCount":6,"startRemind":"2019-01-01"},{"atime":"00:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-01-31","id":"7e9ec8c3f29c4778bbc0dbd52a9f329d","medicineName":"感冒冲剂","medicineType":0,"medicineUseCount":9,"startRemind":"2019-01-30"}],"time":"00:00"},{"plans":[{"atime":"01:00","boxId":"B4E62D8770B5","dayInterval":1,"endRemind":"2019-03-01","id":"0ab9301c25724b409108d3afb96a9ced","medicineName":"1548777007","medicineUseCount":6,"startRemind":"2019-01-01"},{"atime":"01:00","boxId":"B4E62D8770B5","dayInterval":1,"endRemind":"2019-03-03","id":"31ed76ae10cc4e6991ae19b26f1bc454","medicineName":"1548781772","medicineType":0,"medicineUseCount":23,"startRemind":"2019-02-02"},{"atime":"01:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-03-02","id":"39d7db57ab9443c78c1fbcedf7b2d0f0","medicineName":"1548781718","medicineType":0,"medicineUseCount":7,"startRemind":"2019-01-01"}],"time":"01:00"},{"plans":[{"atime":"02:00","boxId":"B4E62D8770B5","dayInterval":1,"endRemind":"2019-03-01","id":"0548b4de3e9c4a9c85795d1c3baa5330","medicineName":"1548777007","medicineUseCount":6,"startRemind":"2019-01-01"},{"atime":"02:00","boxId":"B4E62D8770B5","dayInterval":1,"endRemind":"2019-03-03","id":"a218cd54cb5b45e18a9b75adaa34446e","medicineName":"1548781772","medicineType":0,"medicineUseCount":23,"startRemind":"2019-02-02"},{"atime":"02:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-03-02","id":"ec2b42ecebf64fe3a178f6635a9e702c","medicineName":"1548781718","medicineType":0,"medicineUseCount":7,"startRemind":"2019-01-01"}],"time":"02:00"},{"plans":[{"atime":"03:00","boxId":"B4E62D8770B5","dayInterval":1,"endRemind":"2019-03-01","id":"3172e63636bb482b8b757913d7a3fa26","medicineName":"1548777007","medicineUseCount":6,"startRemind":"2019-01-01"},{"atime":"03:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-03-02","id":"5cd1b6182f254d33ba542c726a82a32b","medicineName":"1548781718","medicineType":0,"medicineUseCount":7,"startRemind":"2019-01-01"}],"time":"03:00"},{"plans":[{"atime":"04:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-03-02","id":"96288f1cff004da8b99b7c8f311b476c","medicineName":"1548781718","medicineType":0,"medicineUseCount":7,"startRemind":"2019-01-01"},{"atime":"04:00","boxId":"B4E62D8770B5","dayInterval":2,"endRemind":"2019-01-31","id":"9877b1151b7744668a54320bf120806d","medicineName":"感冒冲剂","medicineType":0,"medicineUseCount":9,"startRemind":"2019-01-30"}],"time":"04:00"}]}

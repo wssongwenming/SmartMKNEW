@@ -29,8 +29,8 @@ public class ExampleApp  extends Application{
         Latte.init(this)
                 .withIcon(new FontAwesomeModule())
               ///.withInterceptor(new DebugInterceptor("index", R.raw.history))
-               // .withInterceptor(new DebugInterceptor("medicine_mine",R.raw.medicine_mine))
-               // .withInterceptor(new DebugInterceptor("medicine_plan",R.raw.medicine_plan))
+                //.withInterceptor(new DebugInterceptor("medicine_mine",R.raw.medicine_mine))
+                .withInterceptor(new DebugInterceptor("medicine_plan",R.raw.medicine_plan))
               //  .withInterceptor(new DebugInterceptor("medicine_boxes",R.raw.medicine_boxes))
                 //.withInterceptor(new DebugInterceptor("recentmedicine",R.raw.recentmedicine))
                 //.withInterceptor(new DebugInterceptor("medicine_overdue",R.raw.medicineoverdue))
@@ -42,6 +42,7 @@ public class ExampleApp  extends Application{
                 .withWeChatAppId("wxe42b49bb3dff09ab")//微信登陆初始化AppId
                 .withWeChatAppSecret("da557a780af2ef52411d1205519cd3ce")//微信登陆人传入Secret
                 .withQQAppID("1108067090")
+                .withScanFor("medicine")
                 .withIcon(new FontMkModule())
                 .withApiHost("http://127.5.5.1")
                 .configure();

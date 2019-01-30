@@ -32,9 +32,9 @@ public class ExampleActivity extends ProxyActivity implements ISignListener,ILau
         }
         //为微信回调保存Activity上下文
         Latte.getConfigurator().withActivity(this);
-        //StatusBarCompat.translucentStatusBar(this,true);
-        int color = getResources().getColor(R.color.Green);
-        StatusBarCompat.setStatusBarColor(this,color);
+        StatusBarCompat.translucentStatusBar(this,true);
+        //int color=getResources().getColor(R.color.Apricot);
+        //StatusBarCompat.setStatusBarColor(this,color);
         //接受短信验证码
         mObserver = new SMSObserver(this,Latte.getHandler());
         Uri uri = Uri.parse("content://sms");
